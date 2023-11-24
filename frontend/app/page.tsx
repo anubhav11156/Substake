@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         <h1 className="text-2xl text-center">Landing page</h1>
 
         <Button
-          className="rounded-none mt-5"
+          className="rounded-none mt-5 bg-[#627EEA] hover:bg-[#6d86ea]"
           onClick={() => router.push("/application/stake")}
         >
           Launch Dapp

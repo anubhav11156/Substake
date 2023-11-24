@@ -14,7 +14,9 @@ const MobileNavLinks: React.FC = () => {
       <SheetContent>
         <div className="flex flex-col gap-10 w-full items-center pt-10">
           <NavLinks className="flex flex-col" />
-          <Button className="rounded-none">Connect Wallet</Button>
+          <Button className="rounded-none bg-[#627EEA] hover:bg-[#6d86ea] font-medium uppercase">
+            Connect Wallet
+          </Button>
         </div>
       </SheetContent>
     </Sheet>
