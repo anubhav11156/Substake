@@ -2,6 +2,7 @@ import { Menu } from "lucide-react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavLinks from "./NavLinks";
+import { Button } from "./ui/button";
 
 const MobileNavLinks: React.FC = () => {
   return (
@@ -11,7 +12,10 @@ const MobileNavLinks: React.FC = () => {
       </SheetTrigger>
       {/* @ts-ignore */}
       <SheetContent>
-        <NavLinks className="flex flex-col mt-10" />
+        <div className="flex flex-col gap-10 w-full items-center pt-10">
+          <NavLinks className="flex flex-col" />
+          <Button className="rounded-none">Connect Wallet</Button>
+        </div>
       </SheetContent>
     </Sheet>
   );

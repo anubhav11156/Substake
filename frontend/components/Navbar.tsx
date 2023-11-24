@@ -11,7 +11,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
   return (
     <header className="w-full border-b border-black">
-      <div className="flex items-center justify-between max-w-[80rem] w-full mx-auto py-5 px-2">
+      <div className="flex items-center justify-between max-w-[80rem] w-full mx-auto py-5 px-3">
         <div className="flex items-center gap-16">
           <Link href="/">
             <p className="text-xl font-bold">Substake</p>
@@ -27,7 +27,6 @@ const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
 
         {isNavLink && (
           <div className="sm:hidden flex items-center gap-4">
-            <Button className="rounded-none">Connect Wallet</Button>
             <MobileNavLinks />
           </div>
         )}
