@@ -16,6 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
           <Link href="/">
             <p className="text-xl font-bold">Substake</p>
           </Link>
+
           {isNavLink && (
             <div className="hidden sm:flex">
               <NavLinks />
