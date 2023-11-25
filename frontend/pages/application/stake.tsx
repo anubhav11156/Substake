@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { getNetwork } from "@wagmi/core";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
@@ -59,9 +60,11 @@ const StakePage: NextPage = () => {
             />
 
             <div
-              onClick={() =>
-                setStakeValue(accountBalance ? accountBalance : "")
-              }
+              onClick={() => {
+                if (!isConnected) {
+                  toast.error("Please connect your wallet first");
+                } else setStakeValue(accountBalance ? accountBalance : "");
+              }}
               className="bg-gray-200 px-2 py-1 w-fit text-xs font-medium cursor-pointer hover:bg-gray-300 transition-all"
             >
               MAX
