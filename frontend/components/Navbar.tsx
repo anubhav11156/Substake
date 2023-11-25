@@ -53,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({
               >
                 {isConnected
                   ? `${address?.slice(0, 5)}...${address?.slice(-5)}`
-                  : "connect wallet"}
+                  : "connect"}
               </Button>
             );
           }}

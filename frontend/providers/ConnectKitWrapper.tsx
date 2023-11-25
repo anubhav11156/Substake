@@ -9,7 +9,6 @@ import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-import { useAccount } from 'wagmi'
 
 
 const {chains, publicClient, webSocketPublicClient } = configureChains(
@@ -23,11 +22,6 @@ const {chains, publicClient, webSocketPublicClient } = configureChains(
     alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_MUMBAI! }),
   ]
 )
-
-console.log("chains : ", chains);
-
-// const {address} = useAccount();
-// console.log("Address : ", address);
 
 const config = createConfig({
   autoConnect: true,
