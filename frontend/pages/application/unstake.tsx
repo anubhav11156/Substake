@@ -13,7 +13,7 @@ const UnstakePage: NextPage = () => {
         <h1 className="text-center mt-10">Unstake</h1>
 
         <div>
-          {connectors.map((connector) => (
+          {connectors?.map((connector) => (
             <button
               disabled={!connector.ready}
               key={connector.id}
