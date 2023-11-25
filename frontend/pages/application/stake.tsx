@@ -1,24 +1,25 @@
+import { getNetwork } from "@wagmi/core";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
+import { useState } from "react";
+import { useAccount, useBalance, useConnect } from "wagmi";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
-import { useAccount, useBalance, useConnect } from "wagmi";
-import { getNetwork } from "@wagmi/core";
+import { ConnectKitButton } from "connectkit";
 
 const StakePage: NextPage = () => {
+  const [stakeValue, setStakeValue] = useState<null | number>(null);
+
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data, isError, isLoading } = useBalance({
     address: address,
   });
-
-  const accountBalance = data?.formatted;
-
   const { connector: activeConnector, isConnected } = useAccount();
-
   const { chain, chains } = getNetwork();
+  const accountBalance = data?.formatted;
 
   console.log("chain : ", chain);
 
@@ -31,51 +32,74 @@ const StakePage: NextPage = () => {
 
             <div className="flex flex-col">
               <p className="text-xs text-gray-500">AVAILABLE TO STAKE</p>
-              <p className="font-bold">
-                {isConnected ? `${accountBalance}` : "0.0"}
-              </p>
+              <p className="font-bold">{isConnected ? accountBalance : 0.0}</p>
             </div>
 
-            <p className="flex items-center absolute top-2 right-2 text-gray-400 uppercase text-xs font-medium">
-              <Dot className="text-gray-300" /> Scroll
+            <p className="flex items-center absolute top-2 right-2 text-gray-500 uppercase text-xs font-medium">
+              <Dot className="text-gray-400" /> Scroll
             </p>
           </div>
 
           <div className="border-x border-b border-gray-400 p-4 w-full flex items-center gap-3">
             <Input
-              className="border-none outline-none placeholder:text-gray-400 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium"
+              value={stakeValue ? stakeValue : ""}
+              onChange={(e) => setStakeValue(parseFloat(e.target.value))}
+              className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium"
               placeholder="0.0"
+              type="number"
             />
 
-            <div className="bg-gray-200 px-2 py-1 w-fit text-xs font-medium">
+            <div
+              onClick={() => {
+                setStakeValue(
+                  accountBalance ? parseFloat(accountBalance) : 0.0
+                );
+              }}
+              className="bg-gray-200 px-2 py-1 w-fit text-xs font-medium cursor-pointer hover:bg-gray-300 transition-all"
+            >
               MAX
             </div>
           </div>
 
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
-              <p className="text-gray-400 uppercase">you will recieve</p>
-              <p>739248.981130118906064854 SUB</p>
+              <p className="text-gray-500 uppercase">you will recieve</p>
+              <p>739248.9811 SUB</p>
             </div>
 
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 uppercase">Exchange Rate</p>
+              <p className="text-gray-500 uppercase">Exchange Rate</p>
               <p>1 SUB = 1.0000001 ETH </p>
             </div>
 
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 uppercase">Protocol Fee</p>
+              <p className="text-gray-500 uppercase">Protocol Fee</p>
               <p>0.01 %</p>
             </div>
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 uppercase">APR</p>
+              <p className="text-gray-500 uppercase">APR</p>
               <p>3.45 %</p>
             </div>
           </div>
 
-          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-black hover:bg-black/95">
-            {isConnected ? "STAKE" : "CONNECT WALLET"}
-          </Button>
+          {isConnected ? (
+            <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-black hover:bg-black/95 transition-all uppercase">
+              Stake
+            </Button>
+          ) : (
+            <ConnectKitButton.Custom>
+              {({ show }) => {
+                return (
+                  <Button
+                    onClick={show}
+                    className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-black hover:bg-black/95 uppercase transition-all"
+                  >
+                    Connect Wallet
+                  </Button>
+                );
+              }}
+            </ConnectKitButton.Custom>
+          )}
         </div>
       </div>
     </ApplicationLayout>

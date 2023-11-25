@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <Button
                 onClick={show}
                 className={cn(
-                  "rounded-none font-medium uppercase transition-all",
+                  "rounded-none font-medium uppercase transition-all w-36",
                   {
                     "hidden sm:flex": !isConnectWallet,
                     "bg-gray-200 text-black hover:bg-gray-300": isConnected,
