@@ -14,17 +14,17 @@ const NavLinks: React.FC<NavLinksProps> = ({ className }) => {
 
   const navLinks = [
     {
-      name: "Stake",
+      name: "STAKE",
       href: "/application/stake",
       active: pathname === "/application/stake",
     },
     {
-      name: "Unstake",
+      name: "UNSTAKE",
       href: "/application/unstake",
       active: pathname === "/application/unstake",
     },
     {
-      name: "Reward",
+      name: "REWARD",
       href: "/application/reward",
       active: pathname === "/application/reward",
     },
