@@ -5,8 +5,21 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
+import { useAccount, useBalance, useConnect } from 'wagmi';
+
 
 const StakePage: NextPage = () => {
+
+  const { address, isConnecting, isDisconnected } = useAccount();
+  const { data, isError, isLoading } = useBalance({
+    address: address,
+  });
+
+  const accountBalance = data?.formatted;
+
+  const { connector: activeConnector, isConnected } = useAccount();
+  console.log(isConnected);
+
   return (
     <ApplicationLayout>
       <div className="max-w-[85rem] mx-auto w-full">
@@ -16,7 +29,10 @@ const StakePage: NextPage = () => {
 
             <div className="flex flex-col">
               <p className="text-xs text-gray-400">AVAILABLE TO STAKE</p>
-              <p className="font-bold">7.8 (balance)</p>
+              <p className="font-bold">
+                { isConnected && `${accountBalance}`}
+                { !isConnected && "0.0" }
+                </p>
             </div>
 
             <p className="flex items-center absolute top-2 right-2 text-gray-400 uppercase text-xs font-medium">

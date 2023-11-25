@@ -1,26 +1,34 @@
 "use client";
 
 import { ConnectKitProvider } from "connectkit";
-import { WagmiConfig, configureChains, createConfig, mainnet } from "wagmi";
+import { WagmiConfig, configureChains, createConfig } from "wagmi";
+import { arbitrumGoerli, scrollSepolia, polygonMumbai } from '@wagmi/core/chains'
 import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 
 import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { useAccount } from 'wagmi'
 
-// Configure chains & providers with the Alchemy provider.
-// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
+
+const {chains, publicClient, webSocketPublicClient } = configureChains(
+  [scrollSepolia, polygonMumbai],
   [
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY! }),
-    publicProvider(),
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: `https://sepolia-rpc.scroll.io/`,
+      }),
+    }),
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_MUMBAI! }),
   ]
-);
+)
 
-// Set up wagmi config
+console.log("chains : ", chains);
+
+// const {address} = useAccount();
+// console.log("Address : ", address);
+
 const config = createConfig({
   autoConnect: true,
   connectors: [
@@ -35,13 +43,6 @@ const config = createConfig({
       chains,
       options: {
         projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
-      },
-    }),
-    new InjectedConnector({
-      chains,
-      options: {
-        name: "Injected",
-        shimDisconnect: true,
       },
     }),
   ],
