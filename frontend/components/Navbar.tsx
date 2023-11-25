@@ -1,11 +1,10 @@
 import { ConnectKitButton } from "connectkit";
-import { Menu } from "lucide-react";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
-import { Button } from "./ui/button";
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -41,7 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
               <Button
                 onClick={show}
                 className={cn(
-                  "rounded-none hidden sm:flex bg-[#627EEA] hover:bg-[#6d86ea] font-medium uppercase transition-all",
+                  "rounded-none bg-[#627EEA] hover:bg-[#6d86ea] font-medium uppercase transition-all",
                   {
                     "bg-gray-200 text-black hover:bg-gray-300": isConnected,
                   }

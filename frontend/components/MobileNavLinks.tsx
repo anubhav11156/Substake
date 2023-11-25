@@ -2,9 +2,9 @@ import { ConnectKitButton } from "connectkit";
 import { Menu } from "lucide-react";
 
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 import NavLinks from "./NavLinks";
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 
 const MobileNavLinks: React.FC = () => {
   return (
@@ -12,7 +12,6 @@ const MobileNavLinks: React.FC = () => {
       <SheetTrigger>
         <Menu />
       </SheetTrigger>
-      {/* @ts-ignore */}
       <SheetContent>
         <div className="flex flex-col gap-10 w-full items-center pt-10">
           <NavLinks className="flex flex-col" />

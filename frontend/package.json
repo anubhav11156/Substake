@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "frontend2",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,13 +15,12 @@
     "clsx": "^2.0.0",
     "connectkit": "^1.5.3",
     "ethers": "^6.8.1",
-    "lucide-react": "^0.292.0",
+    "lucide-react": "^0.293.0",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^1.19.8",
     "wagmi": "^1.4.7"
   },
   "devDependencies": {
