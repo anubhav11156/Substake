@@ -11,7 +11,7 @@ import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { ConnectKitButton } from "connectkit";
 
 const StakePage: NextPage = () => {
-  const [stakeValue, setStakeValue] = useState<null | number>(null);
+  const [stakeValue, setStakeValue] = useState("");
 
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data, isError, isLoading } = useBalance({
@@ -37,7 +37,7 @@ const StakePage: NextPage = () => {
             <p className="flex items-center absolute top-2 right-2 text-gray-500 uppercase text-xs font-medium">
               {isConnected ? (
                 <>
-                  <Dot className="text-gray-400" color="green"/>
+                  <Dot className="text-gray-400" color="green" />
                   {_chain}
                 </>
               ) : (
@@ -52,18 +52,16 @@ const StakePage: NextPage = () => {
           <div className="border-x border-b border-gray-400 p-4 w-full flex items-center gap-3">
             <Input
               value={stakeValue ? stakeValue : ""}
-              onChange={(e) => setStakeValue(parseFloat(e.target.value))}
+              onChange={(e) => setStakeValue(e.target.value)}
               className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium"
               placeholder="0.0"
               type="number"
             />
 
             <div
-              onClick={() => {
-                setStakeValue(
-                  accountBalance ? parseFloat(accountBalance) : 0.0
-                );
-              }}
+              onClick={() =>
+                setStakeValue(accountBalance ? accountBalance : "")
+              }
               className="bg-gray-200 px-2 py-1 w-fit text-xs font-medium cursor-pointer hover:bg-gray-300 transition-all"
             >
               MAX
