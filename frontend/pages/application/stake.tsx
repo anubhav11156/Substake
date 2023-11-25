@@ -21,7 +21,7 @@ const StakePage: NextPage = () => {
   const { chain, chains } = getNetwork();
   const accountBalance = data?.formatted;
 
-  console.log("chain : ", chain);
+  const _chain = chain?.name;
 
   return (
     <ApplicationLayout>
@@ -34,9 +34,18 @@ const StakePage: NextPage = () => {
               <p className="text-xs text-gray-500">AVAILABLE TO STAKE</p>
               <p className="font-bold">{isConnected ? accountBalance : 0.0}</p>
             </div>
-
             <p className="flex items-center absolute top-2 right-2 text-gray-500 uppercase text-xs font-medium">
-              <Dot className="text-gray-400" /> Scroll
+              {isConnected ? (
+                <>
+                  <Dot className="text-gray-400" color="green"/>
+                  {_chain}
+                </>
+              ) : (
+                <>
+                  <Dot className="text-gray-400" color="red" />
+                  DISCONNECTED
+                </>
+              )}
             </p>
           </div>
 
