@@ -93,7 +93,7 @@ const StakePage: NextPage = () => {
           </div>
 
           {isConnected ? (
-            <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#8299EE] hover:bg-[#758ee8] transition-all uppercase">
+            <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#637FEA] hover:bg-[#708ae8] transition-all uppercase">
               Stake
             </Button>
           ) : (
@@ -102,7 +102,7 @@ const StakePage: NextPage = () => {
                 return (
                   <Button
                     onClick={show}
-                    className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#8299EE] hover:bg-[#758ee8] uppercase transition-all"
+                    className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#637FEA] hover:bg-[#708ae8] uppercase transition-all"
                   >
                     Connect Wallet
                   </Button>

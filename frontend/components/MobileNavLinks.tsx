@@ -30,7 +30,7 @@ const MobileNavLinks: React.FC = () => {
                 <Button
                   onClick={show}
                   className={cn(
-                    "rounded-none font-normal uppercase transition-all bg-[#8299EE] hover:bg-[#758ee8]",
+                    "rounded-none font-normal uppercase transition-all bg-[#637FEA] hover:bg-[#708ae8]",
                     {
                       "bg-gray-200 text-black hover:bg-gray-300": isConnected,
                     }
