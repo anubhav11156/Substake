@@ -52,7 +52,7 @@ const StakePage: NextPage = () => {
             </div>
           </div>
 
-          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium">
+          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-black hover:bg-black/95">
             STAKE
           </Button>
         </div>

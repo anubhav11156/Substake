@@ -8,9 +8,13 @@ import NavLinks from "./NavLinks";
 
 interface NavbarProps {
   isNavLink?: boolean;
+  isConnectWallet?: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
+const Navbar: React.FC<NavbarProps> = ({
+  isNavLink = true,
+  isConnectWallet = true,
+}) => {
   return (
     <header className="w-full border-b border-black">
       <div className="flex items-center justify-between max-w-[85rem] w-full mx-auto py-5 px-3">
@@ -42,6 +46,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
                 className={cn(
                   "rounded-none font-medium uppercase transition-all",
                   {
+                    "hidden sm:flex": !isConnectWallet,
                     "bg-gray-200 text-black hover:bg-gray-300": isConnected,
                   }
                 )}

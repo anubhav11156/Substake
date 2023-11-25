@@ -5,7 +5,7 @@ const ApplicationLayout: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   return (
     <div className="w-full">
-      <Navbar />
+      <Navbar isConnectWallet={false} />
       {children}
     </div>
   );
