@@ -5,12 +5,10 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
-import { useAccount, useBalance, useConnect } from 'wagmi';
-import { getNetwork } from '@wagmi/core'
-
+import { useAccount, useBalance, useConnect } from "wagmi";
+import { getNetwork } from "@wagmi/core";
 
 const StakePage: NextPage = () => {
-
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data, isError, isLoading } = useBalance({
     address: address,
@@ -19,12 +17,10 @@ const StakePage: NextPage = () => {
   const accountBalance = data?.formatted;
 
   const { connector: activeConnector, isConnected } = useAccount();
-  console.log(isConnected);
-
 
   const { chain, chains } = getNetwork();
 
-  console.log("chain : ",chain);
+  console.log("chain : ", chain);
 
   return (
     <ApplicationLayout>
@@ -34,7 +30,7 @@ const StakePage: NextPage = () => {
             <Image src="/eth.svg" width={40} height={40} alt="eth" />
 
             <div className="flex flex-col">
-              <p className="text-xs text-gray-400">AVAILABLE TO STAKE</p>
+              <p className="text-xs text-gray-500">AVAILABLE TO STAKE</p>
               <p className="font-bold">
                 {isConnected ? `${accountBalance}` : "0.0"}
               </p>

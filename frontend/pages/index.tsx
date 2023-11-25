@@ -4,8 +4,7 @@ import { useRouter } from "next/navigation";
 
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { useAccount } from 'wagmi';
-
+import { useAccount } from "wagmi";
 
 export const metadata: Metadata = {
   title: "Substake",
