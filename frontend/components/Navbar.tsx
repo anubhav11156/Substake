@@ -40,7 +40,7 @@ const Navbar: React.FC<NavbarProps> = ({ isNavLink = true }) => {
               <Button
                 onClick={show}
                 className={cn(
-                  "rounded-none bg-[#627EEA] hover:bg-[#6d86ea] font-medium uppercase transition-all",
+                  "rounded-none font-medium uppercase transition-all",
                   {
                     "bg-gray-200 text-black hover:bg-gray-300": isConnected,
                   }

@@ -1,5 +1,5 @@
-import { NextPage } from "next";
 import { Dot } from "lucide-react";
+import { NextPage } from "next";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
@@ -52,7 +52,7 @@ const StakePage: NextPage = () => {
             </div>
           </div>
 
-          <Button className="mt-5 rounded-none w-full bg-[#627EEA] h-[52px] hover:bg-[#6d86ea] text-lg font-medium">
+          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium">
             STAKE
           </Button>
         </div>
