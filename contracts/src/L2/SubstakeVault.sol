@@ -1,4 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-contract SubstakeVault {}
+import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
+
+contract SubstakeVault {
+
+}
