@@ -19,10 +19,10 @@ interface ISubstakeVault {
     // Events
 
     event Deposit(address indexed sender, address indexed owner, uint256 assets, uint256 shares);
-
     event Withdraw(
         address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares
     );
+    event BatchSentToL1(uint256 indexed stakeBatch, uint8 indexed batchType, uint256 amount, address l1Recipient);
 
     function asset() external view returns (address);
     function totalAssets() external view returns (uint256);

@@ -18,13 +18,11 @@ contract SubstakeVault is ISubstakeVault, ERC20Upgradeable, AccessControlUpgrade
     uint256 previousBatchStakeTime;
     uint256 previousBatchUnstakeTime;
     uint56 activeBatchSUBTokenBalance;
-    address payable feesCollector;
 
     function initialize(address _admin, address _substakeL2Config) external initializer {
         SubstakeLib.zeroAddressCheck(_admin);
         SubstakeLib.zeroAddressCheck(_substakeL2Config);
         substakeL2Config = ISubstakeL2Config(_substakeL2Config);
-        feesCollector = _admin;
         __ERC20_init("SubToken", "SUB");
         __AccessControl_init();
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
@@ -51,14 +49,14 @@ contract SubstakeVault is ISubstakeVault, ERC20Upgradeable, AccessControlUpgrade
         bool isClosed;
     }
 
-    function deposit(uint256 assets, address receiver) external override payable returns (uint256, uint256) {
-        require(assets == msg.value, "Insufficient msg.value");
-        require(assets <= maxDeposit(), "Invalid amount, more");
+    function deposit(uint256 assets, address receiver) external override returns (uint256, uint256) {
+        // require(assets == msg.value, "Insufficient msg.value");
+        require(assets <= maxDeposit(receiver), "Invalid amount, more");
         uint256 fees = ISubstakeL2Config(substakeL2Config).computeFees(assets, 0);
-        feesCollector.transfer(fees);
+        ISubstakeL2Config(substakeL2Config).getFeeCollector().transfer(fees);
         uint256 _assets = assets - fees;
         uint256 shares = previewDeposit(_assets);
-        uint256 batchId = _deposit(msg.sender, receiver, _assets, _shares);
+        uint256 batchId = _deposit(msg.sender, receiver, _assets, shares);
         return (_assets, shares);
     }
 
@@ -68,57 +66,53 @@ contract SubstakeVault is ISubstakeVault, ERC20Upgradeable, AccessControlUpgrade
 
     function redeem(uint256 shares, address receiver, address owner) external returns (uint256, uint256) {}
 
-    function asset() public returns (address) {
+    function asset() public view returns (address) {
         return address(0);
     }
 
-    function previewDeposit(uint256 assets) public returns (uint256) {
+    function previewDeposit(uint256 assets) public view returns (uint256) {
         return convertToShares(assets);
     }
 
-    function previewMint() public returns (uint256) {}
+    function previewMint(uint256 shares) public view returns (uint256) {}
 
-    function previewWithdraw() public returns (uint256) {}
+    function previewWithdraw(uint256 assets) public view returns (uint256) {}
 
-    function previewRedeem() public returns (uint256) {}
+    function previewRedeem(uint256 shares) public view returns (uint256) {}
 
-    function convertToAssets() public returns (uint256) {}
+    function convertToAssets(uint256 shares) public view returns (uint256) {}
 
-    function convertToShares() public returns (uint256) {}
+    function convertToShares(uint256 assets) public view returns (uint256) {}
 
-    function maxDeposit() public returns (uint256) {}
+    function maxDeposit(address receiver) public view returns (uint256) {}
 
-    function maxMint() public returns (uint256) {}
+    function maxMint(address receiver) public view returns (uint256) {}
 
-    function maxWithdraw() public returns (uint256) {}
+    function maxWithdraw(address owner) public view returns (uint256) {}
 
-    function maxRedeem() public returns (uint256) {}
+    function maxRedeem(address owner) public view returns (uint256) {}
 
-    function totalAsset() public returns (uint256) {}
+    function totalAssets() public view returns (uint256) {}
 
-    function vaultBalance() public returns(uint256){
+    function vaultBalance() public view returns (uint256) {
         return address(this).balance;
     }
 
-    function stakeThreshold() public returns(uint256){
-        return (
-            ISubstakeL2Config(substakeL2Config).getStakeThreshold()
-        );
+    function stakeThreshold() public view returns (uint256) {
+        return (ISubstakeL2Config(substakeL2Config).getStakeThreshold());
     }
 
-    function unstakeThreshold() public returns(uint256){
-         return (
-            ISubstakeL2Config(substakeL2Config).getUntakeThreshold()
-        );
+    function unstakeThreshold() public returns (uint256) {
+        return (ISubstakeL2Config(substakeL2Config).getUnstakeThreshold());
     }
 
     function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal returns (uint256) {
-        address(this).transfer(assets);
+        // @note_anubhav -> User safeTransferFrom
+        payable(address(this)).transfer(assets);
         _mint(receiver, shares);
 
-        // @todo update the exrate here,
-        // 1. total SubToken supply
-        // 2. total asset
+        ISubstakeL2Config(substakeL2Config).updateTotalETH(totalAssets());
+        ISubstakeL2Config(substakeL2Config).updateTotalSubToken(totalSupply());
 
         uint256 currentStakeBatch = activeStakeBatch();
         batchIdToStakers[currentStakeBatch].push(receiver);
@@ -133,21 +127,28 @@ contract SubstakeVault is ISubstakeVault, ERC20Upgradeable, AccessControlUpgrade
         return stakeBatchId;
     }
 
-    function _dispatchStakeBatch() internal {}
+    function _dispatchStakeBatch() internal {
+        uint256 currentStakeBatch = activeStakeBatch();
+        uint256 amount;
+        address recipient = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
+
+        //@note_anubhav -> write messaging logic here
+        previousBatchStakeTime = block.timestamp;
+        batchIdToStakeBatch[currentStakeBatch].ethBalance = amount;
+        batchIdToStakeBatch[currentStakeBatch].isClosed = true;
+        _createNewStakeBatch();
+        emit BatchSentToL1(currentStakeBatch, STAKE, amount, recipient);
+    }
 
     function _dispatchUnstakeBatch() internal {}
 
-    function _stakingCondition() internal returns(bool){
+    function _stakingCondition() internal returns (bool) {
         //@note_anubhav -> Add no. of stakers and time elapsed as well in staking condition
-        return (
-            (vaultBalance()>=stakeThreshold()) ? true : false
-        );
+        return ((vaultBalance() >= stakeThreshold()) ? true : false);
     }
 
-    function _unstakingCondition() internal returns(bool){
-        return (
-            (activeBatchSUBTokenBalance>=unstakeThreshold()) ? true : false
-        );
+    function _unstakingCondition() internal returns (bool) {
+        return ((activeBatchSUBTokenBalance >= unstakeThreshold()) ? true : false);
     }
 
     function _createNewStakeBatch() internal {
@@ -165,4 +166,7 @@ contract SubstakeVault is ISubstakeVault, ERC20Upgradeable, AccessControlUpgrade
         batchIdToUnstakeBatch[unstakeBatchId].SubBalance = 0;
         batchIdToUnstakeBatch[unstakeBatchId].isClosed = false;
     }
+
+    fallback() external payable {}
+    receive() external payable {}
 }
