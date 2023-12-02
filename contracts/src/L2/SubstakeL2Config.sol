@@ -5,6 +5,7 @@ import "../libs/SubstakeLib.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
+
 contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     bytes32 private constant ADMIN = keccak256("ADMIN");
     bytes32 private constant SCROLL_L2_ETH_GATEWAY = keccak256("SCROLL_L2_ETH_GATEWAY");
