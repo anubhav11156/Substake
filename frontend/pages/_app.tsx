@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import React from "react";
 import { Toaster } from "sonner";
 
+import Loading from "@/components/Loading";
+import { cn } from "@/lib/utils";
 import ConnectKitWrapper from "@/providers/ConnectKitWrapper";
 import "@/styles/globals.css";
-import Loading from "@/components/Loading";
 
 const font = IBM_Plex_Mono({ subsets: ["latin"], weight: "300" });
 
@@ -35,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
   // if (loading) return <Loading />;
 
   return (
-    <div className={font.className}>
+    <div className={cn(font.className, "bg-[#FFDEAD]")}>
       <ConnectKitWrapper>
         <Toaster position="bottom-right" />
         <Component {...pageProps} />
