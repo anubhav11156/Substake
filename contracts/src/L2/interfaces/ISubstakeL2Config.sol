@@ -5,6 +5,7 @@ interface ISubstakeL2Config {
     struct ExchangeRate {
         uint256 totalETH;
         uint256 totalSubToken;
+        uint256 totalwstETH;
         uint256 lidoExRate;
         uint256 ethInTransit;
     }
@@ -15,6 +16,7 @@ interface ISubstakeL2Config {
     function updateTotalSubToken(uint256) external;
     function updateLidoExRate(uint256) external;
     function updateEthInTransit(uint256) external;
+    function updateTotalWstETH(uint256) external;
     function updateSubstakeVault(address) external;
     function updateScrollL2ETHGateway(address) external;
     function updateSubstakeL1Manager(address) external;
@@ -29,7 +31,7 @@ interface ISubstakeL2Config {
     function updateAdmin(address) external;
     function updateFeeCollector(address) external;
 
-    function getExchangeRate() external view returns (ExchangeRate memory);
+    function getExchangeRateData() external view returns (ExchangeRate memory);
     function getSubstakeVault() external view returns (address);
     function getScrollL2ETHGateway() external view returns (address);
     function getSubstakeL1Manager() external view returns (address);

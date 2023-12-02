@@ -5,7 +5,6 @@ import "../libs/SubstakeLib.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-
 contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     bytes32 private constant ADMIN = keccak256("ADMIN");
     bytes32 private constant SCROLL_L2_ETH_GATEWAY = keccak256("SCROLL_L2_ETH_GATEWAY");
@@ -32,8 +31,10 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     mapping(bytes32 => uint256) uint256Map;
     mapping(bytes32 => address payable) addressMap;
 
-    function initialize(address _admin) external initializer {
+    function initialize(address _admin, uint256 _lidoExRate) external initializer {
         SubstakeLib.zeroAddressCheck(_admin);
+        SubstakeLib.zeroCheck(_lidoExRate);
+        exchangeRate.lidoExRate = _lidoExRate;
         __AccessControl_init();
         _setAdmin(_admin);
         _setContract(SCROLL_L2_ETH_GATEWAY, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
@@ -65,6 +66,10 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
 
     function updateEthInTransit(uint256 _newValue) external override onlySubstakeVault {
         exchangeRate.ethInTransit = _newValue;
+    }
+
+    function updateTotalWstETH(uint256 _newValue) external override onlySubstakeVault {
+        exchangeRate.totalwstETH = _newValue;
     }
 
     function updateSubstakeVault(address _newAddress) external override onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -159,7 +164,7 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
         return uint256Map[MIN_UNSTAKERS_IN_BATCH];
     }
 
-    function getExchangeRate() external view override returns (ExchangeRate memory) {
+    function getExchangeRateData() external view override returns (ExchangeRate memory) {
         return exchangeRate;
     }
 
