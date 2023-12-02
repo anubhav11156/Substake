@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({
   isConnectWallet = true,
 }) => {
   return (
-    <header className="w-full border-b border-black">
+    <header className="w-full border-b border-black transition-all">
       <div className="flex items-center justify-between max-w-[85rem] w-full mx-auto py-5 px-3">
         <div className="flex items-center gap-16">
           <Link href="/">
