@@ -1,12 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.20;
 
-contract HashstackManagerProxy {
+import "../../libs/SubstakeLib.sol";
+
+contract SubstakeVaultProxy {
     bytes32 private constant IMPLEMENTATION_SLOT = bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1);
     bytes32 private constant ADMIN_SLOT = bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1);
 
     constructor(address admin) {
-        HashstackLib.zeroAddressCheck(admin);
+        SubstakeLib.zeroAddressCheck(admin);
         _setAdmin(admin);
     }
 
@@ -28,20 +30,20 @@ contract HashstackManagerProxy {
     }
 
     function _getImplementation() private view returns (address) {
-        return HashstackLib.getAddressSlot(IMPLEMENTATION_SLOT).value;
+        return SubstakeLib.getAddressSlot(IMPLEMENTATION_SLOT).value;
     }
 
     function _setImplementation(address implementation) private {
         require(implementation.code.length > 0, "Not an contract address");
-        HashstackLib.getAddressSlot(IMPLEMENTATION_SLOT).value = implementation;
+        SubstakeLib.getAddressSlot(IMPLEMENTATION_SLOT).value = implementation;
     }
 
     function _getAdmin() private view returns (address) {
-        return HashstackLib.getAddressSlot(ADMIN_SLOT).value;
+        return SubstakeLib.getAddressSlot(ADMIN_SLOT).value;
     }
 
     function _setAdmin(address admin) private {
-        HashstackLib.getAddressSlot(ADMIN_SLOT).value = admin;
+        SubstakeLib.getAddressSlot(ADMIN_SLOT).value = admin;
     }
 
     function upgradeImplementation(address _newImplementation) external ifAdmin {
