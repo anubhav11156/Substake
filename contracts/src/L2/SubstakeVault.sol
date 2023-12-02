@@ -7,6 +7,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
+import {ISubstakeL2Router} from "./interfaces/ISubstakeL2Router.sol";
 import {ISubstakeVault} from "./interfaces/ISubstakeVault.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
 

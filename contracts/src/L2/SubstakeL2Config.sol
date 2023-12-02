@@ -8,6 +8,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
 contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     bytes32 private constant ADMIN = keccak256("ADMIN");
     bytes32 private constant SCROLL_L2_ETH_GATEWAY = keccak256("SCROLL_L2_ETH_GATEWAY");
+    bytes32 private constant SCROLL_GATEWAY_WITHDRAW_FEE = keccak256("SCROLL_GATEWAY_WITHDRAW_FEE");
     bytes32 private constant SUBSTAKE_VAULT = keccak256("SUBSTAKE_VAULT");
     bytes32 private constant SUBSTAKE_L1_MANAGER = keccak256("SUBSTAKE_L1_MANAGER");
     bytes32 private constant FEE_COLLECTOR = keccak256("FEE_COLLECTOR");
@@ -49,6 +50,7 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
         _setUint(UNSTAKE_BATCH_MAX_WAIT_TIME, 10800); // 3 Hr
         _setUint(MIN_STAKERS_IN_BATCH, 2);
         _setUint(MIN_UNSTAKERS_IN_BATCH, 2);
+        _setUint(SCROLL_GATEWAY_WITHDRAW_FEE, 5000000000000000); // 0.005 ETH
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
@@ -78,6 +80,10 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
 
     function updateScrollL2ETHGateway(address _newAddress) external override onlyRole(DEFAULT_ADMIN_ROLE) {
         _setContract(SCROLL_L2_ETH_GATEWAY, _newAddress);
+    }
+
+    function updateScrollGatewayWithdrawFee(uint256 _newValue) external override onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setUint(SCROLL_GATEWAY_WITHDRAW_FEE, _newValue);
     }
 
     function updateSubstakeL1Manager(address _newAddress) external override onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -126,6 +132,10 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
 
     function getScrollL2ETHGateway() external view override returns (address) {
         return contractsMap[SCROLL_L2_ETH_GATEWAY];
+    }
+
+    function getScrolllGatewayWithdrawFee() external view override returns(uint256){
+        return uint256Map[SCROLL_GATEWAY_WITHDRAW_FEE];
     }
 
     function getSubstakeL1Manager() public view override returns (address) {
