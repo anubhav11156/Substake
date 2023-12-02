@@ -65,7 +65,6 @@ contract SubstakeVault is
     mapping(uint256 => address[]) batchIdToStakers;
     mapping(uint256 => address[]) batchIdToUnstakers;
 
-    // @note transfer assets as msg.value from frontend
     function deposit(uint256 assets, address receiver)
         external
         override
@@ -165,48 +164,6 @@ contract SubstakeVault is
         return ((_totalwstETH * _ethPerWstETH) / DECIMALS);
     }
 
-    function stakeThreshold() public view returns (uint256) {
-        return (ISubstakeL2Config(substakeL2Config).getStakeThreshold());
-    }
-
-    function unstakeThreshold() public view returns (uint256) {
-        return (ISubstakeL2Config(substakeL2Config).getUnstakeThreshold());
-    }
-
-    function activeStakeBatch() public view returns (uint256) {
-        return stakeBatchId;
-    }
-
-    function activeUnstakeBatch() public view returns (uint256) {
-        return unstakeBatchId;
-    }
-
-    function getPreviousBatchStakeTime() public view returns (uint256) {
-        return previousBatchStakeTime;
-    }
-
-    function getPreviousBatchUnstakeTime() public view returns (uint256) {
-        return previousBatchUnstakeTime;
-    }
-
-    function getAciveUnstakeBatchUnstakersLength() public view returns (uint256) {
-        return batchIdToUnstakers[activeUnstakeBatch()].length;
-    }
-
-    function getActiveStakeBatchStakersLenght() public view returns (uint256) {
-        return batchIdToStakers[activeStakeBatch()].length;
-    }
-
-    function getStakeBatchDetail(uint256 batchId) public view returns (StakeBatch memory) {
-        require(batchId <= activeStakeBatch(), "Invalid StakeBatchId");
-        return batchIdToStakeBatch[batchId];
-    }
-
-    function getUnstakeBatchDetail(uint256 batchId) public view returns (UnstakeBatch memory) {
-        require(batchId <= activeUnstakeBatch(), "Invalid UnstakeBatchId");
-        return batchIdToUnstakeBatch[batchId];
-    }
-
     function ethPerSubToken() public view returns (uint256) {
         uint256 supply = exchangeRate().totalSubToken;
         return (
@@ -265,10 +222,15 @@ contract SubstakeVault is
 
     function _dispatchStakeBatch() internal {
         uint256 currentStakeBatch = activeStakeBatch();
-        uint256 amount;
+        uint256 amount = vaultBalance();
         address recipient = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
-
-        //@note_anubhav -> write messaging logic here
+        uint256 fee = ISubstakeL2Config(substakeL2Config).getScrolllGatewayWithdrawFee();
+        bytes memory message = abi.encode(currentStakeBatch, amount);
+        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendEthAndMessage{value: amount}(
+            amount, message, recipient, fee
+        );
+        ISubstakeL2Config(substakeL2Config).updateEthInTransit(exchangeRate().ethInTransit + amount);
+        ISubstakeL2Config(substakeL2Config).updateTotalETH(totalAssets());
         previousBatchStakeTime = block.timestamp;
         batchIdToStakeBatch[currentStakeBatch].ethBalance = amount;
         batchIdToStakeBatch[currentStakeBatch].isClosed = true;
@@ -280,8 +242,9 @@ contract SubstakeVault is
         uint256 currentUnstakeBatch = activeUnstakeBatch();
         uint256 _assets = convertToAssets(activeBatchSUBTokenBalance);
         address recipient = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
-
-        // @note_anubhav -> write messaging logic here
+        uint256 fee = ISubstakeL2Config(substakeL2Config).getScrolllGatewayWithdrawFee();
+        bytes memory message = abi.encode(currentUnstakeBatch, _assets);
+        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendOnlyMessage(message, recipient, fee);
         previousBatchUnstakeTime = block.timestamp;
         batchIdToUnstakeBatch[currentUnstakeBatch].isClosed = true;
         batchIdToUnstakeBatch[currentUnstakeBatch].ethExpected = _assets;
@@ -334,6 +297,48 @@ contract SubstakeVault is
         return (unstakerSubTokenShare.mulDiv(totalETHInBatch, totalSubTokenInBatch, Math.Rounding.Floor));
     }
 
+    function stakeThreshold() public view returns (uint256) {
+        return (ISubstakeL2Config(substakeL2Config).getStakeThreshold());
+    }
+
+    function unstakeThreshold() public view returns (uint256) {
+        return (ISubstakeL2Config(substakeL2Config).getUnstakeThreshold());
+    }
+
+    function activeStakeBatch() public view returns (uint256) {
+        return stakeBatchId;
+    }
+
+    function activeUnstakeBatch() public view returns (uint256) {
+        return unstakeBatchId;
+    }
+
+    function getPreviousBatchStakeTime() public view returns (uint256) {
+        return previousBatchStakeTime;
+    }
+
+    function getPreviousBatchUnstakeTime() public view returns (uint256) {
+        return previousBatchUnstakeTime;
+    }
+
+    function getAciveUnstakeBatchUnstakersLength() public view returns (uint256) {
+        return batchIdToUnstakers[activeUnstakeBatch()].length;
+    }
+
+    function getActiveStakeBatchStakersLenght() public view returns (uint256) {
+        return batchIdToStakers[activeStakeBatch()].length;
+    }
+
+    function getStakeBatchDetail(uint256 batchId) public view returns (StakeBatch memory) {
+        require(batchId <= activeStakeBatch(), "Invalid StakeBatchId");
+        return batchIdToStakeBatch[batchId];
+    }
+
+    function getUnstakeBatchDetail(uint256 batchId) public view returns (UnstakeBatch memory) {
+        require(batchId <= activeUnstakeBatch(), "Invalid UnstakeBatchId");
+        return batchIdToUnstakeBatch[batchId];
+    }
+
     function stakeHandler(address _from, uint256 _batchId, uint256 _totalShares, uint256 _exRate) external override {
         address substakeL1Manager = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
         require(_from == substakeL1Manager, "Not Authorised!");
@@ -370,6 +375,8 @@ contract SubstakeVault is
         _unpause();
     }
 
+    //@anubhav_audit_note add revert in fallback/recevie if other than scroll contracts deposit ETH to this vault | 
+    // tho won't be a problem  coz only the hacker will be in loss as  exRate won't get affected
     fallback() external payable {}
     receive() external payable {}
 }

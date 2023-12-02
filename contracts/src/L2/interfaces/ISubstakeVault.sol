@@ -15,6 +15,7 @@ interface ISubstakeVault {
     error ApprovalFailed();
     error TransactionFailed();
     error IdenticalValue();
+    error MessagingFailed();
 
     // Events
 
