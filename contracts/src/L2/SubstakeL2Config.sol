@@ -10,7 +10,7 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     bytes32 private constant SCROLL_L2_ETH_GATEWAY = keccak256("SCROLL_L2_ETH_GATEWAY");
     bytes32 private constant SUBSTAKE_VAULT = keccak256("SUBSTAKE_VAULT");
     bytes32 private constant SUBSTAKE_L1_MANAGER = keccak256("SUBSTAKE_L1_MANAGER");
-    bytes32 private constant FEE_COLLECTOR = keccak256("FEE)COLLECTOR");
+    bytes32 private constant FEE_COLLECTOR = keccak256("FEE_COLLECTOR");
     bytes32 private constant STAKING_FEES_IN_BIPS = keccak256("STAKING_FEES_IN_BIPS");
     bytes32 private constant UNSTAKING_FEES_IN_BIPS = keccak256("UNSTAKING_FEES_IN_BIPS");
     bytes32 private constant STAKE_THRESHOLD = keccak256("STAKE_THRESHOLD");
