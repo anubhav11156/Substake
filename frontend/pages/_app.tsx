@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
   if (loading) return <Loading />;
 
   return (
-    <div className={cn(font.className, "bg-[#f9e5c7]")}>
+    <div className={cn(font.className, "bg-[#FFDEAD]")}>
       <ConnectKitWrapper>
         <Toaster position="bottom-right" />
         <Component {...pageProps} />

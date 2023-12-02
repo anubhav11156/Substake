@@ -26,8 +26,8 @@ const UnstakePage: NextPage = () => {
 
   return (
     <ApplicationLayout>
-      <div className="h-[calc(100vh-82px)] justify-center flex flex-col w-full max-w-lg mx-auto items-center px-3 sm:px-0">
-        <div className="fixed -left-72 top-[68px] sm:top-[80px] opacity-40">
+      <div className="h-[calc(100vh-82px)] justify-center flex flex-col w-full max-w-xl mx-auto items-center px-3 sm:px-0">
+        <div className="fixed -left-72 top-[68px] sm:top-[80px] opacity-60">
           <div className="relative w-[695px] h-[1024px]">
             <Image src="/widget.svg" fill alt="eth" className="rotate-180" />
           </div>
