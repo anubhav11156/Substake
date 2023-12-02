@@ -28,7 +28,7 @@ import "../libs/SubstakeLib.sol";
         uniswap swap Router : 0xE592427A0AEce92De3Edee1F18E0157C05861564
 */
 
-contract L1Config is IL1Config {
+contract SubstakeL1Config is IL1Config {
     address admin;
     bytes32 public constant CONTRACTS_MAP = keccak256("CONTRACTS_MAP");
     bytes32 public constant UINT_MAP = keccak256("UINT_MAP");

@@ -10,7 +10,7 @@ import {IMailbox} from "./interfaces/IMailbox.sol";
 import {SubstakeLib} from "../libs/SubstakeLib.sol";
 import {Test, console2} from "forge-std/Test.sol";
 
-contract L1Manager is IL1Manager, Test {
+contract SubstakeL1Manager is IL1Manager, Test {
     IL1Config public l1Config;
 
     uint256 public constant LIDO = 1;
