@@ -1,10 +1,10 @@
 import { getNetwork } from "@wagmi/core";
+import { ConnectKitButton } from "connectkit";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
 import { useAccount, useBalance, useConnect } from "wagmi";
-import { ConnectKitButton } from "connectkit";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,8 +26,8 @@ const StakePage: NextPage = () => {
 
   return (
     <ApplicationLayout>
-      <div className="mt-36 flex flex-col w-full max-w-lg mx-auto items-center px-3 sm:px-0">
-        <div className="hover:bg-gray-200 transition-all shadow-sm relative border border-black p-4 w-full flex items-center gap-4">
+      <div className="h-[calc(100vh-82px)] flex flex-col w-full max-w-lg mx-auto justify-center items-center px-3 sm:px-0">
+        <div className="hover:bg-[#fadfb5] transition-all shadow-sm relative border border-black p-4 w-full flex items-center gap-4">
           <Image src="/eth.svg" width={40} height={40} alt="eth" />
 
           <div className="flex flex-col">
@@ -49,11 +49,11 @@ const StakePage: NextPage = () => {
           </p>
         </div>
 
-        <div className="border-x border-b border-gray-400 p-4 w-full flex items-center gap-3">
+        <div className="border-x border-b border-[#afa445] p-4 w-full flex items-center gap-3">
           <Input
             value={stakeValue ? stakeValue : ""}
             onChange={(e) => setStakeValue(e.target.value)}
-            className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium"
+            className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium bg-[#FFDEAD]"
             placeholder="0.0"
             type="number"
           />
@@ -64,7 +64,7 @@ const StakePage: NextPage = () => {
                 toast.error("Please connect your wallet first");
               } else setStakeValue(accountBalance ? accountBalance : "");
             }}
-            className="bg-gray-200 px-2 py-1 w-fit text-xs font-medium cursor-pointer hover:bg-gray-300 transition-all"
+            className="bg-[#c5ba59] px-2 py-1 w-fit text-xs font-medium cursor-pointer hover:bg-[#d1c663] transition-all text-white/90"
           >
             MAX
           </div>
@@ -92,7 +92,8 @@ const StakePage: NextPage = () => {
         </div>
 
         {isConnected ? (
-          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#637FEA] hover:bg-[#708ae8] transition-all uppercase">
+          // B4B296
+          <Button className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#afa445] hover:bg-[#b2a849] transition-all uppercase">
             Stake
           </Button>
         ) : (
@@ -101,7 +102,7 @@ const StakePage: NextPage = () => {
               return (
                 <Button
                   onClick={show}
-                  className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#637FEA] hover:bg-[#708ae8] uppercase transition-all"
+                  className="mt-5 rounded-none w-full h-[52px] text-lg font-medium bg-[#afa445] text-white/90 hover:bg-[#b2a849] uppercase transition-all"
                 >
                   Connect Wallet
                 </Button>

@@ -7,12 +7,10 @@ const ApplicationLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <Suspense fallback={<Loading />}>
-      <div className="w-full">
-        <Navbar isConnectWallet={false} />
-        {children}
-      </div>
-    </Suspense>
+    <div className="w-full">
+      <Navbar isConnectWallet={false} />
+      <Suspense fallback={<Loading />}>{children}</Suspense>
+    </div>
   );
 };
 

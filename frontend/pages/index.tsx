@@ -1,12 +1,12 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
+import { Suspense } from "react";
 import { useAccount } from "wagmi";
 
+import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import Loading from "@/components/Loading";
 
 export const metadata: Metadata = {
   title: "Substake",
@@ -23,11 +23,11 @@ const Home: NextPage = () => {
       <div className="h-full">
         <Navbar isNavLink={false} />
 
-        <div className="flex flex-col justify-center items-center mt-32">
+        <div className="h-[calc(100vh-82px)] flex flex-col justify-center items-center">
           <h1 className="text-2xl text-center">Landing page</h1>
 
           <Button
-            className="rounded-none mt-5 bg-[#637FEA] hover:bg-[#708ae8]"
+            className="rounded-none mt-5 bg-[#afa445] hover:bg-[#b2a849]"
             onClick={() => router.push("/application/stake")}
           >
             Launch Dapp
