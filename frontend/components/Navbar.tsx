@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({
   isConnectWallet = true,
 }) => {
   return (
-    <header className="w-full border-b border-black transition-all">
+    <header className="w-full border-b border-mainBg transition-all">
       <div className="flex items-center justify-between max-w-[85rem] w-full mx-auto py-5 px-3">
         <div className="flex items-center gap-16">
           <Link href="/">
@@ -44,11 +44,11 @@ const Navbar: React.FC<NavbarProps> = ({
               <Button
                 onClick={show}
                 className={cn(
-                  "rounded-none font-medium uppercase transition-all w-36 bg-[#afa445] text-white/90 hover:bg-[#b2a849]",
+                  "rounded-xl font-medium uppercase transition-all w-36 bg-[#9b923b] hover:bg-[#a99f44] text-white/90",
                   {
                     "hidden sm:flex": !isConnectWallet,
-                    "bg-[#afa445] text-white/90 hover:bg-[#b2a849]":
-                      isConnected,
+                    // "bg-[#afa445] text-white/90 hover:bg-[#b2a849]":
+                    //   isConnected,
                   }
                 )}
               >

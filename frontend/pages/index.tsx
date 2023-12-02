@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Substake",
@@ -27,7 +28,7 @@ const Home: NextPage = () => {
           <h1 className="text-2xl text-center">Landing page</h1>
 
           <Button
-            className="rounded-none mt-5 bg-[#afa445] hover:bg-[#b2a849]"
+            className="rounded-none mt-5 bg-[#9b923b] hover:bg-[#a99f44] text-white/90"
             onClick={() => router.push("/application/stake")}
           >
             Launch Dapp

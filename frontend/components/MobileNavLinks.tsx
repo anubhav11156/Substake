@@ -12,7 +12,7 @@ const MobileNavLinks: React.FC = () => {
       <SheetTrigger>
         <Menu />
       </SheetTrigger>
-      <SheetContent className="bg-[#FFDEAD]">
+      <SheetContent className="bg-[#f9e5c7]">
         <div className="flex flex-col gap-10 w-full items-center pt-10">
           <NavLinks className="flex flex-col" />
 
@@ -30,11 +30,11 @@ const MobileNavLinks: React.FC = () => {
                 <Button
                   onClick={show}
                   className={cn(
-                    "rounded-none font-normal uppercase transition-all bg-[#afa445] text-white/90 hover:bg-[#b2a849]",
-                    {
-                      " bg-[#afa445] text-white/90 hover:bg-[#b2a849]":
-                        isConnected,
-                    }
+                    "rounded-xl font-normal uppercase transition-all bg-[#9b923b] hover:bg-[#a99f44] text-white/90"
+                    // {
+                    //   "":
+                    //     isConnected,
+                    // }
                   )}
                 >
                   {isConnected
