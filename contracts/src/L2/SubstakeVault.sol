@@ -342,9 +342,7 @@ contract SubstakeVault is
     function stakeHandler(address _from, uint256 _batchId, uint256 _totalShares, uint256 _exRate) external override {
         address substakeL1Manager = substakeL2Config.getSubstakeL1Manager();
         require(_from == substakeL1Manager, "Not Authorised!");
-        substakeL2Config.updateEthInTransit(
-            exchangeRate().ethInTransit - batchIdToStakeBatch[_batchId].ethBalance
-        );
+        substakeL2Config.updateEthInTransit(exchangeRate().ethInTransit - batchIdToStakeBatch[_batchId].ethBalance);
         substakeL2Config.updateTotalWstETH(_totalShares);
         substakeL2Config.updateLidoExRate(_exRate);
         emit BatchFromL1(_batchId, STAKE, _from);
@@ -375,7 +373,7 @@ contract SubstakeVault is
         _unpause();
     }
 
-    //@anubhav_audit_note add revert in fallback/recevie if other than scroll contracts deposit ETH to this vault | 
+    //@anubhav_audit_note add revert in fallback/recevie if other than scroll contracts deposit ETH to this vault |
     // tho won't be a problem  coz only the hacker will be in loss as  exRate won't get affected
     fallback() external payable {}
     receive() external payable {}

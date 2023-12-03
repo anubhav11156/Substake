@@ -40,8 +40,8 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
         exchangeRate.lidoExRate = _lidoExRate;
         __AccessControl_init();
         _setAdmin(_admin);
-        _setContract(SCROLL_L2_MESSENGER, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
-        _setContract(SCROLL_L2_ETH_GATEWAY, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
+        _setContract(SCROLL_L2_MESSENGER, 0xBa50f5340FB9F3Bd074bD638c9BE13eCB36E603d);
+        _setContract(SCROLL_L2_ETH_GATEWAY, 0x91e8ADDFe1358aCa5314c644312d38237fC1101C);
         _setContract(SUBSTAKE_L1_MANAGER, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
         _setContract(SUBSTAKE_VAULT, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
         _setContract(SUBSTAKE_L2_ROUTER, 0xd0e400Ec6Ed9C803A9D9D3a602494393E806F823);
