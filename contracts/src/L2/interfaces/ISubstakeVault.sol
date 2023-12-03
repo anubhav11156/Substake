@@ -15,6 +15,7 @@ interface ISubstakeVault {
     error ApprovalFailed();
     error TransactionFailed();
     error IdenticalValue();
+    error MessagingFailed();
 
     // Events
 
@@ -22,7 +23,8 @@ interface ISubstakeVault {
     event Withdraw(
         address indexed sender, address indexed receiver, address indexed owner, uint256 assets, uint256 shares
     );
-    event BatchSentToL1(uint256 indexed stakeBatch, uint8 indexed batchType, uint256 amount, address l1Recipient);
+    event BatchSentToL1(uint256 indexed batchId, uint8 indexed batchType, uint256 amount, address l1Recipient);
+    event BatchFromL1(uint256 indexed batchId, uint8 indexed batchType, address l1Recipient);
 
     function asset() external view returns (address);
     function totalAssets() external view returns (uint256);
@@ -40,4 +42,7 @@ interface ISubstakeVault {
     // function mint(uint256 shares, address receiver) external returns (uint256, uint256);
     // function withdraw(uint256 assets, address receiver, address owner) external returns (uint256, uint256);
     function redeem(uint256 shares, address receiver, address owner) external returns (uint256, uint256);
+    function stakeHandler(address _from, uint256 _batchId, uint256 _totalShares, uint256 _exRate) external;
+    function withdrawHandler(address _from, uint256 _batchId, uint256 _ethAmount, uint256 _totalShares, uint256 _exRate)
+        external;
 }

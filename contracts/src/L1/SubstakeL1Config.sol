@@ -55,7 +55,7 @@ contract SubstakeL1Config is IL1Config {
         // setContract(HYPERLANE_MAILBOX_L2, 0x3C5154a193D6e2955650f9305c8d80c18C814A68);
         setUint(UNISWAP_POOL_FEE, 3000); // 0.3%
         setUint(UINIWAP_SWAP_DEADLINE, 43200); // 12 hr
-        // setUint(HYPERLANE_FEE, 1900000000000000);
+            // setUint(HYPERLANE_FEE, 1900000000000000);
     }
 
     modifier onlyAdmin() {

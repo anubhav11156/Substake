@@ -5,6 +5,7 @@ interface ISubstakeL2Config {
     struct ExchangeRate {
         uint256 totalETH;
         uint256 totalSubToken;
+        uint256 totalwstETH;
         uint256 lidoExRate;
         uint256 ethInTransit;
     }
@@ -15,9 +16,13 @@ interface ISubstakeL2Config {
     function updateTotalSubToken(uint256) external;
     function updateLidoExRate(uint256) external;
     function updateEthInTransit(uint256) external;
+    function updateTotalWstETH(uint256) external;
     function updateSubstakeVault(address) external;
+    function updateScrollL2Messenger(address) external;
     function updateScrollL2ETHGateway(address) external;
+    function updateScrollGatewayWithdrawFee(uint256) external;
     function updateSubstakeL1Manager(address) external;
+    function updateSubstakeL2Router(address) external;
     function updateStakingFee(uint256) external;
     function updateUnstakingFee(uint256) external;
     function updateStakeThreshold(uint256) external;
@@ -29,10 +34,13 @@ interface ISubstakeL2Config {
     function updateAdmin(address) external;
     function updateFeeCollector(address) external;
 
-    function getExchangeRate() external view returns (ExchangeRate memory);
+    function getExchangeRateData() external view returns (ExchangeRate memory);
     function getSubstakeVault() external view returns (address);
+    function getScrollL2Messenger() external view returns (address);
     function getScrollL2ETHGateway() external view returns (address);
+    function getScrolllGatewayWithdrawFee() external view returns (uint256);
     function getSubstakeL1Manager() external view returns (address);
+    function getSubstakeL2Router() external view returns (address);
     function getStakingFee() external view returns (uint256);
     function getUnstakingFee() external view returns (uint256);
     function getStakeThreshold() external view returns (uint256);
