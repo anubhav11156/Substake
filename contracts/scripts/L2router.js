@@ -6,11 +6,8 @@ const fsPromise = fs.promises;
 const ALCHEMY_RPC_URL = ""
 const privateKey = ""
 
-const vaultProxyabipath = "../out/SubstakeVaultProxy.sol/SubstakeVaultProxy.json";
-const vaultProxyAddress = "";
-
-const vaultImplementationabipath = "";
-const vaultImplementation = "";
+const substakeL2routerProxyabipath = "../out/SubstakeL2RouterProxy.sol/SubstakeL2RouterProxy.json";
+const substakeL2routerProxyAddress = "";
 
 const scrollSepoliaRPC = ""
 
@@ -20,23 +17,23 @@ const signer = new ethers.Wallet(privateKey, provider);
 async function getAbi(path){
     const data = await fsPromise.readFile(path, 'utf-8');
     const abi = JSON.parse(data);
-    return abi;
+    return abi;substake
 }
 
-const main = async () =>{
-    _upgradeImplementation();
-    _initializeVault();
+const main = ()=> {
+    //_upgradeImplementation()
+    //_initializeVault()
 }
 
 const _upgradeImplementation = async () => {
-    const PROXY_ABI = await getAbi(vaultProxyabipath);
-    const contract = new ethers.Contract(vaultProxyAddress, PROXY_ABI.abi, signer);
-    const vaultImplementation = "";
+    const PROXY_ABI = await getAbi(substakeL2routerProxyabipath);
+    const contract = new ethers.Contract(substakeL2routerProxyAddress, PROXY_ABI.abi, signer);
+    const substakeL2routerImplementation = "";
     console.log("Updating implementaion.........................");
-    let tx = await contract.upgradeImplementation(vaultImplementation)
+    let tx = await contract.upgradeImplementation(substakeL2routerImplementation)
     await tx.wait()
     .then(() => {
-        console.log("vault Implementation Updated!");
+        console.log("substakeL2router Implementation Updated!");
     })
     .catch((error) => {
         console.log("Failed to update implementation.");
@@ -45,19 +42,20 @@ const _upgradeImplementation = async () => {
 }
 
 const _initializeVault = async () => {
-    const IMPLEMENTATION_ABI = await getAbi(vaultImplementationabipath);
-    const contract = new ethers.Contract(vaultProxyAddress, IMPLEMENTATION_ABI.abi, signer);
+    const IMPLEMENTATION_ABI = await getAbi(substakeL2routerImplementationabipath);
+    const contract = new ethers.Contract(substakeL2routerProxyAddress, IMPLEMENTATION_ABI.abi, signer);
     const admin = "0x55d9a0d367866a102eD85EA76CE46B11E62b3E88";
     const L2config ="0x7a5483542b602e130a05Db23a7E2AeC59b2F08C6";
-    console.log("Initializing Vault.................................");
+    console.log("Initializing substakeL2router.................................");
     let tx = await contract.initialize(admin,L2config);
     await tx.wait()
     .then(() => {
-        console.log("vault Initialized!");
+        console.log("substakeL2router Initialized!");
     })
     .catch((error) => {
-        console.log("Failed to initialize vault!");
+        console.log("Failed to initialize substakeL2router!");
         console.log(error);
     })
 }
+
 main();
