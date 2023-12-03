@@ -4,6 +4,8 @@
     "@openzeppelin/contracts-upgradeable": "^5.0.0",
     "@scroll-tech/contracts": "^0.1.0",
     "@uniswap/v3-core": "^1.0.1",
-    "@uniswap/v3-periphery": "^1.4.4"
+    "@uniswap/v3-periphery": "^1.4.4",
+    "dotenv": "^16.3.1",
+    "ethers": "^6.9.0"
   }
 }
