@@ -20,7 +20,10 @@ const Navbar: React.FC<NavbarProps> = ({
     <header className="w-full border-b border-mainBg transition-all">
       <div className="flex items-center justify-between max-w-[85rem] w-full mx-auto py-5 px-3">
         <div className="flex items-center gap-16">
-          <Link href="/" className="flex items-center gap-2">
+          <Link
+            href="/"
+            className="flex items-center gap-2 rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
+          >
             <Image
               src="/logo2.svg"
               width={40}
@@ -52,11 +55,9 @@ const Navbar: React.FC<NavbarProps> = ({
               <Button
                 onClick={show}
                 className={cn(
-                  "rounded-xl font-medium uppercase transition-all w-36 bg-[#9b923b] hover:bg-[#a99f44] text-white/90",
+                  "rounded-xl font-medium uppercase transition-all w-36 bg-[#9b923b] hover:bg-[#a99f44] text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2",
                   {
                     "hidden sm:flex": !isConnectWallet,
-                    // "bg-[#afa445] text-white/90 hover:bg-[#b2a849]":
-                    //   isConnected,
                   }
                 )}
               >

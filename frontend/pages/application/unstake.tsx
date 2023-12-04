@@ -67,16 +67,16 @@ const UnstakePage: NextPage = () => {
               type="number"
             />
 
-            <div
+            <button
               onClick={() => {
                 if (!isConnected) {
                   toast.error("Please connect your wallet first");
                 } else setUnunstakeValue(accountBalance ? accountBalance : "");
               }}
-              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md"
+              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
             >
               MAX
-            </div>
+            </button>
           </div>
 
           <div className="mt-5 w-full text-xs space-y-2">
@@ -101,7 +101,7 @@ const UnstakePage: NextPage = () => {
           </div>
 
           {isConnected ? (
-            <Button className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase">
+            <Button className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2">
               Unstake
             </Button>
           ) : (
@@ -110,7 +110,7 @@ const UnstakePage: NextPage = () => {
                 return (
                   <Button
                     onClick={show}
-                    className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 uppercase transition-all"
+                    className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 uppercase transition-all ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
                   >
                     Connect Wallet
                   </Button>
