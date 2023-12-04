@@ -5,13 +5,29 @@ import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
 import { useAccount, useBalance, useConnect } from "wagmi";
+import web3modal from "web3modal";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { toast } from "sonner";
 
+const { ethers, JsonRpcProvider } = require("ethers");
+let fs = require("fs");
+require("dotenv").config();
+const fsPromise = fs.promises;
+
+const vaultAbiPath = "../../contracts/out/SubstakeVault.sol/SubstakeVault.json";
+const vaultContractAddress = "0x9F8a444192459a84e99290748309415f7f19bFBA";
+const privateKey = "0x...";
+const scrollSepoliaRPC = "https://rpc.scroll.network";
+
 const StakePage: NextPage = () => {
+  async function getAbi(path: string) {
+    const data = await fsPromise.readFile(path, "utf-8");
+    const abi = JSON.parse(data);
+    return abi;
+  }
   const [stakeValue, setStakeValue] = useState("");
 
   const { address, isConnecting, isDisconnected } = useAccount();
@@ -23,6 +39,22 @@ const StakePage: NextPage = () => {
   const accountBalance = data?.formatted;
 
   const _chain = chain?.name;
+
+  const stakeHandler = async () => {
+    const modal = new web3modal({
+      cacheProvider: true,
+    });
+    const connection = await modal.connect();
+
+    const provider = new JsonRpcProvider(scrollSepoliaRPC);
+    const signer = new ethers.Wallet(privateKey, provider);
+
+    const vaultAbi = await getAbi(vaultAbiPath);
+
+    const vaultContract = new ethers.Contract(vaultContractAddress, vaultAbi, signer);
+
+    const tx = await vaultContract.stake({ value: ethers.utils.parseEther(stakeValue) });
+  };
 
   return (
     <ApplicationLayout>
@@ -99,7 +131,10 @@ const StakePage: NextPage = () => {
           </div>
 
           {isConnected ? (
-            <Button className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase">
+            <Button
+              onClick={stakeHandler}
+              className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase"
+            >
               Stake
             </Button>
           ) : (

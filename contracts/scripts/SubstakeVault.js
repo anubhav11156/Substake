@@ -5,6 +5,7 @@ const fsPromise = fs.promises;
 
 const scrollSepoliaRPC = process.env.SCROLL_RPC;
 const privateKey = process.env.PV_KEY
+console.log(privateKey)
 
 const vaultProxyabipath = "../out/SubstakeVaultProxy.sol/SubstakeVaultProxy.json";
 const vaultProxyAddress = "0xC4374cC35CbB2a42B9C19495AD811C742dc9FAA9";
@@ -19,15 +20,17 @@ async function getAbi(path){
     return abi;
 }
 
-const main = async () => {
-    // upgradeImplementation("0x");
-    // initializeVault()
+const main = () => {
+    // upgradeImplementation();
+    console.log("hello");
+    initializeVault()
 }
 
-const upgradeImplementation = async (vaultImplementation) => {
+const upgradeImplementation = async () => {
     const PROXY_ABI = await getAbi(vaultProxyabipath);
     const contract = new ethers.Contract(vaultProxyAddress, PROXY_ABI.abi, signer);
     console.log("Updating implementaion.........................");
+    const vaultImplementation= "0x9F8a444192459a84e99290748309415f7f19bFBA";
     let tx = await contract.upgradeImplementation(vaultImplementation)
     await tx.wait()
     .then(() => {
@@ -64,3 +67,5 @@ const listenToEvents = async () => {
         console.log(implementation);
     })
 }
+
+main();

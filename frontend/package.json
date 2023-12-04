@@ -14,7 +14,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "connectkit": "^1.5.3",
-    "ethers": "^6.8.1",
+    "ethers": "^6.9.0",
     "lucide-react": "^0.293.0",
     "next": "14.0.3",
     "react": "^18",
@@ -22,7 +22,8 @@
     "sonner": "^1.2.3",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
-    "wagmi": "^1.4.7"
+    "wagmi": "^1.4.7",
+    "web3modal": "^1.9.12"
   },
   "devDependencies": {
     "@types/node": "^20",
