@@ -6,7 +6,7 @@ import {IL1Manager} from "./interfaces/ISubstakeL1Manager.sol";
 import {IL1Config} from "./interfaces/ISubstakeL1Config.sol";
 import {IwETH} from "./interfaces/IwETH.sol";
 import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
-import {IMailbox} from "./interfaces/IMailbox.sol";
+// import {IMailbox} from "./interfaces/IMailbox.sol";
 import {SubstakeLib} from "../libs/SubstakeLib.sol";
 import {Test, console2} from "forge-std/Test.sol";
 
@@ -172,9 +172,9 @@ contract SubstakeL1Manager is IL1Manager, Test {
         return payload;
     }
 
-    function updateConfig(address _newAddress) external {
-        IL1Config(_newAddress);
-    }
+    // function updateConfig(address _newAddress) external {
+    //     IL1Config(_newAddress);
+    // }
 
     function getL1Config() public view returns (address) {
         return address(l1Config);

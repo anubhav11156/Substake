@@ -3,15 +3,11 @@ const {ethers, JsonRpcProvider} = require("ethers");
 let fs= require('fs');
 const fsPromise = fs.promises;
 
-const ALCHEMY_RPC_URL = ""
-const privateKey = ""
+const scrollSepoliaRPC = process.env.SCROLL_RPC;
+const privateKey = process.env.PV_KEY
 
 const vaultProxyabipath = "../out/SubstakeVaultProxy.sol/SubstakeVaultProxy.json";
-const vaultProxyAddress = "";
-
-const vaultImplementationabipath = "";
-
-const scrollSepoliaRPC = ""
+const vaultProxyAddress = "0xC4374cC35CbB2a42B9C19495AD811C742dc9FAA9";
 
 const provider = new JsonRpcProvider(scrollSepoliaRPC);
 const signer = new ethers.Wallet(privateKey, provider);
@@ -23,7 +19,7 @@ async function getAbi(path){
 }
 
 const main = async () =>{
-//_deposit();
+    //_deposit();
 }
 
 const _deposit = async () => {

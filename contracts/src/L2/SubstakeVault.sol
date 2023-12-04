@@ -73,8 +73,8 @@ contract SubstakeVault is
         returns (uint256, uint256)
     {
         require(assets <= maxDeposit(receiver), "Invalid amount, more");
-        uint256 fees = ISubstakeL2Config(substakeL2Config).computeFees(assets, 0);
-        ISubstakeL2Config(substakeL2Config).getFeeCollector().transfer(fees);
+        uint256 fees = substakeL2Config.computeFees(assets, 0);
+        substakeL2Config.getFeeCollector().transfer(fees);
         uint256 _assets = assets - fees;
         uint256 shares = previewDeposit(_assets);
         uint256 batchId = _deposit(msg.sender, receiver, _assets, shares);
@@ -89,8 +89,8 @@ contract SubstakeVault is
         returns (uint256, uint256)
     {
         require(shares <= maxRedeem(owner), "Invalid, greater than balance");
-        uint256 fees = ISubstakeL2Config(substakeL2Config).computeFees(shares, 1);
-        _transfer(owner, ISubstakeL2Config(substakeL2Config).getFeeCollector(), fees);
+        uint256 fees = substakeL2Config.computeFees(shares, 1);
+        _transfer(owner, substakeL2Config.getFeeCollector(), fees);
         uint256 _shares = shares - fees;
         uint256 assets = previewRedeem(_shares);
         activeBatchSUBTokenBalance += _shares;
@@ -179,7 +179,7 @@ contract SubstakeVault is
     }
 
     function exchangeRate() public view returns (ISubstakeL2Config.ExchangeRate memory) {
-        return (ISubstakeL2Config(substakeL2Config).getExchangeRateData());
+        return (substakeL2Config.getExchangeRateData());
     }
 
     function dispatchStakeBatch() external onlyRole(DEFAULT_ADMIN_ROLE) {
@@ -192,8 +192,8 @@ contract SubstakeVault is
 
     function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal returns (uint256) {
         _mint(receiver, shares);
-        ISubstakeL2Config(substakeL2Config).updateTotalETH(totalAssets());
-        ISubstakeL2Config(substakeL2Config).updateTotalSubToken(totalSupply());
+        substakeL2Config.updateTotalETH(totalAssets());
+        substakeL2Config.updateTotalSubToken(totalSupply());
         uint256 currentStakeBatch = activeStakeBatch();
         batchIdToStakers[currentStakeBatch].push(receiver);
         if (_stakingCondition()) {
@@ -223,14 +223,14 @@ contract SubstakeVault is
     function _dispatchStakeBatch() internal {
         uint256 currentStakeBatch = activeStakeBatch();
         uint256 amount = vaultBalance();
-        address recipient = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
-        uint256 fee = ISubstakeL2Config(substakeL2Config).getScrolllGatewayWithdrawFee();
+        address recipient = substakeL2Config.getSubstakeL1Manager();
+        uint256 fee = substakeL2Config.getScrolllGatewayWithdrawFee();
         bytes memory message = abi.encode(currentStakeBatch, amount);
         ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendEthAndMessage{value: amount}(
             amount, message, recipient, fee
         );
-        ISubstakeL2Config(substakeL2Config).updateEthInTransit(exchangeRate().ethInTransit + amount);
-        ISubstakeL2Config(substakeL2Config).updateTotalETH(totalAssets());
+        substakeL2Config.updateEthInTransit(exchangeRate().ethInTransit + amount);
+        substakeL2Config.updateTotalETH(totalAssets());
         previousBatchStakeTime = block.timestamp;
         batchIdToStakeBatch[currentStakeBatch].ethBalance = amount;
         batchIdToStakeBatch[currentStakeBatch].isClosed = true;
@@ -241,8 +241,8 @@ contract SubstakeVault is
     function _dispatchUnstakeBatch() internal {
         uint256 currentUnstakeBatch = activeUnstakeBatch();
         uint256 _assets = convertToAssets(activeBatchSUBTokenBalance);
-        address recipient = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
-        uint256 fee = ISubstakeL2Config(substakeL2Config).getScrolllGatewayWithdrawFee();
+        address recipient = substakeL2Config.getSubstakeL1Manager();
+        uint256 fee = substakeL2Config.getScrolllGatewayWithdrawFee();
         bytes memory message = abi.encode(currentUnstakeBatch, _assets);
         ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendOnlyMessage(message, recipient, fee);
         previousBatchUnstakeTime = block.timestamp;
@@ -298,11 +298,11 @@ contract SubstakeVault is
     }
 
     function stakeThreshold() public view returns (uint256) {
-        return (ISubstakeL2Config(substakeL2Config).getStakeThreshold());
+        return substakeL2Config.getStakeThreshold();
     }
 
     function unstakeThreshold() public view returns (uint256) {
-        return (ISubstakeL2Config(substakeL2Config).getUnstakeThreshold());
+        return substakeL2Config.getUnstakeThreshold();
     }
 
     function activeStakeBatch() public view returns (uint256) {
@@ -340,13 +340,11 @@ contract SubstakeVault is
     }
 
     function stakeHandler(address _from, uint256 _batchId, uint256 _totalShares, uint256 _exRate) external override {
-        address substakeL1Manager = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
+        address substakeL1Manager = substakeL2Config.getSubstakeL1Manager();
         require(_from == substakeL1Manager, "Not Authorised!");
-        ISubstakeL2Config(substakeL2Config).updateEthInTransit(
-            exchangeRate().ethInTransit - batchIdToStakeBatch[_batchId].ethBalance
-        );
-        ISubstakeL2Config(substakeL2Config).updateTotalWstETH(_totalShares);
-        ISubstakeL2Config(substakeL2Config).updateLidoExRate(_exRate);
+        substakeL2Config.updateEthInTransit(exchangeRate().ethInTransit - batchIdToStakeBatch[_batchId].ethBalance);
+        substakeL2Config.updateTotalWstETH(_totalShares);
+        substakeL2Config.updateLidoExRate(_exRate);
         emit BatchFromL1(_batchId, STAKE, _from);
     }
 
@@ -354,16 +352,16 @@ contract SubstakeVault is
         external
         override
     {
-        address substakeL1Manager = ISubstakeL2Config(substakeL2Config).getSubstakeL1Manager();
+        address substakeL1Manager = substakeL2Config.getSubstakeL1Manager();
         require(_from == substakeL1Manager, "Not Authorised!");
         batchIdToUnstakeBatch[_batchId].ethReceived = _ethAmount;
-        ISubstakeL2Config(substakeL2Config).updateTotalWstETH(_totalShares);
-        ISubstakeL2Config(substakeL2Config).updateLidoExRate(_exRate);
+        substakeL2Config.updateTotalWstETH(_totalShares);
+        substakeL2Config.updateLidoExRate(_exRate);
         uint256 sharesToBurn = batchIdToUnstakeBatch[_batchId].SubBalance;
         _burn(address(this), sharesToBurn);
         _distributeETH(_batchId, _ethAmount);
-        ISubstakeL2Config(substakeL2Config).updateTotalSubToken(totalSupply());
-        ISubstakeL2Config(substakeL2Config).updateTotalETH(totalAssets());
+        substakeL2Config.updateTotalSubToken(totalSupply());
+        substakeL2Config.updateTotalETH(totalAssets());
         emit BatchFromL1(_batchId, UNSTAKE, substakeL1Manager);
     }
 
@@ -375,7 +373,7 @@ contract SubstakeVault is
         _unpause();
     }
 
-    //@anubhav_audit_note add revert in fallback/recevie if other than scroll contracts deposit ETH to this vault | 
+    //@anubhav_audit_note add revert in fallback/recevie if other than scroll contracts deposit ETH to this vault |
     // tho won't be a problem  coz only the hacker will be in loss as  exRate won't get affected
     fallback() external payable {}
     receive() external payable {}
