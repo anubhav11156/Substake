@@ -3,15 +3,13 @@ const {ethers, JsonRpcProvider} = require("ethers");
 let fs= require('fs');
 const fsPromise = fs.promises;
 
-const ALCHEMY_RPC_URL = ""
-const privateKey = ""
+const scrollSepoliaRPC = process.env.SCROLL_RPC;
+const privateKey = process.env.PV_KEY
 
 const substakeL2routerProxyabipath = "../out/SubstakeL2RouterProxy.sol/SubstakeL2RouterProxy.json";
-const substakeL2routerProxyAddress = "";
+const substakeL2routerProxyAddress = "0x4ceBC071291125dffc07Fb2b57d2B96c9FB32bCD";
 
-const substakeL2routerImplementationabipath = "";
 
-const scrollSepoliaRPC = ""
 
 const provider = new JsonRpcProvider(scrollSepoliaRPC);
 const signer = new ethers.Wallet(privateKey, provider);
@@ -19,7 +17,7 @@ const signer = new ethers.Wallet(privateKey, provider);
 async function getAbi(path){
     const data = await fsPromise.readFile(path, 'utf-8');
     const abi = JSON.parse(data);
-    return abi;substake
+    return abi;
 }
 
 const main =  () =>{
@@ -30,6 +28,7 @@ const main =  () =>{
 const _sendEthAndMessage = async () => {
     const IMPLEMENTATION_ABI =await getAbi(substakeL2routerImplementationabipath);
     const contract = new ethers.Contract(substakeL2routerProxyAddress, IMPLEMENTATION_ABI.abi, signer);
+    //@note_anubhav add params
     let tx = await contract.sendEthAndMessage()
     await tx.wait()
     .then(() => {
@@ -45,6 +44,7 @@ const _sendEthAndMessage = async () => {
 const _sendOnlyMessage = async () => {
     const IMPLEMENTATION_ABI =await getAbi(substakeL2routerImplementationabipath);
     const contract = new ethers.Contract(substakeL2routerProxyAddress, IMPLEMENTATION_ABI.abi, signer);
+    //@note_anubhav add params
     let tx = await contract.sendOnlyMessage()
     await tx.wait()
     .then(() => {
