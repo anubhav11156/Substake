@@ -5,7 +5,6 @@ import {Script} from "forge-std/Script.sol";
 import {SubstakeVault} from "../src/L2/SubstakeVault.sol";
 
 contract SubstakeVaultScript is Script {
-
     function run() public returns (SubstakeVault) {
         vm.startBroadcast();
         SubstakeVault substakeVault = new SubstakeVault();
