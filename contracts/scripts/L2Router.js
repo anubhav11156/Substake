@@ -1,6 +1,6 @@
 const {ethers, JsonRpcProvider} = require("ethers");
-
 let fs= require('fs');
+require('dotenv').config();
 const fsPromise = fs.promises;
 
 const scrollSepoliaRPC = process.env.SCROLL_RPC;
@@ -21,14 +21,14 @@ async function getAbi(path){
 }
 
 const main = ()=> {
-    //_upgradeImplementation()
-    //_initialize()
+    // _upgradeImplementation()
+    // _initialize()
 }
 
 const _upgradeImplementation = async () => {
     const PROXY_ABI = await getAbi(substakeL2routerProxyabipath);
     const contract = new ethers.Contract(substakeL2routerProxyAddress, PROXY_ABI.abi, signer);
-    const substakeL2routerImplementation = "";
+    const substakeL2routerImplementation = "0xe5e3d9C31e17C0bEa714e93fC103488aa7EF100c";
     console.log("Updating implementaion.........................");
     let tx = await contract.upgradeImplementation(substakeL2routerImplementation)
     await tx.wait()

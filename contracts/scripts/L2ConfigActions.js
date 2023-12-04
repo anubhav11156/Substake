@@ -1,5 +1,6 @@
 const {ethers, JsonRpcProvider} = require("ethers");
 let fs= require('fs');
+require('dotenv').config();
 const fsPromise = fs.promises;
 
 const scrollSepoliaRPC = process.env.SCROLL_RPC;
