@@ -224,10 +224,9 @@ contract SubstakeVault is
         uint256 currentStakeBatch = activeStakeBatch();
         uint256 amount = vaultBalance();
         address recipient = substakeL2Config.getSubstakeL1Manager();
-        uint256 fee = substakeL2Config.getScrolllGatewayWithdrawFee();
         bytes memory message = abi.encode(currentStakeBatch, amount);
-        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendEthAndMessage{value: amount}(
-            amount, message, recipient, fee
+        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendMessageToL1{value: amount}(
+            message, recipient, amount
         );
         substakeL2Config.updateEthInTransit(exchangeRate().ethInTransit + amount);
         substakeL2Config.updateTotalETH(totalAssets());
@@ -242,9 +241,9 @@ contract SubstakeVault is
         uint256 currentUnstakeBatch = activeUnstakeBatch();
         uint256 _assets = convertToAssets(activeBatchSUBTokenBalance);
         address recipient = substakeL2Config.getSubstakeL1Manager();
-        uint256 fee = substakeL2Config.getScrolllGatewayWithdrawFee();
+        uint256 _value = 0;
         bytes memory message = abi.encode(currentUnstakeBatch, _assets);
-        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendOnlyMessage(message, recipient, fee);
+        ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendMessageToL1(message, recipient, _value);
         previousBatchUnstakeTime = block.timestamp;
         batchIdToUnstakeBatch[currentUnstakeBatch].isClosed = true;
         batchIdToUnstakeBatch[currentUnstakeBatch].ethExpected = _assets;

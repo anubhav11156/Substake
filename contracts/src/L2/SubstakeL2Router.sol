@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "../libs/SubstakeLib.sol";
 import "@scroll-tech/contracts/L2/gateways/IL2ETHGateway.sol";
-import "@scroll-tech/contracts/L2//IL2ScrollMessenger.sol";
+import "@scroll-tech/contracts/L2/IL2ScrollMessenger.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
 import {ISubstakeL2Router} from "./interfaces/ISubstakeL2Router.sol";
@@ -24,25 +24,9 @@ contract SubstakeL2Router is ISubstakeL2Router, AccessControlUpgradeable {
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
-    function sendEthAndMessage(uint256 _ethAmount, bytes calldata _data, address _to, uint256 _fee)
-        external
-        payable
-        override
-    {
-        require(_ethAmount == msg.value, "Insufficient ethAmount");
-        require(_ethAmount + _fee <= routerBalance(), "Insufficient router balance!");
-        IL2ETHGateway(substakeL2Config.getScrollL2ETHGateway()).withdrawETH{value: _ethAmount}(
-            _to, _ethAmount, GAS_LIMIT
-        );
-        IL2ScrollMessenger(substakeL2Config.getScrollL2Messenger()).sendMessage{value: _fee}(
-            _to, _fee, _data, GAS_LIMIT
-        );
-    }
-
-    function sendOnlyMessage(bytes calldata _data, address _to, uint256 _fee) external payable override {
-        require(_fee <= routerBalance(), "Insufficient router balance!");
-        IL2ScrollMessenger(substakeL2Config.getScrollL2Messenger()).sendMessage{value: _fee}(
-            _to, _fee, _data, GAS_LIMIT
+    function sendMessageToL1(bytes calldata _data, address _to, uint256 _value) external payable override {
+        IL2ScrollMessenger(substakeL2Config.getScrollL2Messenger()).sendMessage{value:_value}(
+            _to, _value, _data, GAS_LIMIT
         );
     }
 

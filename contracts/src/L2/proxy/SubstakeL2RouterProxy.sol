@@ -4,10 +4,8 @@ pragma solidity ^0.8.20;
 import "../../libs/SubstakeLib.sol";
 
 contract SubstakeL2RouterProxy {
-    bytes32 private constant IMPLEMENTATION_SLOT =
-        bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1);
-    bytes32 private constant ADMIN_SLOT =
-        bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1);
+    bytes32 private constant IMPLEMENTATION_SLOT = bytes32(uint256(keccak256("eip1967.proxy.implementation")) - 1);
+    bytes32 private constant ADMIN_SLOT = bytes32(uint256(keccak256("eip1967.proxy.admin")) - 1);
 
     constructor(address admin) {
         SubstakeLib.zeroAddressCheck(admin);
@@ -48,9 +46,7 @@ contract SubstakeL2RouterProxy {
         SubstakeLib.getAddressSlot(ADMIN_SLOT).value = admin;
     }
 
-    function upgradeImplementation(
-        address _newImplementation
-    ) external ifAdmin {
+    function upgradeImplementation(address _newImplementation) external ifAdmin {
         _setImplementation(_newImplementation);
     }
 
@@ -69,26 +65,15 @@ contract SubstakeL2RouterProxy {
 
             // Call the implementation.
             // out and outsize are 0 because we don't know the size yet.
-            let result := delegatecall(
-                gas(),
-                implementation,
-                0,
-                calldatasize(),
-                0,
-                0
-            )
+            let result := delegatecall(gas(), implementation, 0, calldatasize(), 0, 0)
 
             // Copy the returned data.
             returndatacopy(0, 0, returndatasize())
 
             // delegatecall returns 0 on error.
             switch result
-            case 0 {
-                revert(0, returndatasize())
-            }
-            default {
-                return(0, returndatasize())
-            }
+            case 0 { revert(0, returndatasize()) }
+            default { return(0, returndatasize()) }
         }
     }
 

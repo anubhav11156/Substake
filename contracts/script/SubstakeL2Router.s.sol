@@ -5,7 +5,6 @@ import {Script} from "forge-std/Script.sol";
 import {SubstakeL2Router} from "../src/L2/SubstakeL2Router.sol";
 
 contract SubstakeL2RouterScript is Script {
-
     function run() public returns (SubstakeL2Router) {
         vm.startBroadcast();
         SubstakeL2Router substakeL2Router = new SubstakeL2Router();
