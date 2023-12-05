@@ -16,11 +16,10 @@ import "@scroll-tech/contracts/L1/rollup/IL1MessageQueue.sol";
 
 uint256 constant DECIMALS = 1000000000000000000;
 uint256 constant STAKE = 0;
-uint256 constant UNSTAKE  = 1;
+uint256 constant UNSTAKE = 1;
 uint256 constant VALUE = 0;
 
 contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
-
     ISubstakeL1Config substakeL1Config;
 
     mapping(uint256 => bool) stakeBatchStatus;
@@ -35,7 +34,11 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
     }
 
     //@note_anubhav : Below get executed on mainnet fork
-    function stakeToLido(uint256 ethAmount, uint256 stakeBatchId) external onlyRole(DEFAULT_ADMIN_ROLE) returns (uint256) {
+    function stakeToLido(uint256 ethAmount, uint256 stakeBatchId)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (uint256)
+    {
         if (stakeBatchStatus[stakeBatchId]) {
             revert BatchAlreadyUsed();
         }
@@ -48,7 +51,11 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         return shares;
     }
 
-    function unstakeWstETH(uint256 wstETHAmount, uint256 unstakeBatchId) external onlyRole(DEFAULT_ADMIN_ROLE) returns (uint256) {
+    function unstakeWstETH(uint256 wstETHAmount, uint256 unstakeBatchId)
+        external
+        onlyRole(DEFAULT_ADMIN_ROLE)
+        returns (uint256)
+    {
         if (unstakeBatchStatus[unstakeBatchId]) {
             revert BatchAlreadyUsed();
         }
@@ -70,14 +77,12 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         uint256 _fee
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         address _from = address(this);
-        bytes memory _data = abi.encodeCall(ISubstakeVault.stakeHandler,(_from, _batchId, _totalShares, _exRate));
-        uint256 gasLimitCalculated = IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_data);
+        bytes memory _data = abi.encodeCall(ISubstakeVault.stakeHandler, (_from, _batchId, _totalShares, _exRate));
+        uint256 gasLimitCalculated =
+            IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_data);
         uint256 _gaslimit = gasLimitCalculated * _gaslimitMultiplier;
-        IL1ScrollMessenger(substakeL1Config.getScrollL1Messenger()).sendMessage{value:_fee}(
-            substakeL1Config.getSubstakeVault(),
-            VALUE,
-            _data,
-            _gaslimit
+        IL1ScrollMessenger(substakeL1Config.getScrollL1Messenger()).sendMessage{value: _fee}(
+            substakeL1Config.getSubstakeVault(), VALUE, _data, _gaslimit
         );
         emit MessageSentToL2(substakeL1Config.getSubstakeVault(), STAKE, _data);
     }
@@ -91,23 +96,24 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         uint256 _fee
     ) external onlyRole(DEFAULT_ADMIN_ROLE) {
         address _from = address(this);
-        bytes memory _data = abi.encodeCall(ISubstakeVault.withdrawHandler,(_from, _batchId, _ethAmount,  _totalShares, _exRate));
+        bytes memory _data =
+            abi.encodeCall(ISubstakeVault.withdrawHandler, (_from, _batchId, _ethAmount, _totalShares, _exRate));
         bytes memory _message = abi.encode(_from, substakeL1Config.getSubstakeVault(), _ethAmount, _data);
 
-        uint256 gasLimitCalculted = IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_message);
-        uint256 _gasLimit = gasLimitCalculted*_gaslimitMultiplier;
+        uint256 gasLimitCalculted =
+            IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_message);
+        uint256 _gasLimit = gasLimitCalculted * _gaslimitMultiplier;
 
-        IL1ETHGateway(substakeL1Config.getScrollL1ETHGateway()).depositETHAndCall{value:_ethAmount + _fee}(
-            substakeL1Config.getSubstakeVault(),
-            _ethAmount,
-            _message,
-            _gasLimit
+        IL1ETHGateway(substakeL1Config.getScrollL1ETHGateway()).depositETHAndCall{value: _ethAmount + _fee}(
+            substakeL1Config.getSubstakeVault(), _ethAmount, _message, _gasLimit
         );
         emit MessageSentToL2(substakeL1Config.getSubstakeVault(), UNSTAKE, _message);
     }
 
     function _swapExactInputSingle(uint256 amountIn) internal returns (uint256) {
-        IwstETH(substakeL1Config.getLidoWstETHToken()).approve(address(substakeL1Config.getUniswapSwapRouter()), amountIn);
+        IwstETH(substakeL1Config.getLidoWstETHToken()).approve(
+            address(substakeL1Config.getUniswapSwapRouter()), amountIn
+        );
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
             tokenIn: substakeL1Config.getLidoWstETHToken(),
             tokenOut: substakeL1Config.getWeth(),
@@ -115,8 +121,8 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
             recipient: address(this),
             deadline: block.timestamp + substakeL1Config.getUniswapSwapDeadline(),
             amountIn: amountIn,
-            amountOutMinimum: _uninSwapLimit(amountIn), 
-            sqrtPriceLimitX96: 0 
+            amountOutMinimum: _uninSwapLimit(amountIn),
+            sqrtPriceLimitX96: 0
         });
         uint256 amountOut = ISwapRouter(substakeL1Config.getUniswapSwapRouter()).exactInputSingle(params);
         return amountOut;
@@ -141,7 +147,7 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
     function getLidoExchangeRate() public view returns (uint256) {
         return (IwstETH(substakeL1Config.getLidoWstETHToken()).tokensPerStEth());
     }
-    
+
     function wstEthBalance() public view returns (uint256) {
         return (IwstETH(substakeL1Config.getLidoWstETHToken()).balanceOf(address(this)));
     }
@@ -150,7 +156,6 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         return address(this).balance;
     }
 
-    
     fallback() external payable {}
     receive() external payable {}
 }

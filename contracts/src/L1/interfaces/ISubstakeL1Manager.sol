@@ -5,7 +5,6 @@ import "../../libs/SubstakeLib.sol";
 import "@uniswap/v3-core/contracts/interfaces/callback/IUniswapV3SwapCallback.sol";
 
 interface ISubstakeL1Manager {
-
     error ZeroAmount();
     error InsufficientBridigingFee();
     error InsufficientContractBalance();

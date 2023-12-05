@@ -25,7 +25,7 @@ contract SubstakeL2Router is ISubstakeL2Router, AccessControlUpgradeable {
     }
 
     function sendMessageToL1(bytes calldata _data, address _to, uint256 _value) external payable override {
-        IL2ScrollMessenger(substakeL2Config.getScrollL2Messenger()).sendMessage{value:_value}(
+        IL2ScrollMessenger(substakeL2Config.getScrollL2Messenger()).sendMessage{value: _value}(
             _to, _value, _data, GAS_LIMIT
         );
     }

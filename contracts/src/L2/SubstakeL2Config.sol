@@ -24,9 +24,8 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
     bytes32 private constant MIN_UNSTAKERS_IN_BATCH = keccak256("MIN_UNSTAKERS_IN_BATCH");
 
     modifier onlySubstakeVault() {
-        if (msg.sender == getSubstakeVault()) {
-            _;
-        }
+        require(msg.sender == getSubstakeVault(), "Not SubstakeVault");
+        _;
     }
 
     ExchangeRate exchangeRate;

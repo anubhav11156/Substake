@@ -130,19 +130,19 @@ contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
         return contractsMap[WETH_CONTRACT];
     }
 
-    function getScrollL1Messenger() external override view returns(address) {
+    function getScrollL1Messenger() external view override returns (address) {
         return contractsMap[SCROLL_L1_MESSENGER];
     }
 
-    function getScrollL1ETHGateway() external override view returns(address){
+    function getScrollL1ETHGateway() external view override returns (address) {
         return contractsMap[SCROLL_L1_ETH_GATEWAY];
     }
 
-    function getScrollL1MessageQueue() external override view returns(address){
+    function getScrollL1MessageQueue() external view override returns (address) {
         return contractsMap[SCROLL_L1_MESSAGE_QUEUE];
     }
 
-    function getSwapSlipage() external override view returns(uint256){
+    function getSwapSlipage() external view override returns (uint256) {
         return uint256Map[SWAP_SLIPAGE];
     }
 
