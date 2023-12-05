@@ -6,8 +6,6 @@ const fsPromise = fs.promises;
 const ethSepoliaRpc = process.env.ETH_SEPOLIA;
 const privateKey = process.env.PV_KEY
 
-
-
 const scrollL1MessengerAbiPath = "./L1ScrollMessengerAbi.json";
 const scrollL1MessengerProxy = "0x50c7d3e7f7c656493D1D76aaa1a836CedfCBB16A";
 

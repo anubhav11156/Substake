@@ -6,21 +6,6 @@ import "./interfaces/IwstETH.sol";
 import "../libs/SubstakeLib.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 
-/*
-    Mainnet Contract Address :
-        Uniswap wstETH/wETH Pool = 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa
-        Balancer ETHx/wETH Pool = 0x37b18B10ce5635a84834b26095A0AE5639dCB752
-         -> getPoolId()
-        Balaner ETHx/wETH PoolId = 0x37b18b10ce5635a84834b26095a0ae5639dcb7520000000000000000000005cb 
-        Balancer Vault = 0xBA12222222228d8Ba445958a75a0704d566BF2C8
-        stader ETHx : 0xA35b1B31Ce002FBF2058D22F30f95D405200A15b | upgradable contract
-        Lido wstETH : 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0 | not upgradable
-        starknet core contract : 0xc662c410C0ECf747543f5bA90660f6ABeBD9C8c4
-        starkgate ETH bridge : 0xae0Ee0A63A2cE6BaeEFFE56e7714FB4EFE48D419
-        weth contract : 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
-        uniswap swap Router : 0xE592427A0AEce92De3Edee1F18E0157C05861564
-*/
-
 contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
     bytes32 private constant ADMIN = keccak256("ADMIN");
     bytes32 private constant LIDO_WSTETH_TOKEN = keccak256("LIDO_WSTETH_TOKEN");
@@ -43,7 +28,7 @@ contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
         _setContract(UNISWAP_WSTETH_WETH_POOL, 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa);
         _setContract(WETH_CONTRACT, 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
         _setContract(UNISWAP_SWAP_ROUTER, 0xE592427A0AEce92De3Edee1F18E0157C05861564);
-        _setContract(SUBSTAKE_VAULT, 0xE592427A0AEce92De3Edee1F18E0157C05861564);
+        _setContract(SUBSTAKE_VAULT, 0xC4374cC35CbB2a42B9C19495AD811C742dc9FAA9);
         _setContract(SUBSTAKE_L2_ROUTER, 0x4ceBC071291125dffc07Fb2b57d2B96c9FB32bCD);
         _setContract(SCROLL_L1_MESSENGER, 0x50c7d3e7f7c656493D1D76aaa1a836CedfCBB16A);
         _setContract(SCROLL_L1_ETH_GATEWAY, 0x8A54A2347Da2562917304141ab67324615e9866d);
