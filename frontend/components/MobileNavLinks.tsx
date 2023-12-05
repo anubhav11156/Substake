@@ -10,7 +10,7 @@ const MobileNavLinks: React.FC = () => {
   return (
     <Sheet>
       <SheetTrigger>
-        <Menu />
+        <Menu className="ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2" />
       </SheetTrigger>
       <SheetContent className="bg-[#f9e5c7]">
         <div className="flex flex-col gap-10 w-full items-center pt-10">
@@ -30,11 +30,7 @@ const MobileNavLinks: React.FC = () => {
                 <Button
                   onClick={show}
                   className={cn(
-                    "rounded-xl font-normal uppercase transition-all bg-[#9b923b] hover:bg-[#a99f44] text-white/90"
-                    // {
-                    //   "":
-                    //     isConnected,
-                    // }
+                    "rounded-xl font-normal uppercase transition-all bg-[#9b923b] hover:bg-[#a99f44] text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
                   )}
                 >
                   {isConnected

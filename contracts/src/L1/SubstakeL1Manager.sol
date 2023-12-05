@@ -5,6 +5,7 @@ import {IwstETH} from "./interfaces/IwstETH.sol";
 import {ISubstakeL1Manager} from "./interfaces/ISubstakeL1Manager.sol";
 import {ISubstakeL1Config} from "./interfaces/ISubstakeL1Config.sol";
 import {IwETH} from "./interfaces/IwETH.sol";
+import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import {SubstakeLib} from "../libs/SubstakeLib.sol";
 import {ISubstakeVault} from "../L2/interfaces/ISubstakeVault.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";

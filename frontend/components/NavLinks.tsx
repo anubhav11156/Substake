@@ -24,9 +24,9 @@ const NavLinks: React.FC<NavLinksProps> = ({ className }) => {
       active: pathname === "/application/unstake",
     },
     {
-      name: "REWARD",
-      href: "/application/reward",
-      active: pathname === "/application/reward",
+      name: "TRANSACTION",
+      href: "/application/transaction",
+      active: pathname === "/application/transaction",
     },
   ];
 
@@ -38,7 +38,7 @@ const NavLinks: React.FC<NavLinksProps> = ({ className }) => {
             <Link
               href={navLink.href}
               className={cn(
-                "text-gray-500 hover:text-black font-thin cursor-pointer text-base transition-all",
+                "text-gray-500 hover:text-black font-thin cursor-pointer text-base transition-all ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 rounded-md",
                 {
                   "text-black": navLink.active,
                 }

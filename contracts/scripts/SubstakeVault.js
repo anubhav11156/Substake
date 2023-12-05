@@ -58,3 +58,11 @@ const initializeVault = async () => {
 }
 
 main();
+const listenToEvents = async () => {
+    const PROXY_ABI = await getAbi(vaultProxyabipath);
+    const contract = new ethers.Contract(vaultProxyAddress, PROXY_ABI.abi, signer);
+    contract.on("Upgraded", (implementation, event) => {
+        console.log("Upgraded event fired!");
+        console.log(implementation);
+    })
+}
