@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity ^0.8.19;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.20;
 
 import "./interfaces/ISubstakeL1Config.sol";
 import "./interfaces/IwstETH.sol";
@@ -21,7 +21,7 @@ import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol"
         uniswap swap Router : 0xE592427A0AEce92De3Edee1F18E0157C05861564
 */
 
-contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
+contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
     bytes32 private constant ADMIN = keccak256("ADMIN");
     bytes32 private constant LIDO_WSTETH_TOKEN = keccak256("LIDO_WSTETH_TOKEN");
     bytes32 private constant UNISWAP_WSTETH_WETH_POOL = keccak256("UNISWAP_WSTETH_WETH_POOL");
@@ -29,8 +29,12 @@ contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
     bytes32 private constant UINIWAP_SWAP_DEADLINE = keccak256("UINIWAP_SWAP_DEADLINE");
     bytes32 private constant UNISWAP_SWAP_ROUTER = keccak256("UNISWAP_SWAP_ROUTER");
     bytes32 private constant UNISWAP_POOL_FEE = keccak256("UNISWAP_POOL_FEE");
+    bytes32 private constant SWAP_SLIPAGE = keccak256("SWAP_SLIPAGE");
     bytes32 private constant SUBSTAKE_VAULT = keccak256("SUBSTAKE_VAULT");
     bytes32 private constant SUBSTAKE_L2_ROUTER = keccak256("SUBSTAKE_L2_ROUTER");
+    bytes32 private constant SCROLL_L1_MESSENGER = keccak256("SCROLL_L1_MESSENGER");
+    bytes32 private constant SCROLL_L1_ETH_GATEWAY = keccak256("SCROLL_L1_ETH_GATEWAY");
+    bytes32 private constant SCROLL_L1_MESSAGE_QUEUE = keccak256("SCROLL_L1_MESSAGE_QUEUE");
 
     function initialize(address _admin) external initializer {
         SubstakeLib.zeroAddressCheck(_admin);
@@ -41,8 +45,12 @@ contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
         _setContract(UNISWAP_SWAP_ROUTER, 0xE592427A0AEce92De3Edee1F18E0157C05861564);
         _setContract(SUBSTAKE_VAULT, 0xE592427A0AEce92De3Edee1F18E0157C05861564);
         _setContract(SUBSTAKE_L2_ROUTER, 0x4ceBC071291125dffc07Fb2b57d2B96c9FB32bCD);
+        _setContract(SCROLL_L1_MESSENGER, 0x50c7d3e7f7c656493D1D76aaa1a836CedfCBB16A);
+        _setContract(SCROLL_L1_ETH_GATEWAY, 0x8A54A2347Da2562917304141ab67324615e9866d);
+        _setContract(SCROLL_L1_MESSAGE_QUEUE, 0xF0B2293F5D834eAe920c6974D50957A1732de763);
         _setUint(UNISWAP_POOL_FEE, 100); // 0.01%
         _setUint(UINIWAP_SWAP_DEADLINE, 600); // 12 hr
+        _setUint(SWAP_SLIPAGE, 150); // 1.5%
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
@@ -70,12 +78,28 @@ contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
         _setContract(SUBSTAKE_VAULT, _newAddress);
     }
 
+    function updateScrollL1Messenger(address _newAddres) external override onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setContract(SCROLL_L1_MESSENGER, _newAddres);
+    }
+
+    function updateScrollL1ETHGateway(address _newAddres) external override onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setContract(SCROLL_L1_ETH_GATEWAY, _newAddres);
+    }
+
+    function updateScrollL1MessageQueue(address _newAddress) external override onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setContract(SCROLL_L1_MESSAGE_QUEUE, _newAddress);
+    }
+
     function updateUniswapSwapDeadline(uint256 _newDeadline) external override onlyRole(DEFAULT_ADMIN_ROLE) {
         _setUint(UINIWAP_SWAP_DEADLINE, _newDeadline);
     }
 
     function updateUniswapPoolFee(uint256 _newPoolFee) external override onlyRole(DEFAULT_ADMIN_ROLE) {
         _setUint(UNISWAP_POOL_FEE, _newPoolFee);
+    }
+
+    function updateSwapSlipage(uint256 _newValue) external override onlyRole(DEFAULT_ADMIN_ROLE) {
+        _setUint(SWAP_SLIPAGE, _newValue);
     }
 
     function getUniswap_wstETH_wETH_pool() external view override returns (address) {
@@ -98,7 +122,7 @@ contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
         return SubstakeLib.getUint256Slot(UNISWAP_POOL_FEE).value;
     }
 
-    function getLidoWstETHToken() public view returns (address) {
+    function getLidoWstETHToken() external view returns (address) {
         return contractsMap[LIDO_WSTETH_TOKEN];
     }
 
@@ -106,10 +130,21 @@ contract SubstakeL1Config is IL1Config, AccessControlUpgradeable {
         return contractsMap[WETH_CONTRACT];
     }
 
-    function getL1ManagerWstETHBalance(address _address) external override returns (uint256) {
-        return (IwstETH(getLidoWstETHToken()).balanceOf(_address));
+    function getScrollL1Messenger() external override view returns(address) {
+        return contractsMap[SCROLL_L1_MESSENGER];
     }
 
+    function getScrollL1ETHGateway() external override view returns(address){
+        return contractsMap[SCROLL_L1_ETH_GATEWAY];
+    }
+
+    function getScrollL1MessageQueue() external override view returns(address){
+        return contractsMap[SCROLL_L1_MESSAGE_QUEUE];
+    }
+
+    function getSwapSlipage() external override view returns(uint256){
+        return uint256Map[SWAP_SLIPAGE];
+    }
 
     function _setAdmin(address _admin) internal {
         SubstakeLib.getAddressSlot(ADMIN).value = _admin;

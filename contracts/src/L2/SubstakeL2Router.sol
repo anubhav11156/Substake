@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 import "../libs/SubstakeLib.sol";
 import "@scroll-tech/contracts/L2/gateways/IL2ETHGateway.sol";
-import "@scroll-tech/contracts/L2//IL2ScrollMessenger.sol";
+import "@scroll-tech/contracts/L2/IL2ScrollMessenger.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
 import {ISubstakeL2Router} from "./interfaces/ISubstakeL2Router.sol";

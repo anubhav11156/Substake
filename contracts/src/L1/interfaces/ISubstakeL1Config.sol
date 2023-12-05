@@ -1,7 +1,8 @@
-// SPDX-License-Identifier: GPL-3.0-or-later
-pragma solidity ^0.8.19;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.20;
 
-interface IL1Config {
+interface ISubstakeL1Config {
+
     error IdenticalValue();
     error ZeroValue();
 
@@ -12,19 +13,21 @@ interface IL1Config {
     function updateUniswapSwapDeadline(uint256) external;
     function updateUniswapSwapRouter(address) external;
     function updateUniswapPoolFee(uint256) external;
-    // function updateHyperlaneFees(uint256) external;
-    // function updateHyperlanceMailBoxL1(address) external;
-    // function updateHyperlanceMailBoxL2(address) external;
+    function updateScrollL1Messenger(address) external;
+    function updateScrollL1ETHGateway(address) external;
+    function updateScrollL1MessageQueue(address) external;
+    function updateSwapSlipage(uint256) external;
+
 
     function getSubstakeVault() external returns (address);
-    function getL1ManagerWstETHBalance(address) external returns (uint256);
     function getUniswap_wstETH_wETH_pool() external returns (address);
     function getWeth() external returns (address);
     function getUniswapSwapDeadline() external returns (uint256);
     function getUniswapSwapRouter() external returns (address);
     function getUniswapPoolFee() external returns (uint256);
-    // function getHyperlaneFee() external returns (uint256);
-    // function hyperlaneMailboxL1() external returns (address);
-    // function hyperlaneMailboxL2() external returns (address);
-    function getLidoWstETHToken() external returns (address);
+    function getLidoWstETHToken() external view returns (address);
+    function getScrollL1Messenger() external view returns(address);
+    function getScrollL1ETHGateway() external view returns(address);
+    function getScrollL1MessageQueue() external view returns(address);
+    function getSwapSlipage() external view returns(uint256);
 }
