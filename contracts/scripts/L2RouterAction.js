@@ -55,27 +55,28 @@ const _sendOnlyMessage =  async () => {
     const IMPLEMENTATION_ABI = await getAbi(substakeL2routerImplementationabipath);
     const contract = new ethers.Contract(substakeL2routerProxyAddress, IMPLEMENTATION_ABI.abi, signer);
     const data = ethers.toUtf8Bytes("Anubhav");
-    // const hexMaybe = ethers.hexlify(data);
+    console.log("data : ", data);
+    const hexMaybe = ethers.hexlify(data);
     // console.log("data", data);
-    // console.log("hex maybe : ", hexMaybe);
+    console.log("hex maybe : ", hexMaybe);
     // const messageHash = ethers.keccak256(hexMaybe);
     // console.log("messageHash : ", messageHash);
-    const l1Contract = "0xa08fDf3AA199c79a476Fbb653BB0DA3EC3C7A5Da";
-    const fee = ethers.parseEther("0.0005");
-    console.log("Calling sendOnlyMessage.............");
-    let tx = await contract.sendOnlyMessage(
-        data,
-        l1Contract,
-        fee
-    )
-    await tx.wait()
-    .then(() => {
-        console.log("transaction successful");
-    })
-    .catch((error) => {
-        console.log("transaction failed.");
-        console.log(error);
-    })
+    // const l1Contract = "0xa08fDf3AA199c79a476Fbb653BB0DA3EC3C7A5Da";
+    // const fee = ethers.parseEther("0.0005");
+    // console.log("Calling sendOnlyMessage.............");
+    // let tx = await contract.sendOnlyMessage(
+    //     data,
+    //     l1Contract,
+    //     fee
+    // )
+    // await tx.wait()
+    // .then(() => {
+    //     console.log("transaction successful");
+    // })
+    // .catch((error) => {
+    //     console.log("transaction failed.");
+    //     console.log(error);
+    // })
 }
 
 const merkleInclusionProof =  async () => {
