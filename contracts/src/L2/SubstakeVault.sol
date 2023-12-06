@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/utils/math/Math.sol";
 import {ISubstakeL2Router} from "./interfaces/ISubstakeL2Router.sol";
 import {ISubstakeVault} from "./interfaces/ISubstakeVault.sol";
 import {ISubstakeL2Config} from "./interfaces/ISubstakeL2Config.sol";
+import {Test, console2} from "forge-std/Test.sol";
 
 uint8 constant STAKE = 0;
 uint8 constant UNSTAKE = 1;
@@ -225,10 +226,13 @@ contract SubstakeVault is
         uint256 amount = vaultBalance();
         address recipient = substakeL2Config.getSubstakeL1Manager();
         bytes memory message = abi.encode(currentStakeBatch, amount);
+        console2.log("Here1");
         ISubstakeL2Router(substakeL2Config.getSubstakeL2Router()).sendMessageToL1{value: amount}(
             message, recipient, amount
         );
+        console2.log("Here2");
         substakeL2Config.updateEthInTransit(exchangeRate().ethInTransit + amount);
+        console2.log("Here3");
         substakeL2Config.updateTotalETH(totalAssets());
         previousBatchStakeTime = block.timestamp;
         batchIdToStakeBatch[currentStakeBatch].ethBalance = amount;

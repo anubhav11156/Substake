@@ -57,23 +57,23 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
-    function updateTotalETH(uint256 _newValue) external override onlySubstakeVault {
+    function updateTotalETH(uint256 _newValue) external override /*onlySubstakeVault*/ {
         exchangeRate.totalETH = _newValue;
     }
 
-    function updateTotalSubToken(uint256 _newValue) external override onlySubstakeVault {
+    function updateTotalSubToken(uint256 _newValue) external override /*onlySubstakeVault*/ {
         exchangeRate.totalSubToken = _newValue;
     }
 
-    function updateLidoExRate(uint256 _newValue) external override onlySubstakeVault {
+    function updateLidoExRate(uint256 _newValue) external override /*onlySubstakeVault*/ {
         exchangeRate.lidoExRate = _newValue;
     }
 
-    function updateEthInTransit(uint256 _newValue) external override onlySubstakeVault {
+    function updateEthInTransit(uint256 _newValue) external override /*onlySubstakeVault*/ {
         exchangeRate.ethInTransit = _newValue;
     }
 
-    function updateTotalWstETH(uint256 _newValue) external override onlySubstakeVault {
+    function updateTotalWstETH(uint256 _newValue) external override /*onlySubstakeVault*/ {
         exchangeRate.totalwstETH = _newValue;
     }
 
