@@ -68,6 +68,7 @@ contract SubstakeVault is
 
     function deposit(uint256 assets, address receiver)
         external
+        payable
         override
         whenNotPaused
         nonReentrant
@@ -193,7 +194,9 @@ contract SubstakeVault is
     }
 
     function _deposit(address caller, address receiver, uint256 assets, uint256 shares) internal returns (uint256) {
+        console2.log("here in _deposit");
         _mint(receiver, shares);
+        console2.log("after _mint");
         substakeL2Config.updateTotalETH(totalAssets());
         substakeL2Config.updateTotalSubToken(totalSupply());
         uint256 currentStakeBatch = activeStakeBatch();
