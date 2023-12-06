@@ -180,6 +180,7 @@ contract SubstakeVault is
     }
 
     function exchangeRate() public view returns (ISubstakeL2Config.ExchangeRate memory) {
+        console2.log("Here in exchange rate");
         return (substakeL2Config.getExchangeRateData());
     }
 
