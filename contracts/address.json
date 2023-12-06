@@ -15,7 +15,10 @@
         "l2":{
             "vaultProxy":"",
             "configProxy":"",
-            "routerProxy":""
+            "routerProxy":"0x4ceBC071291125dffc07Fb2b57d2B96c9FB32bCD",
+            "substakeVault":"0xec0b3739cc8674013fbb281883fbc079ab81bcfc",
+            "vaultProxy":"0xC4374cC35CbB2a42B9C19495AD811C742dc9FAA9"
+
         },
         "l1":{
             "managerProxy":"",
