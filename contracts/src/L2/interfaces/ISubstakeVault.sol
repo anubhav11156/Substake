@@ -38,7 +38,7 @@ interface ISubstakeVault {
     function previewWithdraw(uint256 assets) external view returns (uint256);
     function previewRedeem(uint256 shares) external view returns (uint256);
     function maxWithdraw(address owner) external view returns (uint256);
-    function deposit(uint256 assets, address receiver) external returns (uint256, uint256);
+    function deposit(uint256 assets, address receiver) external payable returns (uint256, uint256);
     function redeem(uint256 shares, address receiver, address owner) external returns (uint256, uint256);
     function stakeHandler(address _from, uint256 _batchId, uint256 _totalShares, uint256 _exRate) external;
     function withdrawHandler(address _from, uint256 _batchId, uint256 _ethAmount, uint256 _totalShares, uint256 _exRate)

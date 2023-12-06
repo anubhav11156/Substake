@@ -67,6 +67,7 @@ contract SubstakeVault is
 
     function deposit(uint256 assets, address receiver)
         external
+        payable
         override
         whenNotPaused
         nonReentrant

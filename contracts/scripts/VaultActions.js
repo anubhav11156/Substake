@@ -32,13 +32,9 @@ const userDeposit = async () => {
     const receiver = "0x55d9a0d367866a102eD85EA76CE46B11E62b3E88";
     console.log("calling deposit(uint256, address)");
     try {
-        let tx = await contract.deposit(ethAmount, receiver, { value: ethAmount, gasLimit: 1000000 });
+        let tx = await contract.deposit(ethAmount, receiver, { value: ethAmount, gasLimit: 600000 });
         let receipt = await tx.wait();
-        console.log("receipt : ", receipt);
-        const shares = receipt.events[0].args.shares;
-        const batchId = receipt.events[0].args.batchId;
-        
-        console.log("Deposit successful. Shares:", shares.toString(), "Stake Batch ID:", batchId.toString());
+        console.log("receipt");
     } catch (error) {
         console.log("Deposit failed.");
         console.log(error);
