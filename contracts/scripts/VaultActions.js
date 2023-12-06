@@ -45,7 +45,7 @@ const stakeDispatch = async () => {
     console.log("calling dispatchStakeBatch()........");
     let tx = await contract.dispatchStakeBatch({
         value: ethAmount,
-        gasLimit: 10000000
+        gasLimit: 1000000
     });
     await tx.wait()
         .then(() => {

@@ -182,11 +182,11 @@ contract SubstakeVault is
         return (substakeL2Config.getExchangeRateData());
     }
 
-    function dispatchStakeBatch() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function dispatchStakeBatch() external payable onlyRole(DEFAULT_ADMIN_ROLE) {
         _dispatchStakeBatch();
     }
 
-    function dispatchUnstakeBatch() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function dispatchUnstakeBatch() external payable onlyRole(DEFAULT_ADMIN_ROLE) {
         _dispatchUnstakeBatch();
     }
 
