@@ -19,6 +19,7 @@
     "clsx": "^2.0.0",
     "connectkit": "^1.5.3",
     "ethers": "^6.8.1",
+    "fs": "^0.0.1-security",
     "lucide-react": "^0.293.0",
     "next": "14.0.3",
     "react": "^18",
