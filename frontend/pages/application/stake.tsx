@@ -69,8 +69,8 @@ const StakePage: NextPage = () => {
 
 
   const stakeHandler = async () => {
-    if (!stakeValue) return toast.error("Please enter a amount!");
-    if (stakeValue === "0") return toast.error("Please enter a valid amount!");
+    if (!stakeValue) return toast.error("Please enter an amount!");
+    if (Number(stakeValue) === 0) return toast.error("Please enter a valid amount!");
 
     setStakeLoading(true);
     toast.loading("Staking...", { id: "stake" });

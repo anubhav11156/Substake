@@ -6,6 +6,11 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
+import { N, ethers, JsonRpcProvider } from "ethers";
+import { useState, useEffect } from "react";
+import { VAULT_ABI } from "@/abi/abi";
+import { config, getAbi } from "@/configData";
+import { useAccount, useBalance } from "wagmi";
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -16,6 +21,33 @@ const Navbar: React.FC<NavbarProps> = ({
   isNavLink = true,
   isConnectWallet = true,
 }) => {
+
+  const [subTokenBalance, setSubTokenBalance] = useState("");
+  const { address, isConnecting, isDisconnected } = useAccount();
+
+  const vaultProxyAddress = config.substake.l2.vaultProxy;
+
+  useEffect(()=>{
+    getUserSubTokenBalance();
+  },[subTokenBalance, address]);
+
+  const getUserSubTokenBalance = async () => {
+    const jsonProvider = new JsonRpcProvider(process.env.NEXT_PUBLIC_SCROLL_RPC!);
+    const contract = new ethers.Contract(vaultProxyAddress,
+      VAULT_ABI.abi,
+      jsonProvider
+    );
+    try {
+      await contract.balanceOf(address)
+        .then((response) => {
+          let subBalance = (Number(response) / 10 ** 18).toFixed(6);
+          setSubTokenBalance(subBalance);
+        })
+    } catch (error) {
+      console.log("Failed to fetch SUB balance ",error);
+    }
+  }
+
   return (
     <header className="w-full border-b border-mainBg transition-all">
       <div className="flex items-center justify-between max-w-[85rem] w-full mx-auto py-5 px-3">
