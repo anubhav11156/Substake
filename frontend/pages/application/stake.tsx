@@ -13,13 +13,14 @@ import { useState } from "react";
 import { useAccount, useBalance, useConnect } from "wagmi";
 import { toast } from "sonner";
 import web3modal from "web3modal";
-import { ethers } from "ethers";
+import { N, ethers } from "ethers";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
 import { config, getAbi } from "@/configData";
+import { VAULT_ABI } from "@/abi/abi"
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
@@ -41,21 +42,20 @@ const StakePage: NextPage = () => {
     const modal = new web3modal({
       cacheProvider: true,
     });
-
     const connection = await modal.connect();
     const provider = new ethers.BrowserProvider(connection);
-    const signer = provider.getSigner();
-    console.log("signer :", signer );
-    const IMPLEMENTATION_ABI = await getAbi(vaultAbiPath);
-    console.log(IMPLEMENTATION_ABI.abi);
-    // const contract = new ethers.Contract(vaultProxyAddress, IMPLEMENTATION_ABI.abi, signer);
-    // try{
-    //   let tx = await contract.deposit(stakeValue, address, { value: stakeValue, gasLimit: 600000 });
-    //   let receipt = await tx.wait();
-    //   console.log("receipt");
-    // }catch(error){
+    const signer = await provider.getSigner();
+    const stakeAmount = ethers.parseEther(stakeValue);
 
-    // }
+    const contract = new ethers.Contract(vaultProxyAddress, VAULT_ABI.abi, signer);
+    try{
+      let tx = await contract.deposit(stakeAmount, address, { value: stakeAmount, gasLimit: 600000 });
+      toast.success("Successfully Staked!");
+      setStakeValue("");
+    }catch(error){
+      toast.error("Failed to stake!");
+      setStakeValue("");
+    }
 
   };
 
