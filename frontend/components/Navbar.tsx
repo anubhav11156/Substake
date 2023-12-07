@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({
   isConnectWallet = true,
 }) => {
   const [subTokenBalance, setSubTokenBalance] = useState("");
-  const { address, isConnecting, isDisconnected, isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
 
   const vaultProxyAddress = config.substake.l2.vaultProxy;
 
