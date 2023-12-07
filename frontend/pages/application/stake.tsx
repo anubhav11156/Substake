@@ -11,12 +11,15 @@ import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
 import { useAccount, useBalance, useConnect } from "wagmi";
+import { toast } from "sonner";
+import web3modal from "web3modal";
+import { JsonRpcProvider } from "ethers";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner";
+import { config } from "@/configData";
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
@@ -30,6 +33,21 @@ const StakePage: NextPage = () => {
   const accountBalance = data?.formatted;
 
   const _chain = chain?.name;
+
+  const stakeHandler = async () => {
+    const modal = new web3modal({
+      cacheProvider: true,
+    });
+
+    const connection = await modal.connect();
+
+    const provider = new JsonRpcProvider(process.env.NEXT_PUBLIC_SCROLL_RPC!);
+    const signer = provider.getSigner();
+
+    console.log(connection);
+    console.log(provider);
+    console.log(signer);
+  };
 
   return (
     <ApplicationLayout>
@@ -119,7 +137,10 @@ const StakePage: NextPage = () => {
           </div>
 
           {isConnected ? (
-            <Button className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2">
+            <Button
+              onClick={stakeHandler}
+              className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
+            >
               Stake
             </Button>
           ) : (
