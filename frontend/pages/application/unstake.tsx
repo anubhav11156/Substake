@@ -5,7 +5,9 @@ import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
+import web3modal from "web3modal";
 import { ConnectKitButton } from "connectkit";
+import { ethers } from "ethers";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,9 +19,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { VAULT_ABI } from "@/abi/abi";
+import { config } from "@/configData";
 
 const UnstakePage: NextPage = () => {
-  const [unstakeValue, setUnunstakeValue] = useState("");
+  const [unstakeValue, setUnstakeValue] = useState("");
+  const [unstakeLoading, setUnstakeLoading] = useState(false);
 
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data, isError, isLoading } = useBalance({
@@ -30,6 +35,46 @@ const UnstakePage: NextPage = () => {
   const accountBalance = data?.formatted;
 
   const _chain = chain?.name;
+
+  const vaultProxyAddress = config.substake.l2.vaultProxy;
+  const vaultAbiPath = "../../abi/SubstakeVault.json";
+
+  const unstakeHandler = async () => {
+    if (!unstakeValue) return toast.error("Please enter a amount!");
+    if (unstakeValue === "0")
+      return toast.error("Please enter a valid amount!");
+
+    setUnstakeLoading(true);
+    toast.loading("Unstaking...", { id: "unstake" });
+
+    const modal = new web3modal({
+      cacheProvider: true,
+    });
+    const connection = await modal.connect();
+    const provider = new ethers.BrowserProvider(connection);
+    const signer = await provider.getSigner();
+    const unstakeAmount = ethers.parseEther(unstakeValue);
+
+    const contract = new ethers.Contract(
+      vaultProxyAddress,
+      VAULT_ABI.abi,
+      signer
+    );
+    try {
+      let tx = await contract.deposit(unstakeAmount, address, {
+        value: unstakeAmount,
+        gasLimit: 1100000,
+      });
+
+      toast.success("Successfully Unstaked!", { id: "unstake" });
+      setUnstakeValue("");
+      setUnstakeLoading(false);
+    } catch (error) {
+      toast.error("Failed to unstake!", { id: "unstake" });
+      setUnstakeValue("");
+      setUnstakeLoading(false);
+    }
+  };
 
   return (
     <ApplicationLayout>
@@ -80,19 +125,20 @@ const UnstakePage: NextPage = () => {
           <div className="border-x border-b border-mainBg p-4 w-full flex items-center gap-3 rounded-bl-xl rounded-br-xl">
             <Input
               value={unstakeValue ? unstakeValue : ""}
-              onChange={(e) => setUnunstakeValue(e.target.value)}
+              onChange={(e) => setUnstakeValue(e.target.value)}
               className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium bg-[#fadfb5]"
               placeholder="0.0"
               type="number"
             />
 
             <button
+              disabled={unstakeLoading}
               onClick={() => {
                 if (!isConnected) {
                   toast.error("Please connect your wallet first");
-                } else setUnunstakeValue(accountBalance ? accountBalance : "");
+                } else setUnstakeValue(accountBalance ? accountBalance : "");
               }}
-              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
+              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
               MAX
             </button>
@@ -120,7 +166,11 @@ const UnstakePage: NextPage = () => {
           </div>
 
           {isConnected ? (
-            <Button className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2">
+            <Button
+              disabled={unstakeLoading}
+              onClick={unstakeHandler}
+              className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
+            >
               Unstake
             </Button>
           ) : (

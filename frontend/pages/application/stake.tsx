@@ -1,29 +1,30 @@
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
+import { N, ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
-import { useAccount, useBalance } from "wagmi";
 import { toast } from "sonner";
+import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
-import { N, ethers } from "ethers";
 
+import { VAULT_ABI } from "@/abi/abi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { config, getAbi } from "@/configData";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
-import { config, getAbi } from "@/configData";
-import { VAULT_ABI } from "@/abi/abi";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
+  const [stakeLoading, setStakeLoading] = useState(false);
 
   const { address, isConnecting, isDisconnected } = useAccount();
   const { data, isError, isLoading } = useBalance({
@@ -39,6 +40,12 @@ const StakePage: NextPage = () => {
   const vaultAbiPath = "../../abi/SubstakeVault.json";
 
   const stakeHandler = async () => {
+    if (!stakeValue) return toast.error("Please enter a amount!");
+    if (stakeValue === "0") return toast.error("Please enter a valid amount!");
+
+    setStakeLoading(true);
+    toast.loading("Staking...", { id: "stake" });
+
     const modal = new web3modal({
       cacheProvider: true,
     });
@@ -57,11 +64,14 @@ const StakePage: NextPage = () => {
         value: stakeAmount,
         gasLimit: 1100000,
       });
-      toast.success("Successfully Staked!");
+
+      toast.success("Successfully Staked!", { id: "stake" });
       setStakeValue("");
+      setStakeLoading(false);
     } catch (error) {
-      toast.error("Failed to stake!");
+      toast.error("Failed to stake!", { id: "stake" });
       setStakeValue("");
+      setStakeLoading(false);
     }
   };
 
@@ -117,15 +127,17 @@ const StakePage: NextPage = () => {
               className="border-none outline-none placeholder:text-gray-500 text-black text-xl focus-visible:ring-0 focus-visible:ring-offset-0 font-semibold placeholder:font-medium bg-[#fadfb5]"
               placeholder="0.0"
               type="number"
+              disabled={stakeLoading}
             />
 
             <button
+              disabled={stakeLoading}
               onClick={() => {
                 if (!isConnected) {
                   toast.error("Please connect your wallet first");
                 } else setStakeValue(accountBalance ? accountBalance : "");
               }}
-              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
+              className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
               MAX
             </button>
@@ -154,6 +166,7 @@ const StakePage: NextPage = () => {
 
           {isConnected ? (
             <Button
+              disabled={stakeLoading}
               onClick={stakeHandler}
               className="mt-5 rounded-xl w-full h-[52px] text-lg font-medium bg-[#9b923b] hover:bg-[#a99f44] text-white/90 transition-all uppercase ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
             >
