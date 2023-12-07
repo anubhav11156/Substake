@@ -92,7 +92,10 @@ contract SubstakeVault is
     {
         require(shares <= maxRedeem(owner), "Invalid, greater than balance");
         uint256 fees = substakeL2Config.computeFees(shares, 1);
-        _transfer(owner, substakeL2Config.getFeeCollector(), fees);
+        console2.log("unstake fees calcuated : ", fees);
+        uint256 ownerSUB_balance = balanceOf(owner);
+        console2.log("owner bal", ownerSUB_balance);
+        _transfer(owner, 0x70997970C51812dc3A010C7d01b50e0d17dc79C8, fees);
         uint256 _shares = shares - fees;
         uint256 assets = previewRedeem(_shares);
         activeBatchSUBTokenBalance += _shares;
