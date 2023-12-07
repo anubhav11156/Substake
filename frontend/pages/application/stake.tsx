@@ -3,11 +3,11 @@ import { ConnectKitButton } from "connectkit";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAccount, useBalance } from "wagmi";
 import { toast } from "sonner";
 import web3modal from "web3modal";
-import { N, ethers } from "ethers";
+import { N, ethers, JsonRpcProvider } from "ethers";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,19 +24,48 @@ import {
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
+  const [ethPerSubToken, setEthPerSubToken] = useState("");
+  const [receiveSUB, setReceiveSub] = useState(0);
 
   const { address, isConnecting, isDisconnected } = useAccount();
+
   const { data, isError, isLoading } = useBalance({
     address: address,
   });
   const { connector: activeConnector, isConnected } = useAccount();
   const { chain, chains } = getNetwork();
   const accountBalance = data?.formatted;
-
   const _chain = chain?.name;
 
   const vaultProxyAddress = config.substake.l2.vaultProxy;
-  const vaultAbiPath = "../../abi/SubstakeVault.json";
+
+  useEffect(() => {
+    getEthPerSub();
+    caculateSubTokenAmount();
+  }, [stakeValue]);
+
+  const caculateSubTokenAmount = () => {
+    let subTokenAmont = Number(stakeValue) * Number(ethPerSubToken);
+    setReceiveSub(subTokenAmont);
+  }
+
+  const getEthPerSub = async () => {
+    const jsonProvider = new JsonRpcProvider(process.env.NEXT_PUBLIC_SCROLL_RPC!);
+    const contract = new ethers.Contract(vaultProxyAddress,
+      VAULT_ABI.abi,
+      jsonProvider
+    );
+    try {
+      await contract.ethPerSubToken()
+        .then((response) => {
+          let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
+          setEthPerSubToken(ethPerSub);
+        })
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   const stakeHandler = async () => {
     const modal = new web3modal({
@@ -134,12 +163,12 @@ const StakePage: NextPage = () => {
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
               <p className="text-gray-500 uppercase">you will recieve</p>
-              <p>739248.9811 SUB</p>
+              <p>{receiveSUB} SUB</p>
             </div>
 
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">Exchange Rate</p>
-              <p>1 SUB = 1.0000001 ETH </p>
+              <p>1 SUB = {ethPerSubToken} ETH </p>
             </div>
 
             <div className="flex items-center justify-between">
