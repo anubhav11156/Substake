@@ -27,6 +27,7 @@ const StakePage: NextPage = () => {
   const [ethPerSubToken, setEthPerSubToken] = useState("");
   const [receiveSUB, setReceiveSub] = useState(0);
   const [stakeLoading, setStakeLoading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   const { address, isConnecting, isDisconnected } = useAccount();
 
@@ -41,6 +42,13 @@ const StakePage: NextPage = () => {
   const vaultProxyAddress = config.substake.l2.vaultProxy;
 
   useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
+
+  useEffect(() => {
     getEthPerSub();
     caculateSubTokenAmount();
   }, [stakeValue]);
@@ -48,29 +56,31 @@ const StakePage: NextPage = () => {
   const caculateSubTokenAmount = () => {
     let subTokenAmont = Number(stakeValue) * Number(ethPerSubToken);
     setReceiveSub(subTokenAmont);
-  }
+  };
 
   const getEthPerSub = async () => {
-    const jsonProvider = new JsonRpcProvider(process.env.NEXT_PUBLIC_SCROLL_RPC!);
-    const contract = new ethers.Contract(vaultProxyAddress,
+    const jsonProvider = new JsonRpcProvider(
+      process.env.NEXT_PUBLIC_SCROLL_RPC!
+    );
+    const contract = new ethers.Contract(
+      vaultProxyAddress,
       VAULT_ABI.abi,
       jsonProvider
     );
     try {
-      await contract.ethPerSubToken()
-        .then((response) => {
-          let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
-          setEthPerSubToken(ethPerSub);
-        })
+      await contract.ethPerSubToken().then((response) => {
+        let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
+        setEthPerSubToken(ethPerSub);
+      });
     } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   const stakeHandler = async () => {
     if (!stakeValue) return toast.error("Please enter an amount!");
-    if (Number(stakeValue) === 0) return toast.error("Please enter a valid amount!");
+    if (Number(stakeValue) === 0)
+      return toast.error("Please enter a valid amount!");
 
     setStakeLoading(true);
     toast.loading("Staking...", { id: "stake" });
@@ -103,6 +113,8 @@ const StakePage: NextPage = () => {
       setStakeLoading(false);
     }
   };
+
+  if (!isMounted) return null;
 
   return (
     <ApplicationLayout>
