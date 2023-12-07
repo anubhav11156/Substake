@@ -55,6 +55,10 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  React.useEffect(() => {
+    table.setPageSize(5);
+  }, [data, table]);
+
   return (
     <div>
       {/* <div className="flex items-center py-4">
@@ -123,6 +127,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
+          className="bg-transparent border border-mainBg hover:bg-mainBg hover:text-white transition-all"
         >
           Previous
         </Button>
@@ -131,6 +136,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
+          className="bg-transparent border border-mainBg hover:bg-mainBg hover:text-white transition-all"
         >
           Next
         </Button>

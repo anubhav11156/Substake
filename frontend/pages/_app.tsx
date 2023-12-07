@@ -38,7 +38,16 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={cn(font.className, "bg-[#FFDEAD]")}>
       <ConnectKitWrapper>
-        <Toaster position="bottom-right" />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              toast:
+                "bg-[#FFDEAD] border gap-3 right-0 font-semibold border-mainBg text-black/80 flex items-center p-4 rounded-xl shadow-lg",
+            },
+          }}
+        />
         <Component {...pageProps} />
       </ConnectKitWrapper>
     </div>

@@ -1,3 +1,9 @@
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
 import { Dot } from "lucide-react";
@@ -9,6 +15,7 @@ import { useAccount, useBalance, useConnect } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const StakePage: NextPage = () => {
@@ -27,13 +34,13 @@ const StakePage: NextPage = () => {
   return (
     <ApplicationLayout>
       <div className="h-[calc(100vh-82px)] flex flex-col w-full max-w-xl mx-auto justify-center items-center px-3 sm:px-0 overflow-hidden">
-        <div className="fixed -right-72 top-[68px] sm:top-[80px] opacity-60">
+        <div className="fixed -right-72 top-[80px] opacity-60">
           <div className="relative w-[695px] h-[1024px]">
             <Image src="/widget.svg" fill alt="eth" />
           </div>
         </div>
 
-        <div className="rounded-xl border-2 border-mainBg w-full p-3 bg-[#fadfb5] shadow-xl z-30">
+        <div className="rounded-xl border-2 border-mainBg w-full p-3 bg-[#fadfb5] shadow-2xl z-30">
           <div className="rounded-tl-xl rounded-tr-xl transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
             <Image src="/eth.svg" width={40} height={40} alt="eth" />
 
@@ -41,19 +48,32 @@ const StakePage: NextPage = () => {
               <p className="text-xs text-gray-500">AVAILABLE TO STAKE</p>
               <p className="font-bold">{isConnected ? accountBalance : 0.0}</p>
             </div>
-            <span className="flex items-center absolute top-2 right-2 text-gray-500 uppercase text-xs font-medium">
-              {isConnected ? (
-                <>
-                  <Dot className="text-gray-400" color="green" />
-                  {_chain}
-                </>
-              ) : (
-                <>
-                  <Dot className="text-gray-400" color="red" />
-                  DISCONNECTED
-                </>
-              )}
-            </span>
+
+            <div className="absolute top-2 right-2 uppercase font-medium text-xs flex items-center">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="sm:hidden rounded-xl">
+                    <Dot
+                      className={cn("text-red-500", {
+                        "text-green-500": isConnected,
+                      })}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-[#fadfb5] border-mainBg">
+                    {isConnected ? _chain : "Disconnected"}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <Dot
+                className={cn("text-red-500 hidden sm:flex", {
+                  "text-green-500": isConnected,
+                })}
+              />
+              <span className="text-gray-400 hidden sm:flex">
+                {isConnected ? _chain : "Disconnected"}
+              </span>
+            </div>
           </div>
 
           <div className="border-x border-b border-mainBg p-4 w-full flex items-center gap-3 rounded-bl-xl rounded-br-xl">
