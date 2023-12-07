@@ -69,7 +69,7 @@ const Navbar: React.FC<NavbarProps> = ({
           </Link>
 
           {isNavLink && (
-            <div className="hidden sm:flex">
+            <div className="hidden md:flex">
               <NavLinks />
             </div>
           )}
@@ -80,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <div
               className={cn(
                 buttonVariants(),
-                "rounded-xl font-medium uppercase transition-all w-full bg-[#9b923b] hover:bg-transparent text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 items-center gap-2 truncate border border-mainBg bg-transparent hidden sm:flex"
+                "rounded-xl font-medium uppercase transition-all w-full bg-[#9b923b] hover:bg-transparent text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 items-center gap-2 truncate border border-mainBg bg-transparent hidden md:flex"
               )}
             >
               <div className="p-2 bg-mainBg rounded-full">
@@ -108,7 +108,7 @@ const Navbar: React.FC<NavbarProps> = ({
                   className={cn(
                     "rounded-xl font-medium uppercase transition-all w-36 bg-[#9b923b] hover:bg-[#a99f44] text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2",
                     {
-                      "hidden sm:flex": !isConnectWallet,
+                      "hidden md:flex": !isConnectWallet,
                     }
                   )}
                 >
@@ -122,7 +122,7 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {isNavLink && (
-          <div className="sm:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-4">
             <MobileNavLinks subTokenBalance={subTokenBalance} />
           </div>
         )}
