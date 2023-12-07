@@ -1,16 +1,10 @@
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
-import { useAccount, useBalance, useConnect } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
 import { toast } from "sonner";
 import web3modal from "web3modal";
 import { N, ethers } from "ethers";
@@ -20,7 +14,13 @@ import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
 import { config, getAbi } from "@/configData";
-import { VAULT_ABI } from "@/abi/abi"
+import { VAULT_ABI } from "@/abi/abi";
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
@@ -47,16 +47,22 @@ const StakePage: NextPage = () => {
     const signer = await provider.getSigner();
     const stakeAmount = ethers.parseEther(stakeValue);
 
-    const contract = new ethers.Contract(vaultProxyAddress, VAULT_ABI.abi, signer);
-    try{
-      let tx = await contract.deposit(stakeAmount, address, { value: stakeAmount, gasLimit: 600000 });
+    const contract = new ethers.Contract(
+      vaultProxyAddress,
+      VAULT_ABI.abi,
+      signer
+    );
+    try {
+      let tx = await contract.deposit(stakeAmount, address, {
+        value: stakeAmount,
+        gasLimit: 1100000,
+      });
       toast.success("Successfully Staked!");
       setStakeValue("");
-    }catch(error){
+    } catch (error) {
       toast.error("Failed to stake!");
       setStakeValue("");
     }
-
   };
 
   return (

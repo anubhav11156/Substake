@@ -4,12 +4,19 @@ import { NextPage } from "next";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useAccount, useBalance, useConnect } from "wagmi";
+import { useAccount, useBalance } from "wagmi";
+import { ConnectKitButton } from "connectkit";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
-import { ConnectKitButton } from "connectkit";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 const UnstakePage: NextPage = () => {
   const [unstakeValue, setUnunstakeValue] = useState("");
@@ -43,19 +50,31 @@ const UnstakePage: NextPage = () => {
               </p>
               <p className="font-bold">{isConnected ? accountBalance : 0.0}</p>
             </div>
-            <span className="flex items-center absolute top-2 right-2 text-gray-500 uppercase text-xs font-medium">
-              {isConnected ? (
-                <>
-                  <Dot className="text-gray-400" color="green" />
-                  {_chain}
-                </>
-              ) : (
-                <>
-                  <Dot className="text-gray-400" color="red" />
-                  DISCONNECTED
-                </>
-              )}
-            </span>
+            <div className="absolute top-2 right-2 uppercase font-medium text-xs flex items-center">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="sm:hidden rounded-xl">
+                    <Dot
+                      className={cn("text-red-500", {
+                        "text-green-500": isConnected,
+                      })}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-[#fadfb5] border-mainBg">
+                    {isConnected ? _chain : "Disconnected"}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <Dot
+                className={cn("text-red-500 hidden sm:flex", {
+                  "text-green-500": isConnected,
+                })}
+              />
+              <span className="text-gray-400 hidden sm:flex">
+                {isConnected ? _chain : "Disconnected"}
+              </span>
+            </div>
           </div>
 
           <div className="border-x border-b border-mainBg p-4 w-full flex items-center gap-3 rounded-bl-xl rounded-br-xl">
