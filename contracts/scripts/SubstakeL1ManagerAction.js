@@ -21,7 +21,7 @@ async function getAbi(path) {
 }
 
 const main = () => {
-    _sendStakeMessage();
+    // _sendStakeMessage();
     // _sendUnstakeMessage();
 }
 

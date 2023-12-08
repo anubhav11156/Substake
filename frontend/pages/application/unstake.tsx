@@ -96,16 +96,18 @@ const UnstakePage: NextPage = () => {
       signer
     );
     try {
-      let tx = await contract.deposit(unstakeAmount, address, {
-        value: unstakeAmount,
-        gasLimit: 1100000,
+      let tx = await contract.redeem(
+        unstakeAmount,
+        address,
+        address, {
+        gasLimit: 800000,
       });
-
       toast.success("Successfully Unstaked!", { id: "unstake" });
       setUnstakeValue("");
       setUnstakeLoading(false);
     } catch (error) {
       toast.error("Failed to unstake!", { id: "unstake" });
+      console.log("error:", error);
       setUnstakeValue("");
       setUnstakeLoading(false);
     }
