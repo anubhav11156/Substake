@@ -21,14 +21,14 @@ async function getAbi(path){
 }
 
 const main = async () =>{
-    // _upgradeImplementation();
-    _initialize();
+    _upgradeImplementation();
+    // _initialize();
 }
 
 const _upgradeImplementation = async () => {
     const PROXY_ABI = await getAbi(substakeL1ManagerProxyabipath);
     const contract = new ethers.Contract(substakeL1ManagerProxyAddress, PROXY_ABI.abi, signer);
-    const substakeL1ManagerImplementation = "0x55b4532660065A80411C16B60a82C43e2C06d629";
+    const substakeL1ManagerImplementation = "0xf68b2f562Eba6D0c5521120e252e959038C2573c";
     console.log("Updating implementaion.........................");
     let tx = await contract.upgradeImplementation(substakeL1ManagerImplementation)
     await tx.wait()

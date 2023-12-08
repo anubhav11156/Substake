@@ -74,13 +74,14 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         uint256 _totalShares,
         uint256 _exRate,
         uint256 _gaslimitMultiplier,
+        uint256 _l2Gaslimit,
         uint256 _fee
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external payable onlyRole(DEFAULT_ADMIN_ROLE) {
         address _from = address(this);
         bytes memory _data = abi.encodeCall(ISubstakeVault.stakeHandler, (_from, _batchId, _totalShares, _exRate));
         uint256 gasLimitCalculated =
             IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_data);
-        uint256 _gaslimit = gasLimitCalculated * _gaslimitMultiplier;
+        uint256 _gaslimit = (gasLimitCalculated * _gaslimitMultiplier)+_l2Gaslimit;
         IL1ScrollMessenger(substakeL1Config.getScrollL1Messenger()).sendMessage{value: _fee}(
             substakeL1Config.getSubstakeVault(), VALUE, _data, _gaslimit
         );
@@ -93,8 +94,9 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         uint256 _totalShares,
         uint256 _exRate,
         uint256 _gaslimitMultiplier,
+        uint256 _l2Gaslimit,
         uint256 _fee
-    ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    ) external payable onlyRole(DEFAULT_ADMIN_ROLE) {
         address _from = address(this);
         bytes memory _data =
             abi.encodeCall(ISubstakeVault.withdrawHandler, (_from, _batchId, _ethAmount, _totalShares, _exRate));
@@ -102,7 +104,7 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
 
         uint256 gasLimitCalculted =
             IL1MessageQueue(substakeL1Config.getScrollL1MessageQueue()).calculateIntrinsicGasFee(_message);
-        uint256 _gasLimit = gasLimitCalculted * _gaslimitMultiplier;
+        uint256 _gasLimit = (gasLimitCalculted * _gaslimitMultiplier) + _l2Gaslimit;
 
         IL1ETHGateway(substakeL1Config.getScrollL1ETHGateway()).depositETHAndCall{value: _ethAmount + _fee}(
             substakeL1Config.getSubstakeVault(), _ethAmount, _message, _gasLimit
