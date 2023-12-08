@@ -105,7 +105,11 @@ const UnstakePage: NextPage = () => {
                       })}
                     />
                   </TooltipTrigger>
-                  <TooltipContent className="bg-[#fadfb5] border-mainBg">
+                  <TooltipContent
+                    className={cn("bg-[#fadfb5] border-mainBg text-green-500", {
+                      "text-red-500": !isConnected,
+                    })}
+                  >
                     {isConnected ? _chain : "Disconnected"}
                   </TooltipContent>
                 </Tooltip>
@@ -116,7 +120,11 @@ const UnstakePage: NextPage = () => {
                   "text-green-500": isConnected,
                 })}
               />
-              <span className="text-gray-400 hidden sm:flex">
+              <span
+                className={cn("text-green-500 hidden sm:flex", {
+                  "text-red-500": !isConnected,
+                })}
+              >
                 {isConnected ? _chain : "Disconnected"}
               </span>
             </div>

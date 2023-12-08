@@ -1,13 +1,13 @@
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
+import { JsonRpcProvider, N, ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
-import { N, ethers, JsonRpcProvider } from "ethers";
 
 import { VAULT_ABI } from "@/abi/abi";
 import { Button } from "@/components/ui/button";
@@ -98,6 +98,18 @@ const StakePage: NextPage = () => {
       VAULT_ABI.abi,
       signer
     );
+
+    let stakeBatchId;
+    try {
+      stakeBatchId = contract
+        .activeStakeBatch()
+        .then((res) => console.log(Number(res)));
+    } catch (error) {
+      console.log(error);
+    }
+
+    if (!stakeBatchId) return toast.error("Deposit failed");
+
     try {
       let tx = await contract.deposit(stakeAmount, address, {
         value: stakeAmount,
@@ -144,7 +156,11 @@ const StakePage: NextPage = () => {
                       })}
                     />
                   </TooltipTrigger>
-                  <TooltipContent className="bg-[#fadfb5] border-mainBg">
+                  <TooltipContent
+                    className={cn("bg-[#fadfb5] border-mainBg text-green-500", {
+                      "text-red-500": !isConnected,
+                    })}
+                  >
                     {isConnected ? _chain : "Disconnected"}
                   </TooltipContent>
                 </Tooltip>
@@ -155,7 +171,11 @@ const StakePage: NextPage = () => {
                   "text-green-500": isConnected,
                 })}
               />
-              <span className="text-gray-400 hidden sm:flex">
+              <span
+                className={cn("text-green-500 hidden sm:flex", {
+                  "text-red-500": !isConnected,
+                })}
+              >
                 {isConnected ? _chain : "Disconnected"}
               </span>
             </div>
