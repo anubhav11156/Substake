@@ -1,16 +1,17 @@
 import { ConnectKitButton } from "connectkit";
+import { JsonRpcProvider, ethers } from "ethers";
+import Image from "next/image";
+import { useEffect } from "react";
+import { useAccount } from "wagmi";
 import Link from "next/link";
 
 import { VAULT_ABI } from "@/abi/abi";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { config, getAbi } from "@/configData";
 import { cn } from "@/lib/utils";
-import { JsonRpcProvider, N, ethers } from "ethers";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useAccount, useBalance } from "wagmi";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
+import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -21,8 +22,10 @@ const Navbar: React.FC<NavbarProps> = ({
   isNavLink = true,
   isConnectWallet = true,
 }) => {
-  const [subTokenBalance, setSubTokenBalance] = useState("");
   const { address, isConnected } = useAccount();
+  const [subTokenBalance, setSubTokenBalance] = getUserBalanceDetails(
+    (state) => [state.subTokenBalance, state.setSubTokenBalance]
+  );
 
   const vaultProxyAddress = config.substake.l2.vaultProxy;
 
@@ -93,15 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({
           )}
 
           <ConnectKitButton.Custom>
-            {({
-              isConnected,
-              isConnecting,
-              show,
-              hide,
-              address,
-              ensName,
-              chain,
-            }) => {
+            {({ isConnected, show, address }) => {
               return (
                 <Button
                   onClick={show}

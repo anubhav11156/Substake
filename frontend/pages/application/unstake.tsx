@@ -2,12 +2,12 @@ import { getNetwork } from "@wagmi/core";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
 import { ConnectKitButton } from "connectkit";
-import { ethers } from "ethers";
+import { JsonRpcProvider, ethers } from "ethers";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,23 +21,58 @@ import {
 import { cn } from "@/lib/utils";
 import { VAULT_ABI } from "@/abi/abi";
 import { config } from "@/configData";
+import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 
 const UnstakePage: NextPage = () => {
   const [unstakeValue, setUnstakeValue] = useState("");
   const [unstakeLoading, setUnstakeLoading] = useState(false);
+  const [subTokenPerEth, setSubTokenPerEth] = useState("");
+  const [receiveSUB, setReceiveSub] = useState(0);
+  const [subTokenBalance] = getUserBalanceDetails((state) => [
+    state.subTokenBalance,
+  ]);
 
-  const { address, isConnecting, isDisconnected } = useAccount();
-  const { data, isError, isLoading } = useBalance({
+  const { address } = useAccount();
+  const { data } = useBalance({
     address: address,
   });
-  const { connector: activeConnector, isConnected } = useAccount();
-  const { chain, chains } = getNetwork();
+  const { connector, isConnected } = useAccount();
+  const { chain } = getNetwork();
   const accountBalance = data?.formatted;
 
   const _chain = chain?.name;
 
   const vaultProxyAddress = config.substake.l2.vaultProxy;
   const vaultAbiPath = "../../abi/SubstakeVault.json";
+
+  useEffect(() => {
+    getSubTokenPerEth();
+    caculateSubTokenAmount();
+  }, [unstakeValue]);
+
+  const caculateSubTokenAmount = () => {
+    let subTokenAmont = Number(unstakeValue) * Number(subTokenPerEth);
+    setReceiveSub(subTokenAmont);
+  };
+
+  const getSubTokenPerEth = async () => {
+    const jsonProvider = new JsonRpcProvider(
+      process.env.NEXT_PUBLIC_SCROLL_RPC!
+    );
+    const contract = new ethers.Contract(
+      vaultProxyAddress,
+      VAULT_ABI.abi,
+      jsonProvider
+    );
+    try {
+      await contract.subTokenPerEth().then((response) => {
+        let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
+        setSubTokenPerEth(ethPerSub);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const unstakeHandler = async () => {
     if (!unstakeValue) return toast.error("Please enter a amount!");
@@ -93,7 +128,7 @@ const UnstakePage: NextPage = () => {
               <p className="text-xs text-gray-500 uppercase">
                 available to unstake
               </p>
-              <p className="font-bold">{isConnected ? accountBalance : 0.0}</p>
+              <p className="font-bold">{isConnected ? subTokenBalance : 0.0}</p>
             </div>
             <div className="absolute top-2 right-2 uppercase font-medium text-xs flex items-center">
               <TooltipProvider>
@@ -155,12 +190,12 @@ const UnstakePage: NextPage = () => {
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
               <p className="text-gray-500 uppercase">you will recieve</p>
-              <p>739248.9811 SUB</p>
+              <p>{receiveSUB} SUB</p>
             </div>
 
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">Exchange Rate</p>
-              <p>1 SUB = 1.0000001 ETH </p>
+              <p>1 SUB = {subTokenPerEth} ETH </p>
             </div>
 
             <div className="flex items-center justify-between">
