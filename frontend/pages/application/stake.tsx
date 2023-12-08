@@ -139,7 +139,9 @@ const StakePage: NextPage = () => {
 
         <div className="rounded-xl border-2 border-mainBg w-full p-3 bg-[#fadfb5] shadow-2xl z-30">
           <div className="rounded-tl-xl rounded-tr-xl transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
-            <Image src="/eth.svg" width={40} height={40} alt="eth" />
+            <div className="p-2 bg-mainBg rounded-xl">
+              <Image src="/logo_white.svg" width={25} height={25} alt="eth" />
+            </div>
 
             <div className="flex flex-col">
               <p className="text-xs text-gray-500">AVAILABLE TO STAKE</p>
