@@ -1,4 +1,6 @@
 import { getNetwork } from "@wagmi/core";
+import { ConnectKitButton } from "connectkit";
+import { JsonRpcProvider, ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
@@ -6,21 +8,19 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
-import { ConnectKitButton } from "connectkit";
-import { JsonRpcProvider, ethers } from "ethers";
 
+import { VAULT_ABI } from "@/abi/abi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import ApplicationLayout from "@/layouts/ApplicationLayout";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { VAULT_ABI } from "@/abi/abi";
 import { config } from "@/configData";
+import ApplicationLayout from "@/layouts/ApplicationLayout";
+import { cn } from "@/lib/utils";
 import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 
 const UnstakePage: NextPage = () => {
@@ -113,14 +113,14 @@ const UnstakePage: NextPage = () => {
 
   return (
     <ApplicationLayout>
-      <div className="h-[calc(100vh-82px)] justify-center flex flex-col w-full max-w-xl mx-auto items-center px-3 sm:px-0">
+      <div className="h-[calc(100vh-82px)] justify-center flex flex-col mx-auto items-center px-3 sm:px-0">
         <div className="fixed -left-72 top-[80px] opacity-60">
           <div className="relative w-[695px] h-[1024px]">
             <Image src="/widget.svg" fill alt="eth" className="rotate-180" />
           </div>
         </div>
 
-        <div className="rounded-xl border-2 border-mainBg w-full p-3 bg-[#fadfb5] shadow-xl z-30">
+        <div className="box_shadow_div rounded-xl border-2 border-mainBg w-full max-w-xl p-3 bg-[#fadfb5] shadow-xl z-30">
           <div className="rounded-tl-xl rounded-tr-xl hover:bg-[#fadfb5] transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
             <div className="p-2 bg-mainBg rounded-xl">
               <Image src="/logo_white.svg" width={25} height={25} alt="eth" />

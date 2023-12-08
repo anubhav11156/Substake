@@ -130,14 +130,14 @@ const StakePage: NextPage = () => {
 
   return (
     <ApplicationLayout>
-      <div className="h-[calc(100vh-82px)] flex flex-col w-full max-w-xl mx-auto justify-center items-center px-3 sm:px-0 overflow-hidden">
+      <div className="h-[calc(100vh-82px)] flex flex-col mx-auto justify-center items-center px-3 sm:px-0 overflow-hidden">
         <div className="fixed -right-72 top-[80px] opacity-60">
           <div className="relative w-[695px] h-[1024px]">
             <Image src="/widget.svg" fill alt="eth" />
           </div>
         </div>
 
-        <div className="rounded-xl border-2 border-mainBg w-full p-3 bg-[#fadfb5] shadow-2xl z-30">
+        <div className="box_shadow_div rounded-xl border-2 border-mainBg w-full max-w-xl p-3 bg-[#fadfb5] z-40">
           <div className="rounded-tl-xl rounded-tr-xl transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
             <div className="p-2 bg-mainBg rounded-xl">
               <Image src="/logo_white.svg" width={25} height={25} alt="eth" />
