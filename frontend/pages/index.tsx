@@ -21,18 +21,10 @@ export const metadata: Metadata = {
 const Home: NextPage = () => {
   const router = useRouter();
 
-  const { address } = useAccount();
-
   return (
     <Suspense fallback={<Loading />}>
       <div className="h-full">
         <Navbar isNavLink={false} />
-
-        {/* <div className="fixed -right-72 top-[68px] sm:top-[80px] opacity-60">
-          <div className="relative w-[695px] h-[1024px]">
-            <Image src="/mainbg.svg" fill alt="eth" />
-          </div>
-        </div> */}
 
         <div
           className={cn(

@@ -9,7 +9,7 @@ export type Column = {
   createdAt: string;
   stakeBatchId: number;
   network: string;
-  protcol: string;
+  protocol: string;
   status: string;
 };
 
@@ -28,7 +28,7 @@ export const columns: ColumnDef<Column>[] = [
   },
 
   {
-    accessorKey: "protcol",
+    accessorKey: "protocol",
     header: "Protocol",
   },
   {

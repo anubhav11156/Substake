@@ -15,6 +15,9 @@ export default async function handler(
     where: {
       address,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   if (!user)

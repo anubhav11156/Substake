@@ -11,27 +11,29 @@ datasource db {
 }
 
 model UserStakingDetails {
-  address      String @id
-  Asset        Int    @default(0)
-  shares       Int    @default(0)
-  StakeBatchId Int    @default(0)
-  status       String
-  protocol     String
-  network      String
+  transactionHash String @id @default(uuid())
+  address         String
+  Asset           Int    @default(0)
+  shares          Int    @default(0)
+  StakeBatchId    Int    @default(0)
+  status          String
+  protocol        String
+  network         String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model UserUnstakingDetails {
-  address        String @id
-  ExpectedAsset  Int    @default(0)
-  FinalizedAsset Int    @default(0)
-  shares         Int    @default(0)
-  UnstakeBatchId Int    @default(0)
-  status         String
-  protocol       String
-  network        String
+  transactionHash String @id @default(uuid())
+  address         String
+  ExpectedAsset   Int    @default(0)
+  FinalizedAsset  Int    @default(0)
+  shares          Int    @default(0)
+  UnstakeBatchId  Int    @default(0)
+  status          String
+  protocol        String
+  network         String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
