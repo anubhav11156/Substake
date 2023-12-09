@@ -10,6 +10,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model UserDetails {
+  id           String  @id @default(uuid())
+  address      String  @unique
+  isSubscribed Boolean @default(false)
+}
+
 model UserStakingDetails {
   transactionHash String @id @default(uuid())
   address         String

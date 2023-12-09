@@ -1,21 +1,18 @@
 import { ConnectKitButton } from "connectkit";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 
-import { VAULT_ABI } from "@/abi/abi";
+import { PUSH_COMM_V2_ABI, VAULT_ABI } from "@/abi/abi";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { config, getAbi } from "@/configData";
+import { config } from "@/configData";
 import { cn } from "@/lib/utils";
 import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
+import { ethers } from "ethers";
+import web3modal from "web3modal";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
-import { ethers } from "ethers";
-import { PUSH_COMM_V2_ABI } from "@/abi/abi";
-import web3modal from "web3modal";
-
-
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -26,7 +23,6 @@ const Navbar: React.FC<NavbarProps> = ({
   isNavLink = true,
   isConnectWallet = true,
 }) => {
-
   const [isSubscribed, setIsSubscribed] = useState(false);
   const { address, isConnected } = useAccount();
   const [subTokenBalance, setSubTokenBalance] = getUserBalanceDetails(
@@ -40,7 +36,6 @@ const Navbar: React.FC<NavbarProps> = ({
     checkAndSubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subTokenBalance, address]);
-
 
   const subscribeHandler = async () => {
     const channelAddress = "0x1ec22DB2e933b8801d63E61731fD177fcF9D7196";
@@ -57,24 +52,21 @@ const Navbar: React.FC<NavbarProps> = ({
       pushCommV2Address,
       PUSH_COMM_V2_ABI.abi,
       signer
-    )
-    try{
-        let tx =  await pushContract.subscribe(
-          channelAddress, {
-            gaslimit:200000
-          }
-        )
-        tx.wait();
-    } catch(error){
+    );
+    try {
+      let tx = await pushContract.subscribe(channelAddress, {
+        gaslimit: 200000,
+      });
+      tx.wait();
+    } catch (error) {
       console.log(error);
     }
-  }
-
+  };
 
   const checkAndSubscribe = async () => {
     const channelAddress = "0x1ec22DB2e933b8801d63E61731fD177fcF9D7196";
     const pushCommV2Address = "0x0C34d54a09CFe75BCcd878A469206Ae77E0fe6e7";
-    const ownerPrivateKey = process.env.NEXT_PUBLIC_PV_KEY!
+    const ownerPrivateKey = process.env.NEXT_PUBLIC_PV_KEY!;
     const jsonProvider = new ethers.providers.JsonRpcProvider(
       process.env.NEXT_PUBLIC_ETH_SEPOLIA!
     );
@@ -86,13 +78,13 @@ const Navbar: React.FC<NavbarProps> = ({
       jsonProvider
     );
     try {
-      let status = await pushContract.isUserSubscribed(channelAddress,address)
+      let status = await pushContract.isUserSubscribed(channelAddress, address);
       console.log("Subscription status : ", status);
       setIsSubscribed(status);
-    } catch(error){
+    } catch (error) {
       console.log("error : ", error);
     }
-  }
+  };
 
   const getUserSubTokenBalance = async () => {
     const jsonProvider = new ethers.providers.JsonRpcProvider(
@@ -104,7 +96,7 @@ const Navbar: React.FC<NavbarProps> = ({
       jsonProvider
     );
     try {
-      await contract.balanceOf(address).then((response:any) => {
+      await contract.balanceOf(address).then((response: any) => {
         let subBalance = ethers.utils.parseUnits(response.toString());
         let converted = (Number(subBalance) / 10 ** 18).toFixed(3);
         setSubTokenBalance(converted.toString());
@@ -134,6 +126,12 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {isSubscribed ? (
+            <Button>Already Subscribed!</Button>
+          ) : (
+            <Button onClick={subscribeHandler}>Subscribe</Button>
+          )}
+
           {isConnected && (
             <div
               className={cn(
