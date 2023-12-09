@@ -55,7 +55,7 @@ const Navbar: React.FC<NavbarProps> = ({
     );
     try {
       let tx = await pushContract.subscribe(channelAddress, {
-        gaslimit: 200000,
+        gasLimit: 200000,
       });
       tx.wait();
     } catch (error) {
