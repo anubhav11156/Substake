@@ -7,7 +7,7 @@ const scrollSepoliaRPC = process.env.SCROLL_RPC;
 const privateKey = process.env.PV_KEY;
 
 const substakeL2configProxyabipath = "../out/SubstakeL2ConfigProxy.sol/SubstakeL2ConfigProxy.json";
-const substakeL2configProxyAddress = "0x7BCaa65E6cAceF4FB7F2852488829bd92090667a";
+const substakeL2configProxyAddress = "0x6aCd0C82DfCbb9Ed98AcF2f9805897fe5762BF0b";
 const substakeL2configImplementationabipath =  "../out/SubstakeL2Config.sol/SubstakeL2Config.json"
 
 
@@ -21,14 +21,14 @@ async function getAbi(path){
 }
 
 const main = async () =>{
-    // _upgradeImplementation();
+    _upgradeImplementation();
     // _initialize();
 }
 
 const _upgradeImplementation = async () => {
     const PROXY_ABI = await getAbi(substakeL2configProxyabipath);
     const contract = new ethers.Contract(substakeL2configProxyAddress, PROXY_ABI.abi, signer);
-    const substakeL2configImplementation = "0xfBB72BFb7c167c0aF3419f458338F35e9DEE36bB";
+    const substakeL2configImplementation = "0xc4eaaFE1679DF42773f792cBeD921c5fAb76d23c";
     console.log("Updating implementaion.........................");
     let tx = await contract.upgradeImplementation(substakeL2configImplementation)
     await tx.wait()

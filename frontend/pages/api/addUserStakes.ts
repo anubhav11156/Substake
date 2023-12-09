@@ -31,7 +31,7 @@ export default async function handler(
       address,
       Asset: assets,
       StakeBatchId: stakeBatchId,
-      status: "processing",
+      status: "deposit accepted",
       protocol,
       network,
     },
