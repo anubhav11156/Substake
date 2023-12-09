@@ -1,28 +1,35 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { AddUserStakesType } from "@/interfaces/UserStakes";
 import prismadb from "@/lib/prismadb";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { address, assets, shares, stakeBatchId, protocol, network } = req.body;
+  const {
+    address,
+    assets,
+    stakeBatchId,
+    protocol,
+    network,
+  }: AddUserStakesType = req.body;
 
   if (!address) return res.status(404).json({ message: "address is required" });
   if (!assets) return res.status(404).json({ message: "assets is required" });
-  if (!shares) return res.status(404).json({ message: "shares is required" });
   if (!stakeBatchId)
     return res.status(404).json({ message: "stakeBatchId is required" });
   if (!protocol)
     return res.status(404).json({ message: "protocol is required" });
   if (!network) return res.status(404).json({ message: "network is required" });
 
+  console.log(assets, stakeBatchId, network);
+
   const user = await prismadb.userStakingDetails.create({
     data: {
       address,
       Asset: assets,
-      shares,
       StakeBatchId: stakeBatchId,
       status: "processing",
       protocol,
