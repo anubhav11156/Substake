@@ -61,22 +61,20 @@ const Navbar: React.FC<NavbarProps> = ({
       signer
     );
     try {
+      toast.loading("Subscribing...", { id: "subscribe" });
       let tx = await pushContract.subscribe(channelAddress, {
         gasLimit: 200000,
       });
-      toast.loading("Waiting for confirmation...", { id: "subscribe" });
-
       const res = await tx.wait();
 
-      toast.loading("Subscribing...", { id: "subscribe" });
-
       if (res.status === 1) {
-        setIsSubscribed(true);
+        checkAndSubscribe();
         toast.success("Successfully subscribed to the channel", {
           id: "subscribe",
         });
       }
     } catch (error) {
+      toast.error("Failed to subscribe to the channel", { id: "subscribe" });
       console.log(error);
     }
   };
@@ -95,9 +93,9 @@ const Navbar: React.FC<NavbarProps> = ({
       PUSH_COMM_V2_ABI.abi,
       jsonProvider
     );
+
     try {
       let status = await pushContract.isUserSubscribed(channelAddress, address);
-      console.log("Subscription status : ", status);
       setIsSubscribed(status);
     } catch (error) {
       console.log("error : ", error);
@@ -148,7 +146,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <Tooltip>
               <TooltipTrigger
                 className={cn(
-                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[4.8rem] h-10",
+                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[4rem] h-10",
                   {
                     "border border-red-500 hover:bg-red-500 text-red-500":
                       isSubscribed,
@@ -173,7 +171,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <div
               className={cn(
                 buttonVariants(),
-                "rounded-xl font-medium uppercase transition-all w-full bg-[#9b923b] hover:bg-transparent text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 items-center gap-2 truncate border border-mainBg bg-transparent hidden md:flex"
+                "rounded-xl font-medium uppercase transition-all w-fit bg-[#9b923b] hover:bg-transparent text-white/90 ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 items-center gap-2 truncate border border-mainBg bg-transparent hidden md:flex"
               )}
             >
               <div className="p-2 bg-mainBg rounded-full">

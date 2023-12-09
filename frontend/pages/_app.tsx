@@ -39,7 +39,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   if (loading) return <Loading />;
-
+  // background: "linear-gradient(180deg, #ffdead 0%, #e1d77d 100%)",
   return (
     <QueryClientProvider client={queryClient}>
       <div className={cn(font.className, "bg-[#FFDEAD]")}>
@@ -50,7 +50,7 @@ export default function App({ Component, pageProps }: AppProps) {
               unstyled: true,
               classNames: {
                 toast:
-                  "bg-[#FFDEAD] border gap-3 right-0 font-semibold border-mainBg text-black/80 flex items-center p-4 rounded-xl shadow-lg",
+                  "bg-[#FFDEAD] border gap-3 right-0 font-semibold border-mainBg text-black/80 flex items-center p-4 rounded-xl shadow-lg bg-[linear-gradient(180deg,_#ffdead_0%,_#e1d77d_100%)]",
               },
             }}
           />
