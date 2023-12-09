@@ -45,8 +45,11 @@ const Navbar: React.FC<NavbarProps> = ({
     );
     try {
       await contract.balanceOf(address).then((response) => {
-        let subBalance = (Number(response) / 10 ** 18).toFixed(6);
-        setSubTokenBalance(subBalance);
+        console.log('balance response is : ', response);
+        let subBalance = ethers.parseUnits(response.toString());
+        let converted = ((Number(subBalance))/10**18).toFixed(3);
+        console.log("converted : ", converted);
+        setSubTokenBalance(converted.toString());
       });
     } catch (error) {
       console.log("Failed to fetch SUB balance ", error);

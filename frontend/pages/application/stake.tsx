@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 
 const StakePage: NextPage = () => {
   const [stakeValue, setStakeValue] = useState("");
-  const [ethPerSubToken, setEthPerSubToken] = useState("");
+  const [subTokenPerETH, setSubTokenPerETH] = useState("");
   const [receiveSUB, setReceiveSub] = useState(0);
   const [stakeLoading, setStakeLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -49,16 +49,16 @@ const StakePage: NextPage = () => {
   }, []);
 
   useEffect(() => {
-    getEthPerSub();
+    getSubPerETH();
     caculateSubTokenAmount();
   }, [stakeValue]);
 
   const caculateSubTokenAmount = useCallback(() => {
-    let subTokenAmont = Number(stakeValue) * Number(ethPerSubToken);
+    let subTokenAmont = Number(stakeValue) * Number(subTokenPerETH);
     setReceiveSub(subTokenAmont);
-  }, [stakeValue, ethPerSubToken]);
+  }, [stakeValue, subTokenPerETH]);
 
-  const getEthPerSub = useCallback(async () => {
+  const getSubPerETH = useCallback(async () => {
     const jsonProvider = new JsonRpcProvider(
       process.env.NEXT_PUBLIC_SCROLL_RPC!
     );
@@ -68,9 +68,11 @@ const StakePage: NextPage = () => {
       jsonProvider
     );
     try {
-      await contract.ethPerSubToken().then((response) => {
-        let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
-        setEthPerSubToken(ethPerSub);
+      await contract.subTokenPerEth().then((response) => {
+        let ethPerSub = ethers.parseUnits(response.toString());
+        let converted = ((Number(ethPerSub))/10**18).toFixed(3);
+        console.log("converted : ", converted);
+        setSubTokenPerETH(converted);
       });
     } catch (error) {
       console.log(error);
@@ -212,7 +214,7 @@ const StakePage: NextPage = () => {
 
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">Exchange Rate</p>
-              <p>1 SUB = {ethPerSubToken} ETH </p>
+              <p>1 SUB = {subTokenPerETH} ETH </p>
             </div>
 
             <div className="flex items-center justify-between">

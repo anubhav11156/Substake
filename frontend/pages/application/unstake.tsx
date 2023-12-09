@@ -26,7 +26,7 @@ import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 const UnstakePage: NextPage = () => {
   const [unstakeValue, setUnstakeValue] = useState("");
   const [unstakeLoading, setUnstakeLoading] = useState(false);
-  const [subTokenPerEth, setSubTokenPerEth] = useState("");
+  const [ethPerSubToken, setethPerSubToken] = useState("");
   const [receiveSUB, setReceiveSub] = useState(0);
   const [subTokenBalance] = getUserBalanceDetails((state) => [
     state.subTokenBalance,
@@ -59,8 +59,8 @@ const UnstakePage: NextPage = () => {
   }, []);
 
   const caculateSubTokenAmount = () => {
-    let subTokenAmont = Number(unstakeValue) * Number(subTokenPerEth);
-    setReceiveSub(subTokenAmont);
+    let ethAmount = Number(unstakeValue) * Number(ethPerSubToken);
+    setReceiveSub(ethAmount);
   };
 
   const getSubTokenPerEth = async () => {
@@ -74,8 +74,10 @@ const UnstakePage: NextPage = () => {
     );
     try {
       await contract.subTokenPerEth().then((response) => {
-        let ethPerSub = (Number(response) / 10 ** 18).toFixed(4);
-        setSubTokenPerEth(ethPerSub);
+        let subPerEth = ethers.parseUnits(response.toString());
+        let converted = ((Number(subPerEth))/10**18).toFixed(3);
+        console.log("converted : ", converted);
+        setethPerSubToken(converted);
       });
     } catch (error) {
       console.log(error);
@@ -207,12 +209,12 @@ const UnstakePage: NextPage = () => {
 
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">Exchange Rate</p>
-              <p>1 SUB = {subTokenPerEth} ETH </p>
+              <p>1 SUB = {ethPerSubToken} ETH </p>
             </div>
 
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">Protocol Fee</p>
-              <p>0.01 %</p>
+              <p>0.05 %</p>
             </div>
             <div className="flex items-center justify-between">
               <p className="text-gray-500 uppercase">APR</p>
