@@ -4,7 +4,7 @@ import { JsonRpcProvider, ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
@@ -49,6 +49,7 @@ const UnstakePage: NextPage = () => {
   useEffect(() => {
     getSubTokenPerEth();
     caculateSubTokenAmount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unstakeValue]);
 
   useEffect(() => {
@@ -58,12 +59,12 @@ const UnstakePage: NextPage = () => {
     };
   }, []);
 
-  const caculateSubTokenAmount = () => {
+  const caculateSubTokenAmount = useCallback(() => {
     let ethAmount = Number(unstakeValue) * Number(ethPerSubToken);
     setReceiveSub(ethAmount);
-  };
+  }, [ethPerSubToken, unstakeValue]);
 
-  const getSubTokenPerEth = async () => {
+  const getSubTokenPerEth = useCallback(async () => {
     const jsonProvider = new JsonRpcProvider(
       process.env.NEXT_PUBLIC_SCROLL_RPC!
     );
@@ -75,14 +76,13 @@ const UnstakePage: NextPage = () => {
     try {
       await contract.subTokenPerEth().then((response) => {
         let subPerEth = ethers.parseUnits(response.toString());
-        let converted = ((Number(subPerEth))/10**18).toFixed(3);
-        console.log("converted : ", converted);
+        let converted = (Number(subPerEth) / 10 ** 18).toFixed(3);
         setethPerSubToken(converted);
       });
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [vaultProxyAddress]);
 
   const unstakeHandler = async () => {
     if (!unstakeValue) return toast.error("Please enter a amount!");
@@ -105,15 +105,24 @@ const UnstakePage: NextPage = () => {
       VAULT_ABI.abi,
       signer
     );
+
     try {
-      // let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
-      // aprvTx.wait();
-      let tx = await contract.redeem(unstakeAmount, address, address, {
+      let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
+      const aprvTxRes = await aprvTx.wait();
+
+      if (aprvTxRes?.status === 0)
+        return toast.error("Approved Failed!", { id: "unstake" });
+
+      let tx = await contract.redeem(unstakeAmount, address, {
         gasLimit: 800000,
       });
-      tx.wait();
-      console.log('tx : ', tx);
+      const txRes = await tx.wait();
+
+      if (txRes?.status === 0)
+        return toast.error("Redeem failed!", { id: "unstake" });
+
       toast.success("Successfully Unstaked!", { id: "unstake" });
+
       setUnstakeValue("");
       setUnstakeLoading(false);
     } catch (error) {
