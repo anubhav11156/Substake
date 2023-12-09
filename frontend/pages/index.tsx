@@ -41,7 +41,7 @@ const Home: NextPage = () => {
         <div
           className={cn(
             font.className,
-            "h-full lg:h-[calc(100vh-82px)] bg-[#] flex flex-col lg:flex-row justify-center lg:justify-between items-center w-full max-w-[85rem] mx-auto px-3 gap-8 lg:gap-0"
+            "h-full lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row justify-center lg:justify-between items-center w-full max-w-[85rem] mx-auto px-3 gap-24 lg:gap-0"
           )}
         >
           <div className="mt-16 lg:mt-0 flex flex-col justify-center items-center lg:items-start lg:justify-start relative">
@@ -62,12 +62,36 @@ const Home: NextPage = () => {
             </Button>
           </div>
 
-          <div className="relative w-[600px] h-[400px]">
+          <div className="relative w-[462px] h-[240px] xl:w-[562px] xl:h-[289px] mb-5 md:mb-0">
             <Image
               src="/hero_image.svg"
               fill
               className="object-cover"
               alt="hero_image"
+            />
+
+            <Image
+              src="/scroll.svg"
+              width={105}
+              height={109}
+              className="absolute left-8 bottom-4 xl:left-12 xl:bottom-12 animate-bounce duration-[5000ms] "
+              alt="scroll"
+            />
+
+            <Image
+              src="/ethereum.svg"
+              width={80}
+              height={80}
+              className="absolute right-[2.5rem] xl:right-[3.8rem] top-[50%] animate-bounce duration-[5000ms] "
+              alt="ethereum"
+            />
+
+            <Image
+              src="/block.svg"
+              width={107}
+              height={108}
+              className="absolute -top-[3.5rem] left-[39%] xl:-top-6 xl:left-[41%] animate-bounce duration-[5000ms] "
+              alt="block"
             />
           </div>
         </div>
