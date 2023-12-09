@@ -24,7 +24,7 @@ contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
     function initialize(address _admin) external initializer {
         SubstakeLib.zeroAddressCheck(_admin);
         _setAdmin(_admin);
-        _setContract(LIDO_WSTETH_TOKEN, 0x6320cD32aA674d2898A68ec82e869385Fc5f7E2f);
+        _setContract(LIDO_WSTETH_TOKEN, 0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0);
         _setContract(UNISWAP_WSTETH_WETH_POOL, 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa);
         _setContract(WETH_CONTRACT, 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
         _setContract(UNISWAP_SWAP_ROUTER, 0xE592427A0AEce92De3Edee1F18E0157C05861564);
