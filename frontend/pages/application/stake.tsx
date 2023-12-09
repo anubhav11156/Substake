@@ -51,6 +51,7 @@ const StakePage: NextPage = () => {
   useEffect(() => {
     getSubPerETH();
     caculateSubTokenAmount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stakeValue]);
 
   const caculateSubTokenAmount = useCallback(() => {
@@ -70,8 +71,7 @@ const StakePage: NextPage = () => {
     try {
       await contract.subTokenPerEth().then((response) => {
         let ethPerSub = ethers.parseUnits(response.toString());
-        let converted = ((Number(ethPerSub))/10**18).toFixed(3);
-        console.log("converted : ", converted);
+        let converted = (Number(ethPerSub) / 10 ** 18).toFixed(3);
         setSubTokenPerETH(converted);
       });
     } catch (error) {
