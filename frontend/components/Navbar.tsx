@@ -1,8 +1,7 @@
 import { ConnectKitButton } from "connectkit";
-import { ethers } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import { VAULT_ABI } from "@/abi/abi";
@@ -12,6 +11,11 @@ import { cn } from "@/lib/utils";
 import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
+import { ethers } from "ethers";
+import { PUSH_COMM_V2_ABI } from "@/abi/abi";
+import web3modal from "web3modal";
+
+
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -22,6 +26,8 @@ const Navbar: React.FC<NavbarProps> = ({
   isNavLink = true,
   isConnectWallet = true,
 }) => {
+
+  const [isSubscribed, setIsSubscribed] = useState(false);
   const { address, isConnected } = useAccount();
   const [subTokenBalance, setSubTokenBalance] = getUserBalanceDetails(
     (state) => [state.subTokenBalance, state.setSubTokenBalance]
@@ -31,8 +37,62 @@ const Navbar: React.FC<NavbarProps> = ({
 
   useEffect(() => {
     getUserSubTokenBalance();
+    checkAndSubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subTokenBalance, address]);
+
+
+  const subscribeHandler = async () => {
+    const channelAddress = "0x1ec22DB2e933b8801d63E61731fD177fcF9D7196";
+    const pushCommV2Address = "0x0C34d54a09CFe75BCcd878A469206Ae77E0fe6e7";
+
+    const modal = new web3modal({
+      cacheProvider: true,
+    });
+    const connection = await modal.connect();
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+
+    const pushContract = new ethers.Contract(
+      pushCommV2Address,
+      PUSH_COMM_V2_ABI.abi,
+      signer
+    )
+    try{
+        let tx =  await pushContract.subscribe(
+          channelAddress, {
+            gaslimit:200000
+          }
+        )
+        tx.wait();
+    } catch(error){
+      console.log(error);
+    }
+  }
+
+
+  const checkAndSubscribe = async () => {
+    const channelAddress = "0x1ec22DB2e933b8801d63E61731fD177fcF9D7196";
+    const pushCommV2Address = "0x0C34d54a09CFe75BCcd878A469206Ae77E0fe6e7";
+    const ownerPrivateKey = process.env.NEXT_PUBLIC_PV_KEY!
+    const jsonProvider = new ethers.providers.JsonRpcProvider(
+      process.env.NEXT_PUBLIC_ETH_SEPOLIA!
+    );
+    // const wallet = new ethers.Wallet(ownerPrivateKey);
+    // const signer = wallet.connect(jsonProvider);
+    const pushContract = new ethers.Contract(
+      pushCommV2Address,
+      PUSH_COMM_V2_ABI.abi,
+      jsonProvider
+    );
+    try {
+      let status = await pushContract.isUserSubscribed(channelAddress,address)
+      console.log("Subscription status : ", status);
+      setIsSubscribed(status);
+    } catch(error){
+      console.log("error : ", error);
+    }
+  }
 
   const getUserSubTokenBalance = async () => {
     const jsonProvider = new ethers.providers.JsonRpcProvider(
