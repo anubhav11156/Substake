@@ -171,7 +171,7 @@ const Home: NextPage = () => {
               src="/scroll.svg"
               width={105}
               height={109}
-              className="absolute left-8 bottom-4 xl:left-12 xl:bottom-12 animate-bounce duration-[5000ms] "
+              className="absolute left-8 bottom-8 xl:left-12 xl:bottom-16 animate-bounce duration-[5000ms] "
               alt="scroll"
             />
 
