@@ -5,17 +5,18 @@ import { fetchStakesByBatchId } from "../actions/getStakesByBatchId";
 import { fetchUnstakesByBatchId } from "../actions/getUnstakesByBatchId";
 
 export const intilizeUserForPush = async (
+  isStakeBatchId: boolean,
   stakeBatchId?: number,
   unstakeBatchId?: number
 ) => {
-  if (!stakeBatchId && !unstakeBatchId) return;
+  if (!stakeBatchId && !unstakeBatchId && !isStakeBatchId) return;
   let res;
 
-  if (stakeBatchId) {
+  if (stakeBatchId && isStakeBatchId) {
     res = await fetchStakesByBatchId(stakeBatchId);
   }
 
-  if (unstakeBatchId) {
+  if (unstakeBatchId && !isStakeBatchId) {
     res = await fetchUnstakesByBatchId(unstakeBatchId);
   }
 
