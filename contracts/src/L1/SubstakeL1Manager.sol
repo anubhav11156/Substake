@@ -123,7 +123,8 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
             tokenIn: substakeL1Config.getLidoWstETHToken(),
             tokenOut: substakeL1Config.getWeth(),
-            fee: uint24(substakeL1Config.getUniswapPoolFee()),
+            // fee: uint24(substakeL1Config.getUniswapPoolFee()),
+            fee:100,
             recipient: address(this),
             deadline: block.timestamp + substakeL1Config.getUniswapSwapDeadline(),
             amountIn: amountIn,
