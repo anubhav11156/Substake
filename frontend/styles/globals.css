@@ -123,3 +123,25 @@ input[type="number"] {
     background-position: 1200px 0;
   }
 }
+
+.path {
+  stroke-dasharray: 20;
+  animation: dash 3s infinite;
+}
+
+.path2 {
+  stroke-dasharray: 20;
+  animation: reverse dash2 3s infinite;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
+
+@keyframes dash2 {
+  to {
+    stroke-dashoffset: 1000;
+  }
+}
