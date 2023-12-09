@@ -6,66 +6,6 @@ import { StakeTable } from "@/components/tables/stakeTable/client";
 import { UnstakeTable } from "@/components/tables/unstakeTable/client";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 
-// const stakeData = [
-//   {
-//     assets: 1,
-//     shares: 10,
-//     createdAt: "10/10/2021",
-//     stakeBatchId: 1234567890,
-//     network: "Ethereum",
-//     protcol: "Compound",
-//     status: "Active",
-//   },
-//   {
-//     assets: 2,
-//     shares: 10,
-//     createdAt: "10/10/2021",
-//     stakeBatchId: 1234567890,
-//     network: "Ethereum",
-//     protcol: "Compound",
-//     status: "Active",
-//   },
-//   {
-//     assets: 3,
-//     shares: 10,
-//     createdAt: "10/10/2021",
-//     stakeBatchId: 1234567890,
-//     network: "Ethereum",
-//     protcol: "Compound",
-//     status: "Active",
-//   },
-// ];
-
-// const unstakeData = [
-//   {
-//     shares: 10,
-//     assetsExpected: 10,
-//     assetsFinalized: 10,
-//     unstakeBatchId: 38,
-//     network: "Ethereum",
-//     protocol: "Compound",
-//     status: "Active",
-//   },
-//   {
-//     shares: 10,
-//     assetsExpected: 10,
-//     assetsFinalized: 10,
-//     unstakeBatchId: 38,
-//     network: "Ethereum",
-//     protocol: "Compound",
-//     status: "Active",
-//   },
-//   {
-//     shares: 10,
-//     assetsExpected: 10,
-//     assetsFinalized: 10,
-//     unstakeBatchId: 38,
-//     network: "Ethereum",
-//     protocol: "Compound",
-//     status: "Active",
-//   },
-// ];
-
 const RewardPage: NextPage = () => {
   const [isMounted, setIsMounted] = useState(false);
 

@@ -3,8 +3,7 @@ import { NextPage } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
-import { useAccount } from "wagmi";
+import { Suspense, useEffect, useState } from "react";
 
 import Loading from "@/components/Loading";
 import Navbar from "@/components/Navbar";
@@ -19,7 +18,15 @@ export const metadata: Metadata = {
 };
 
 const Home: NextPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
+
+  if (!isMounted) return null;
 
   return (
     <Suspense fallback={<Loading />}>

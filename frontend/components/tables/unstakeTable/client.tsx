@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useAccount } from "wagmi";
 
-import Loading from "@/components/Loading";
 import { DataTable } from "@/components/ui/data-table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Column, columns } from "./columns";
 
 export const UnstakeTable: React.FC = () => {
@@ -46,7 +46,18 @@ export const UnstakeTable: React.FC = () => {
   }));
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <div className="w-full">
+        <Skeleton className="h-12 w-full bg-transparent rounded-tl-md rounded-tr-md border border-mainBg" />
+        <div className="flex flex-col w-full rounded-bl-md rounded-br-md border-x border-b border-mainBg">
+          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
+          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
+          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
+          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
+          <Skeleton className="h-[52px] bg-transparent rounded-bl-md rounded-br-md" />
+        </div>
+      </div>
+    );
   }
 
   if (isError) {

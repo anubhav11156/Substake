@@ -4,7 +4,7 @@ import { JsonRpcProvider, N, ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAccount, useBalance } from "wagmi";
 import web3modal from "web3modal";
@@ -18,7 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { config, getAbi } from "@/configData";
+import { config } from "@/configData";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
 
@@ -29,13 +29,13 @@ const StakePage: NextPage = () => {
   const [stakeLoading, setStakeLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
-  const { address, isConnecting, isDisconnected } = useAccount();
+  const { address } = useAccount();
 
-  const { data, isError, isLoading } = useBalance({
+  const { data } = useBalance({
     address: address,
   });
-  const { connector: activeConnector, isConnected } = useAccount();
-  const { chain, chains } = getNetwork();
+  const { isConnected } = useAccount();
+  const { chain } = getNetwork();
   const accountBalance = data?.formatted;
   const _chain = chain?.name;
 
@@ -53,12 +53,12 @@ const StakePage: NextPage = () => {
     caculateSubTokenAmount();
   }, [stakeValue]);
 
-  const caculateSubTokenAmount = () => {
+  const caculateSubTokenAmount = useCallback(() => {
     let subTokenAmont = Number(stakeValue) * Number(ethPerSubToken);
     setReceiveSub(subTokenAmont);
-  };
+  }, [stakeValue, ethPerSubToken]);
 
-  const getEthPerSub = async () => {
+  const getEthPerSub = useCallback(async () => {
     const jsonProvider = new JsonRpcProvider(
       process.env.NEXT_PUBLIC_SCROLL_RPC!
     );
@@ -75,7 +75,7 @@ const StakePage: NextPage = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [vaultProxyAddress]);
 
   const stakeHandler = async () => {
     if (!stakeValue) return toast.error("Please enter an amount!");

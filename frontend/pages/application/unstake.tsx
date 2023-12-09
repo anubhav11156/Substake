@@ -31,6 +31,7 @@ const UnstakePage: NextPage = () => {
   const [subTokenBalance] = getUserBalanceDetails((state) => [
     state.subTokenBalance,
   ]);
+  const [isMounted, setIsMounted] = useState(false);
 
   const { address } = useAccount();
   const { data } = useBalance({
@@ -49,6 +50,13 @@ const UnstakePage: NextPage = () => {
     getSubTokenPerEth();
     caculateSubTokenAmount();
   }, [unstakeValue]);
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => {
+      setIsMounted(false);
+    };
+  }, []);
 
   const caculateSubTokenAmount = () => {
     let subTokenAmont = Number(unstakeValue) * Number(subTokenPerEth);
@@ -109,6 +117,8 @@ const UnstakePage: NextPage = () => {
       setUnstakeLoading(false);
     }
   };
+
+  if (!isMounted) return null;
 
   return (
     <ApplicationLayout>

@@ -103,3 +103,23 @@ input[type="number"] {
     0px 25px 20px -20px rgba(0, 0, 0, 0.45),
     -25px 0px 20px -20px rgba(0, 0, 0, 0.45);
 }
+
+.shimmer {
+  animation-duration: 2.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: #ffdead;
+  background: linear-gradient(to right, #ffdead 8%, #c1b869 18%, #ffdead 33%);
+  background-size: 1200px 100%;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1200px 0;
+  }
+  100% {
+    background-position: 1200px 0;
+  }
+}
