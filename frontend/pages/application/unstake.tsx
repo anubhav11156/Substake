@@ -104,7 +104,11 @@ const UnstakePage: NextPage = () => {
       signer
     );
     try {
-      let tx = await contract.redeem(unstakeAmount, address, address, {
+      let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
+      let tx = await contract.redeem(
+        unstakeAmount,
+        address,
+        address, {
         gasLimit: 800000,
       });
       toast.success("Successfully Unstaked!", { id: "unstake" });
@@ -129,7 +133,7 @@ const UnstakePage: NextPage = () => {
           </div>
         </div>
 
-        <div className="shadow-xl rounded-xl border-2 border-mainBg w-full max-w-xl p-3 bg-[#fadfb5] z-30">
+        <div className="box_shadow_div rounded-xl border-2 border-mainBg w-full max-w-xl p-3 bg-[#fadfb5] shadow-xl z-30">
           <div className="rounded-tl-xl rounded-tr-xl hover:bg-[#fadfb5] transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
             <div className="p-2 bg-mainBg rounded-xl">
               <Image src="/logo_white.svg" width={25} height={25} alt="eth" />
