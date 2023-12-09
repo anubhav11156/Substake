@@ -1,5 +1,5 @@
 import { ConnectKitButton } from "connectkit";
-import { JsonRpcProvider, ethers } from "ethers";
+import { ethers } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -35,7 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({
   }, [subTokenBalance, address]);
 
   const getUserSubTokenBalance = async () => {
-    const jsonProvider = new JsonRpcProvider(
+    const jsonProvider = new ethers.providers.JsonRpcProvider(
       process.env.NEXT_PUBLIC_SCROLL_RPC!
     );
     const contract = new ethers.Contract(
@@ -44,8 +44,8 @@ const Navbar: React.FC<NavbarProps> = ({
       jsonProvider
     );
     try {
-      await contract.balanceOf(address).then((response) => {
-        let subBalance = ethers.parseUnits(response.toString());
+      await contract.balanceOf(address).then((response:any) => {
+        let subBalance = ethers.utils.parseUnits(response.toString());
         let converted = (Number(subBalance) / 10 ** 18).toFixed(3);
         setSubTokenBalance(converted.toString());
       });

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
-import { JsonRpcProvider, N, ethers } from "ethers";
+import { ethers } from "ethers";
 import { Dot } from "lucide-react";
 import { NextPage } from "next";
 import Image from "next/image";
@@ -64,7 +64,7 @@ const StakePage: NextPage = () => {
   }, [stakeValue, subTokenPerETH]);
 
   const getSubPerETH = useCallback(async () => {
-    const jsonProvider = new JsonRpcProvider(
+    const jsonProvider = new ethers.providers.JsonRpcProvider(
       process.env.NEXT_PUBLIC_SCROLL_RPC!
     );
     const contract = new ethers.Contract(
@@ -73,8 +73,8 @@ const StakePage: NextPage = () => {
       jsonProvider
     );
     try {
-      await contract.subTokenPerEth().then((response) => {
-        let ethPerSub = ethers.parseUnits(response.toString());
+      await contract.subTokenPerEth().then((response:any) => {
+        let ethPerSub = ethers.utils.parseUnits(response.toString());
         let converted = (Number(ethPerSub) / 10 ** 18).toFixed(3);
         setSubTokenPerETH(converted);
       });
@@ -115,9 +115,9 @@ const StakePage: NextPage = () => {
       cacheProvider: true,
     });
     const connection = await modal.connect();
-    const provider = new ethers.BrowserProvider(connection);
-    const signer = await provider.getSigner();
-    const stakeAmount = ethers.parseEther(stakeValue);
+    const provider = new ethers.providers.Web3Provider(connection);
+    const signer = provider.getSigner();
+    const stakeAmount = ethers.utils.parseEther(stakeValue);
 
     const contract = new ethers.Contract(
       vaultProxyAddress,
