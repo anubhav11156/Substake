@@ -5,14 +5,12 @@ import React from "react";
 import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { JsonRpcProvider, N, ethers } from "ethers";
 
 
 import Loading from "@/components/Loading";
 import { cn } from "@/lib/utils";
 import ConnectKitWrapper from "@/providers/ConnectKitWrapper";
 import "@/styles/globals.css";
-import { PushAPI, CONSTANTS } from "@pushprotocol/restapi";
 
 const font = IBM_Plex_Mono({ subsets: ["latin"], weight: "300" });
 
@@ -62,18 +60,4 @@ export default function App({ Component, pageProps }: AppProps) {
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
-}
-
-const initizeUserForPush = async () => {
-
-
-  const privateKey = process.env.NEXT_PUBLIC_PV_KEY!
-
-  const jsonProvider = new JsonRpcProvider(
-    process.env.NEXT_PUBLIC_ETH_SEPOLIA!
-  );
-  
-  const signer = await jsonProvider.getSigner();
-  const userSubstake = await PushAPI.initialize(signer, { env: CONSTANTS.ENV.STAGING });
-  
 }
