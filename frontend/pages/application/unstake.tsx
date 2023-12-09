@@ -132,7 +132,7 @@ const UnstakePage: NextPage = () => {
 
         <div className="rounded-xl border-2 border-mainBg w-full max-w-xl p-3 bg-[#fadfb5] shadow-xl z-30">
           <div className="rounded-tl-xl rounded-tr-xl hover:bg-[#fadfb5] transition-all shadow-sm relative border border-mainBg p-4 w-full flex items-center gap-4">
-            <div className="p-2 bg-mainBg rounded-xl">
+            <div className="p-2 bg-mainBg rounded-[14px]">
               <Image src="/logo_white.svg" width={25} height={25} alt="eth" />
             </div>
 
