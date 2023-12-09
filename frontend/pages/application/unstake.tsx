@@ -215,8 +215,8 @@ const UnstakePage: NextPage = () => {
 
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
-              <p className="text-gray-500 uppercase">you will recieve</p>
-              <p>{receiveSUB} SUB</p>
+              <p className="text-gray-500 uppercase">you will recieve (expected)</p>
+              <p>{receiveSUB} ETH</p>
             </div>
 
             <div className="flex items-center justify-between">

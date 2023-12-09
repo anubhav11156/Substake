@@ -29,7 +29,7 @@ const upgradeImplementation = async () => {
     const PROXY_ABI = await getAbi(vaultProxyabipath);
     const contract = new ethers.Contract(vaultProxyAddress, PROXY_ABI.abi, signer);
     console.log("Updating implementaion.........................");
-    const vaultImplementation = "0x16Adfbc3fB9Be57658825B009C2BA8Ab1aAcAf73";
+    const vaultImplementation = "0xa08fDf3AA199c79a476Fbb653BB0DA3EC3C7A5Da";
     let tx = await contract.upgradeImplementation(vaultImplementation)
     await tx.wait()
         .then(() => {
