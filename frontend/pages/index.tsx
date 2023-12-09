@@ -30,16 +30,21 @@ const Home: NextPage = () => {
 
   return (
     <Suspense fallback={<Loading />}>
-      <div className="h-full">
+      <div
+        className="h-full overflow-hidden"
+        style={{
+          background: "linear-gradient(180deg, #ffdead 0%, #e1d77d 100%)",
+        }}
+      >
         <Navbar isNavLink={false} />
 
         <div
           className={cn(
             font.className,
-            "h-full lg:h-[calc(100vh-82px)] flex flex-col lg:flex-row justify-center lg:justify-between items-center w-full max-w-[85rem] mx-auto px-3 gap-8 lg:gap-0"
+            "h-full lg:h-[calc(100vh-82px)] bg-[#] flex flex-col lg:flex-row justify-center lg:justify-between items-center w-full max-w-[85rem] mx-auto px-3 gap-8 lg:gap-0"
           )}
         >
-          <div className="mt-16 lg:mt-0 flex flex-col justify-center items-center lg:items-start lg:justify-start">
+          <div className="mt-16 lg:mt-0 flex flex-col justify-center items-center lg:items-start lg:justify-start relative">
             <h1 className="font-bold text-6xl text-center lg:text-start text-mainBg leading-[4.8rem] tracking-wider">
               Unlock liquidity and <br className="hidden lg:flex" /> amplify
               rewards
@@ -50,15 +55,20 @@ const Home: NextPage = () => {
             </p>
 
             <Button
-              className="rounded-xl mt-3.5 lg:mt-5 bg-[#fadfb5] hover:bg-mainBg hover:text-white text-mainBg transition-all border-2 border-mainBg text-base font-semibold h-16 w-32"
+              className="rounded-xl mt-3.5 lg:mt-5 bg-[#fadfb5] hover:bg-mainBg hover:text-white text-mainBg transition-all border-2 border-mainBg text-base font-semibold h-16 w-32 z-10 bg-transparent"
               onClick={() => router.push("/application/stake")}
             >
-              Launch Dapp
+              Get Started
             </Button>
           </div>
 
-          <div className="">
-            <Image src="/logo.svg" width={500} height={500} alt="sldkjf" />
+          <div className="relative w-[600px] h-[400px]">
+            <Image
+              src="/hero_image.svg"
+              fill
+              className="object-cover"
+              alt="hero_image"
+            />
           </div>
         </div>
       </div>

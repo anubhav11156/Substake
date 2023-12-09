@@ -1,17 +1,17 @@
 import { ConnectKitButton } from "connectkit";
 import { JsonRpcProvider, ethers } from "ethers";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useAccount } from "wagmi";
-import Link from "next/link";
 
 import { VAULT_ABI } from "@/abi/abi";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { config, getAbi } from "@/configData";
 import { cn } from "@/lib/utils";
+import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
-import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
 
 interface NavbarProps {
   isNavLink?: boolean;
@@ -62,13 +62,7 @@ const Navbar: React.FC<NavbarProps> = ({
             href="/"
             className="flex items-center gap-2 rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2"
           >
-            <Image
-              src="/logo2.svg"
-              width={40}
-              height={40}
-              alt="logo"
-              className="-rotate-90"
-            />
+            <Image src="/logo2.svg" width={40} height={40} alt="logo" />
             <p className="text-xl font-bold">SUBSTAKE</p>
           </Link>
 
