@@ -13,7 +13,7 @@ datasource db {
 model UserStakingDetails {
   transactionHash String @id @default(uuid())
   address         String
-  Asset           Int    @default(0)
+  Asset           String
   shares          Int    @default(0)
   StakeBatchId    Int    @default(0)
   status          String

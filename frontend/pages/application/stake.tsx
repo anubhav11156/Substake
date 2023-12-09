@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
 import { JsonRpcProvider, N, ethers } from "ethers";
@@ -19,6 +20,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { config } from "@/configData";
+import { AddUserStakesType } from "@/interfaces/UserStakes";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +30,8 @@ const StakePage: NextPage = () => {
   const [receiveSUB, setReceiveSub] = useState(0);
   const [stakeLoading, setStakeLoading] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { address } = useAccount();
 
@@ -79,6 +83,26 @@ const StakePage: NextPage = () => {
     }
   }, [vaultProxyAddress]);
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: async (data: AddUserStakesType) => {
+      const res = await fetch("http://localhost:3000/api/addUserStakes", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res?.status !== 200)
+        return toast.error("Someting went wrong!", { id: "stake" });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["stakeData"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const stakeHandler = async () => {
     if (!stakeValue) return toast.error("Please enter an amount!");
     if (Number(stakeValue) === 0)
@@ -103,14 +127,11 @@ const StakePage: NextPage = () => {
 
     let stakeBatchId;
     try {
-      stakeBatchId = contract
-        .activeStakeBatch()
-        .then((res) => console.log(Number(res)));
+      stakeBatchId = (await contract.activeStakeBatch()).toString();
+      if (!stakeBatchId) return toast.error("Deposit failed");
     } catch (error) {
       console.log(error);
     }
-
-    if (!stakeBatchId) return toast.error("Deposit failed");
 
     try {
       let tx = await contract.deposit(stakeAmount, address, {
@@ -118,12 +139,28 @@ const StakePage: NextPage = () => {
         gasLimit: 1100000,
       });
 
-      toast.success("Successfully Staked!", { id: "stake" });
+      let txRes = await tx.wait();
+
+      if (txRes.status === 0)
+        return toast.error("Failed to stake!", { id: "stake" });
+
+      mutate({
+        address: address!,
+        assets: stakeValue,
+        stakeBatchId: Number(stakeBatchId),
+        protocol: "Lido",
+        network: _chain!,
+      });
+
+      if (isPending) return toast.loading("Staking...", { id: "stake" });
+      if (isError) return toast.error("Failed to stake!", { id: "stake" });
+
       setStakeValue("");
+      toast.success("Successfully Staked!", { id: "stake" });
       setStakeLoading(false);
     } catch (error) {
-      toast.error("Failed to stake!", { id: "stake" });
       setStakeValue("");
+      toast.error("Failed to stake!", { id: "stake" });
       setStakeLoading(false);
     }
   };
