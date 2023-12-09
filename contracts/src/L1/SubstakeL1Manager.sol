@@ -13,6 +13,7 @@ import "@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol";
 import "@scroll-tech/contracts/L1/gateways/IL1ETHGateway.sol";
 import "@scroll-tech/contracts/L1/IL1ScrollMessenger.sol";
 import "@scroll-tech/contracts/L1/rollup/IL1MessageQueue.sol";
+import {Test, console2} from "forge-std/Test.sol";
 
 uint256 constant DECIMALS = 1000000000000000000;
 uint256 constant STAKE = 0;
@@ -62,7 +63,9 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         if (wstETHAmount > wstEthBalance()) {
             revert InsufficientWstETH();
         }
+        console2.log("here 1");
         uint256 wETH = _swapExactInputSingle(wstETHAmount);
+        // console2.log("here 2");
         _unWrapETH(uint256(wETH));
         unstakeBatchStatus[unstakeBatchId] = true;
         emit Unstaked(wETH, wstETHAmount, unstakeBatchId);
@@ -116,6 +119,7 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
         IwstETH(substakeL1Config.getLidoWstETHToken()).approve(
             address(substakeL1Config.getUniswapSwapRouter()), amountIn
         );
+        console2.log("Here 3");
         ISwapRouter.ExactInputSingleParams memory params = ISwapRouter.ExactInputSingleParams({
             tokenIn: substakeL1Config.getLidoWstETHToken(),
             tokenOut: substakeL1Config.getWeth(),
@@ -123,10 +127,12 @@ contract SubstakeL1Manager is ISubstakeL1Manager, AccessControlUpgradeable {
             recipient: address(this),
             deadline: block.timestamp + substakeL1Config.getUniswapSwapDeadline(),
             amountIn: amountIn,
-            amountOutMinimum: _uninSwapLimit(amountIn),
+            amountOutMinimum:  100000, // _uninSwapLimit(amountIn),
             sqrtPriceLimitX96: 0
         });
+        console2.log("Here 4");
         uint256 amountOut = ISwapRouter(substakeL1Config.getUniswapSwapRouter()).exactInputSingle(params);
+        console2.log("Here 5");
         return amountOut;
     }
 

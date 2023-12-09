@@ -35,7 +35,7 @@ contract SubstakeL1Config is ISubstakeL1Config, AccessControlUpgradeable {
         _setContract(SCROLL_L1_MESSAGE_QUEUE, 0xF0B2293F5D834eAe920c6974D50957A1732de763);
         _setUint(UNISWAP_POOL_FEE, 100); // 0.01%
         _setUint(UINIWAP_SWAP_DEADLINE, 600); // 12 hr
-        _setUint(SWAP_SLIPAGE, 150); // 1.5%
+        _setUint(SWAP_SLIPAGE, 500); // 5%
         _grantRole(DEFAULT_ADMIN_ROLE, _admin);
     }
 
