@@ -47,8 +47,8 @@ contract SubstakeL2Config is ISubstakeL2Config, AccessControlUpgradeable {
         _setAddress(FEE_COLLECTOR, 0x55d9a0d367866a102eD85EA76CE46B11E62b3E88);
         _setUint(STAKING_FEES_IN_BIPS, 50); // 0.5%
         _setUint(UNSTAKING_FEES_IN_BIPS, 100); // 1%
-        _setUint(STAKE_THRESHOLD, 10000000000000000); // 0.01 ETH
-        _setUint(UNSTAKE_THRESHOLD, 10000000000000000); // 0.01 SUB
+        _setUint(STAKE_THRESHOLD, 3000000000000000); // 0.003 ETH
+        _setUint(UNSTAKE_THRESHOLD, 1000000000000000); // 0.001 SUB
         _setUint(STAKE_BATCH_MAX_WAIT_TIME, 10800); // 3 Hr
         _setUint(UNSTAKE_BATCH_MAX_WAIT_TIME, 10800); // 3 Hr
         _setUint(MIN_STAKERS_IN_BATCH, 2);

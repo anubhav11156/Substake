@@ -58,7 +58,7 @@ const Home: NextPage = () => {
               className="rounded-xl mt-3.5 lg:mt-5 bg-[#fadfb5] hover:bg-mainBg hover:text-white text-mainBg transition-all border-2 border-mainBg text-base font-semibold h-16 w-32 z-10 bg-transparent"
               onClick={() => router.push("/application/stake")}
             >
-              Get Started
+              Launch Dapp
             </Button>
           </div>
 
