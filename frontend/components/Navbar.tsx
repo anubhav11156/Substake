@@ -1,16 +1,24 @@
 import { ConnectKitButton } from "connectkit";
+import { ethers } from "ethers";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
+import web3modal from "web3modal";
 
 import { PUSH_COMM_V2_ABI, VAULT_ABI } from "@/abi/abi";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { config } from "@/configData";
 import { cn } from "@/lib/utils";
 import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
-import { ethers } from "ethers";
-import web3modal from "web3modal";
+import { BellIcon, BellOff } from "lucide-react";
+import { toast } from "sonner";
 import MobileNavLinks from "./MobileNavLinks";
 import NavLinks from "./NavLinks";
 
@@ -28,7 +36,6 @@ const Navbar: React.FC<NavbarProps> = ({
   const [subTokenBalance, setSubTokenBalance] = getUserBalanceDetails(
     (state) => [state.subTokenBalance, state.setSubTokenBalance]
   );
-
   const vaultProxyAddress = config.substake.l2.vaultProxy;
 
   useEffect(() => {
@@ -57,7 +64,18 @@ const Navbar: React.FC<NavbarProps> = ({
       let tx = await pushContract.subscribe(channelAddress, {
         gasLimit: 200000,
       });
-      tx.wait();
+      toast.loading("Waiting for confirmation...", { id: "subscribe" });
+
+      const res = await tx.wait();
+
+      toast.loading("Subscribing...", { id: "subscribe" });
+
+      if (res.status === 1) {
+        setIsSubscribed(true);
+        toast.success("Successfully subscribed to the channel", {
+          id: "subscribe",
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -126,11 +144,30 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          {isSubscribed ? (
-            <Button>Already Subscribed!</Button>
-          ) : (
-            <Button onClick={subscribeHandler}>Subscribe</Button>
-          )}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger
+                className={cn(
+                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[4.8rem] h-10",
+                  {
+                    "border border-red-500 hover:bg-red-500 text-red-500":
+                      isSubscribed,
+                  }
+                )}
+                onClick={!isSubscribed ? subscribeHandler : () => {}}
+              >
+                {!isSubscribed ? <BellIcon size={20} /> : <BellOff size={20} />}
+              </TooltipTrigger>
+
+              <TooltipContent
+                className={cn("bg-[#fadfb5] border-mainBg text-green-500", {
+                  "text-red-500": !isSubscribed,
+                })}
+              >
+                {isSubscribed ? "Already Subscribed" : "Subscribe"}
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
           {isConnected && (
             <div
