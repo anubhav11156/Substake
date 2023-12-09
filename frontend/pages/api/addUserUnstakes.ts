@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 
+import { AddUserUntakesType } from "@/interfaces/UserStakes";
 import prismadb from "@/lib/prismadb";
 
 export default async function handler(
@@ -14,7 +15,8 @@ export default async function handler(
     unstakeBatchId,
     protocol,
     network,
-  } = req.body;
+    shares,
+  }: AddUserUntakesType = req.body;
 
   if (!address) return res.status(404).json({ message: "address is required" });
   if (!assetsExpected)
@@ -26,6 +28,7 @@ export default async function handler(
   if (!protocol)
     return res.status(404).json({ message: "protocol is required" });
   if (!network) return res.status(404).json({ message: "network is required" });
+  if (!shares) return res.status(404).json({ message: "shares is required" });
 
   const user = await prismadb.userUnstakingDetails.create({
     data: {
@@ -36,6 +39,7 @@ export default async function handler(
       status: "processing",
       protocol,
       network,
+      shares,
     },
   });
 

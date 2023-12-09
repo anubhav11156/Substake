@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { getNetwork } from "@wagmi/core";
 import { ConnectKitButton } from "connectkit";
 import { JsonRpcProvider, ethers } from "ethers";
@@ -19,6 +20,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { config } from "@/configData";
+import { AddUserUntakesType } from "@/interfaces/UserStakes";
 import ApplicationLayout from "@/layouts/ApplicationLayout";
 import { cn } from "@/lib/utils";
 import { getUserBalanceDetails } from "@/store/UserBalanceDetails";
@@ -32,6 +34,8 @@ const UnstakePage: NextPage = () => {
     state.subTokenBalance,
   ]);
   const [isMounted, setIsMounted] = useState(false);
+
+  const queryClient = useQueryClient();
 
   const { address } = useAccount();
   const { data } = useBalance({
@@ -84,6 +88,26 @@ const UnstakePage: NextPage = () => {
     }
   }, [vaultProxyAddress]);
 
+  const { mutate, isPending, isError } = useMutation({
+    mutationFn: async (data: AddUserUntakesType) => {
+      const res = await fetch("http://localhost:3000/api/addUserUnstakes", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res?.status !== 200)
+        return toast.error("Someting went wrong!", { id: "stake" });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["stakeData"] });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const unstakeHandler = async () => {
     if (!unstakeValue) return toast.error("Please enter a amount!");
     if (unstakeValue === "0")
@@ -113,6 +137,14 @@ const UnstakePage: NextPage = () => {
       if (aprvTxRes?.status === 0)
         return toast.error("Approved Failed!", { id: "unstake" });
 
+      let unstakeBatchId;
+      try {
+        unstakeBatchId = (await contract.activeUnstakeBatch()).toString();
+        if (!unstakeBatchId) return toast.error("Unstake failed");
+      } catch (error) {
+        console.log(error);
+      }
+
       let tx = await contract.redeem(unstakeAmount, address, {
         gasLimit: 800000,
       });
@@ -120,6 +152,19 @@ const UnstakePage: NextPage = () => {
 
       if (txRes?.status === 0)
         return toast.error("Redeem failed!", { id: "unstake" });
+
+      mutate({
+        address: address!,
+        assetsExpected: 0,
+        assetsFinalized: 0,
+        unstakeBatchId: unstakeBatchId,
+        protocol: "Uniswap V3",
+        network: _chain!,
+        shares: unstakeValue,
+      });
+
+      if (isPending) return toast.loading("Untaking...", { id: "unstake" });
+      if (isError) return toast.error("Failed to unstake!", { id: "unstake" });
 
       toast.success("Successfully Unstaked!", { id: "unstake" });
 
@@ -215,7 +260,9 @@ const UnstakePage: NextPage = () => {
 
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
-              <p className="text-gray-500 uppercase">you will recieve (expected)</p>
+              <p className="text-gray-500 uppercase">
+                you will recieve (expected)
+              </p>
               <p>{receiveSUB} ETH</p>
             </div>
 

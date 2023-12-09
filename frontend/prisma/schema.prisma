@@ -29,7 +29,7 @@ model UserUnstakingDetails {
   address         String
   ExpectedAsset   Int    @default(0)
   FinalizedAsset  Int    @default(0)
-  shares          Int    @default(0)
+  shares          String
   UnstakeBatchId  Int    @default(0)
   status          String
   protocol        String
