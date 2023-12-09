@@ -78,7 +78,7 @@ const UnstakePage: NextPage = () => {
       jsonProvider
     );
     try {
-      await contract.subTokenPerEth().then((response:any) => {
+      await contract.subTokenPerEth().then((response: any) => {
         let subPerEth = ethers.utils.parseUnits(response.toString());
         let converted = (Number(subPerEth) / 10 ** 18).toFixed(3);
         setethPerSubToken(converted);
@@ -211,11 +211,7 @@ const UnstakePage: NextPage = () => {
                       })}
                     />
                   </TooltipTrigger>
-                  <TooltipContent
-                    className={cn("bg-[#fadfb5] border-mainBg text-green-500", {
-                      "text-red-500": !isConnected,
-                    })}
-                  >
+                  <TooltipContent className="bg-[#fadfb5] border-mainBg text-gray-500">
                     {isConnected ? _chain : "Disconnected"}
                   </TooltipContent>
                 </Tooltip>
@@ -226,11 +222,7 @@ const UnstakePage: NextPage = () => {
                   "text-green-500": isConnected,
                 })}
               />
-              <span
-                className={cn("text-green-500 hidden sm:flex", {
-                  "text-red-500": !isConnected,
-                })}
-              >
+              <span className="text-gray-500 hidden sm:flex">
                 {isConnected ? _chain : "Disconnected"}
               </span>
             </div>
