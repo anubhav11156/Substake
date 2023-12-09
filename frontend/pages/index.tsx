@@ -80,12 +80,12 @@ const Home: NextPage = () => {
               />
               <path
                 opacity="0.6"
-                d="M266.51 116L160 187.456"
+                d="M269.51 116L166 190"
                 stroke="#80732F"
                 stroke-width="4"
                 stroke-linecap="round"
                 stroke-dasharray="6.76 6.76"
-                className="path"
+                className="path2"
               />
               <path
                 opacity="0.6"
@@ -94,7 +94,7 @@ const Home: NextPage = () => {
                 stroke-width="4"
                 stroke-linecap="round"
                 stroke-dasharray="6.76 6.76"
-                className="path2"
+                className="path"
               />
               <path
                 d="M103.82 169.797L198.469 225.129C201.505 226.904 201.48 231.3 198.424 233.041L103.775 286.955C102.36 287.761 100.622 287.753 99.215 286.933L6.68538 233.019C3.68126 231.269 3.65663 226.937 6.64066 225.153L99.1708 169.82C100.6 168.965 102.382 168.956 103.82 169.797Z"
@@ -111,7 +111,7 @@ const Home: NextPage = () => {
                 stroke-width="4"
                 stroke-linecap="round"
                 stroke-dasharray="6.76 6.76"
-                className="path2"
+                className="path"
               />
               <path
                 opacity="0.6"
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
                 stroke-width="4"
                 stroke-linecap="round"
                 stroke-dasharray="6.76 6.76"
-                className="path"
+                className="path2"
               />
               <path
                 d="M458.18 169.797L363.531 225.129C360.495 226.904 360.52 231.3 363.576 233.041L458.225 286.955C459.64 287.761 461.378 287.753 462.785 286.933L555.315 233.019C558.319 231.268 558.343 226.937 555.359 225.153L462.829 169.82C461.4 168.965 459.618 168.956 458.18 169.797Z"
