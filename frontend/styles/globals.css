@@ -126,12 +126,12 @@ input[type="number"] {
 
 .path {
   stroke-dasharray: 20;
-  animation: dash 3s infinite;
+  animation: dash 8s linear infinite;
 }
 
 .path2 {
   stroke-dasharray: 20;
-  animation: reverse dash2 3s infinite;
+  animation: reverse dash2 8s linear infinite;
 }
 
 @keyframes dash {
