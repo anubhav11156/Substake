@@ -106,10 +106,13 @@ const UnstakePage: NextPage = () => {
       signer
     );
     try {
-      let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
+      // let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
+      // aprvTx.wait();
       let tx = await contract.redeem(unstakeAmount, address, address, {
         gasLimit: 800000,
       });
+      tx.wait();
+      console.log('tx : ', tx);
       toast.success("Successfully Unstaked!", { id: "unstake" });
       setUnstakeValue("");
       setUnstakeLoading(false);
@@ -203,8 +206,8 @@ const UnstakePage: NextPage = () => {
 
           <div className="mt-5 w-full text-xs space-y-2">
             <div className="flex items-center justify-between w-full">
-              <p className="text-gray-500 uppercase">you will recieve</p>
-              <p>{receiveSUB} SUB</p>
+              <p className="text-gray-500 uppercase">you will recieve (expected)</p>
+              <p>{receiveSUB} ETH</p>
             </div>
 
             <div className="flex items-center justify-between">
