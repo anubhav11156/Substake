@@ -96,6 +96,7 @@ const UnstakePage: NextPage = () => {
       signer
     );
     try {
+      let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
       let tx = await contract.redeem(
         unstakeAmount,
         address,
