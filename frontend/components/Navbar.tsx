@@ -88,6 +88,7 @@ const Navbar: React.FC<NavbarProps> = ({
     );
     // const wallet = new ethers.Wallet(ownerPrivateKey);
     // const signer = wallet.connect(jsonProvider);
+
     const pushContract = new ethers.Contract(
       pushCommV2Address,
       PUSH_COMM_V2_ABI.abi,
@@ -146,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <Tooltip>
               <TooltipTrigger
                 className={cn(
-                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[4rem] h-10",
+                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 items-center justify-center w-[2.8rem] h-10 hidden md:flex",
                   {
                     "border border-red-500 hover:bg-red-500 text-red-500":
                       isSubscribed,
@@ -205,7 +206,35 @@ const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {isNavLink && (
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-3">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger
+                  className={cn(
+                    "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[2.2rem] h-8 md:hidden",
+                    {
+                      "border border-red-500 hover:bg-red-500 text-red-500":
+                        isSubscribed,
+                    }
+                  )}
+                  onClick={!isSubscribed ? subscribeHandler : () => {}}
+                >
+                  {!isSubscribed ? (
+                    <BellIcon size={20} />
+                  ) : (
+                    <BellOff size={20} />
+                  )}
+                </TooltipTrigger>
+
+                <TooltipContent
+                  className={cn("bg-[#fadfb5] border-mainBg text-green-500", {
+                    "text-red-500": !isSubscribed,
+                  })}
+                >
+                  {isSubscribed ? "Already Subscribed" : "Subscribe"}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
             <MobileNavLinks subTokenBalance={subTokenBalance} />
           </div>
         )}
