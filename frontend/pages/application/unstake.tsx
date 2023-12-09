@@ -109,6 +109,7 @@ const UnstakePage: NextPage = () => {
     try {
       let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
       const aprvTxRes = await aprvTx.wait();
+
       if (aprvTxRes?.status === 0)
         return toast.error("Approved Failed!", { id: "unstake" });
 
@@ -116,6 +117,7 @@ const UnstakePage: NextPage = () => {
         gasLimit: 800000,
       });
       const txRes = await tx.wait();
+
       if (txRes?.status === 0)
         return toast.error("Redeem failed!", { id: "unstake" });
 
