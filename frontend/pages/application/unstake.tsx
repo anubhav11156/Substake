@@ -191,7 +191,7 @@ const UnstakePage: NextPage = () => {
               onClick={() => {
                 if (!isConnected) {
                   toast.error("Please connect your wallet first");
-                } else setUnstakeValue(accountBalance ? accountBalance : "");
+                } else setUnstakeValue(subTokenBalance ? subTokenBalance : "");
               }}
               className="bg-[#9b923b] hover:bg-[#a99f44] text-white/90 px-2 py-1 w-fit text-xs font-medium cursor-pointer transition-all rounded-md ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
