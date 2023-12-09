@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",
+    "@pushprotocol/restapi": "^1.4.45",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-dropdown-menu": "^2.0.6",
     "@radix-ui/react-slot": "^1.0.2",
