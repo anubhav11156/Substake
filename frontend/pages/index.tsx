@@ -187,7 +187,7 @@ const Home: NextPage = () => {
               src="/block.svg"
               width={107}
               height={108}
-              className="absolute -top-[3.5rem] left-[39%] xl:-top-6 xl:left-[41%] animate-bounce duration-[5000ms] "
+              className="absolute -top-[2.5rem] left-[39%] xl:-top-6 xl:left-[41%] animate-bounce duration-[5000ms] "
               alt="block"
             />
           </div>
