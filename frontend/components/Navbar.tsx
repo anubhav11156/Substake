@@ -147,7 +147,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <Tooltip>
               <TooltipTrigger
                 className={cn(
-                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 items-center justify-center w-[2.8rem] h-10 hidden md:flex",
+                  "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 items-center justify-center w-[2.8rem] h-10 hidden md:flex ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2",
                   {
                     "border border-red-500 hover:bg-red-500 text-red-500":
                       isSubscribed,
@@ -211,7 +211,7 @@ const Navbar: React.FC<NavbarProps> = ({
               <Tooltip>
                 <TooltipTrigger
                   className={cn(
-                    "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[2.2rem] h-8 md:hidden",
+                    "border border-mainBg bg-transparent hover:bg-mainBg hover:text-white text-mainBg rounded-full transition-all mr-2 flex items-center justify-center w-[2.2rem] h-8 md:hidden ring-offset-[#fadfb5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mainBg focus-visible:ring-offset-2",
                     {
                       "border border-red-500 hover:bg-red-500 text-red-500":
                         isSubscribed,
