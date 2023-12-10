@@ -40,7 +40,7 @@ export const StakeTable: React.FC = () => {
     status: item?.status,
   }));
 
-  if (true) {
+  if (isLoading) {
     return (
       <div className="w-full">
         <Skeleton className="h-12 w-full rounded-tl-md rounded-tr-md border border-mainBg" />
@@ -55,15 +55,15 @@ export const StakeTable: React.FC = () => {
     );
   }
 
-  // if (isError) {
-  //   return (
-  //     <div className="flex items-center justify-center h-96">
-  //       <p className="text-2xl text-center text-gray-500">
-  //         Something went wrong.
-  //       </p>
-  //     </div>
-  //   );
-  // }
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <p className="text-2xl text-center text-gray-500">
+          Something went wrong.
+        </p>
+      </div>
+    );
+  }
 
-  // return <DataTable searchKey="id" columns={columns} data={formattedData} />;
+  return <DataTable searchKey="id" columns={columns} data={formattedData} />;
 };
