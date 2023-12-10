@@ -88,7 +88,7 @@ const UnstakePage: NextPage = () => {
     }
   }, [vaultProxyAddress]);
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddUserUntakesType) => {
       const res = await fetch("http://localhost:3000/api/addUserUnstakes", {
         method: "POST",
@@ -98,13 +98,15 @@ const UnstakePage: NextPage = () => {
         },
       });
       if (res?.status !== 200)
-        return toast.error("Someting went wrong!", { id: "stake" });
+        return toast.error("Someting went wrong!", { id: "register" });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["stakeData"] });
+      queryClient.invalidateQueries({ queryKey: ["unstakeData"] });
+      toast.success("Successfully registered!", { id: "register" });
     },
     onError: (error) => {
       console.log(error);
+      toast.error("Someting went wrong!", { id: "register" });
     },
   });
 
@@ -113,15 +115,12 @@ const UnstakePage: NextPage = () => {
     if (unstakeValue === "0")
       return toast.error("Please enter a valid amount!");
 
-    setUnstakeLoading(true);
-    toast.loading("Unstaking...", { id: "unstake" });
-
     const modal = new web3modal({
       cacheProvider: true,
     });
     const connection = await modal.connect();
     const provider = new ethers.providers.Web3Provider(connection);
-    const signer = await provider.getSigner();
+    const signer = provider.getSigner();
     const unstakeAmount = ethers.utils.parseEther(unstakeValue);
 
     const contract = new ethers.Contract(
@@ -131,6 +130,9 @@ const UnstakePage: NextPage = () => {
     );
 
     try {
+      setUnstakeLoading(true);
+      toast.loading("Unstaking...", { id: "unstake" });
+
       let aprvTx = await contract.approve(vaultProxyAddress, unstakeAmount);
       const aprvTxRes = await aprvTx.wait();
 
@@ -163,16 +165,14 @@ const UnstakePage: NextPage = () => {
         shares: unstakeValue,
       });
 
-      if (isPending) return toast.loading("Untaking...", { id: "unstake" });
-      if (isError) return toast.error("Failed to unstake!", { id: "unstake" });
+      if (isPending) toast.loading("Registering...", { id: "register" });
 
       toast.success("Successfully Unstaked!", { id: "unstake" });
-
       setUnstakeValue("");
       setUnstakeLoading(false);
     } catch (error) {
-      toast.error("Failed to unstake!", { id: "unstake" });
       console.log("error:", error);
+      toast.error("Failed to unstake!", { id: "unstake" });
       setUnstakeValue("");
       setUnstakeLoading(false);
     }

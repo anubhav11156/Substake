@@ -73,7 +73,7 @@ const StakePage: NextPage = () => {
       jsonProvider
     );
     try {
-      await contract.subTokenPerEth().then((response:any) => {
+      await contract.subTokenPerEth().then((response: any) => {
         let ethPerSub = ethers.utils.parseUnits(response.toString());
         let converted = (Number(ethPerSub) / 10 ** 18).toFixed(3);
         setSubTokenPerETH(converted);
@@ -83,7 +83,7 @@ const StakePage: NextPage = () => {
     }
   }, [vaultProxyAddress]);
 
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddUserStakesType) => {
       const res = await fetch("http://localhost:3000/api/addUserStakes", {
         method: "POST",
@@ -93,13 +93,15 @@ const StakePage: NextPage = () => {
         },
       });
       if (res?.status !== 200)
-        return toast.error("Someting went wrong!", { id: "stake" });
+        return toast.error("Someting went wrong!", { id: "register" });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["stakeData"] });
+      toast.success("Registered Successfully!", { id: "register" });
     },
     onError: (error) => {
       console.log(error);
+      toast.error("Someting went wrong!", { id: "register" });
     },
   });
 
@@ -152,8 +154,7 @@ const StakePage: NextPage = () => {
         network: _chain!,
       });
 
-      if (isPending) return toast.loading("Staking...", { id: "stake" });
-      if (isError) return toast.error("Failed to stake!", { id: "stake" });
+      if (isPending) return toast.loading("Registering...", { id: "register" });
 
       setStakeValue("");
       toast.success("Successfully Staked!", { id: "stake" });
