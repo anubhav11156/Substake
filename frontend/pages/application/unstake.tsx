@@ -111,6 +111,7 @@ const UnstakePage: NextPage = () => {
   });
 
   const unstakeHandler = async () => {
+    console.log("Here");
     if (!unstakeValue) return toast.error("Please enter a amount!");
     if (unstakeValue === "0")
       return toast.error("Please enter a valid amount!");
@@ -147,7 +148,7 @@ const UnstakePage: NextPage = () => {
         console.log(error);
       }
 
-      let tx = await contract.redeem(unstakeAmount, address, {
+      let tx = await contract.redeem(unstakeAmount, address, address, {
         gasLimit: 800000,
       });
       const txRes = await tx.wait();
@@ -155,17 +156,17 @@ const UnstakePage: NextPage = () => {
       if (txRes?.status === 0)
         return toast.error("Redeem failed!", { id: "unstake" });
 
-      mutate({
-        address: address!,
-        assetsExpected: 0,
-        assetsFinalized: 0,
-        unstakeBatchId: unstakeBatchId,
-        protocol: "Uniswap V3",
-        network: _chain!,
-        shares: unstakeValue,
-      });
+      // mutate({
+      //   address: address!,
+      //   assetsExpected: 0,
+      //   assetsFinalized: 0,
+      //   unstakeBatchId: unstakeBatchId,
+      //   protocol: "Uniswap V3",
+      //   network: _chain!,
+      //   shares: unstakeValue,
+      // });
 
-      if (isPending) toast.loading("Registering...", { id: "register" });
+      // if (isPending) toast.loading("Registering...", { id: "register" });
 
       toast.success("Successfully Unstaked!", { id: "unstake" });
       setUnstakeValue("");
