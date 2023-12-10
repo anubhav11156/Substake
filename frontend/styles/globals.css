@@ -110,7 +110,7 @@ input[type="number"] {
   animation-iteration-count: infinite;
   animation-name: shimmer;
   animation-timing-function: linear;
-  background: #ffdead;
+  background: transparent;
   background: linear-gradient(to right, #ffdead 8%, #c1b869 18%, #ffdead 33%);
   background-size: 1200px 100%;
 }

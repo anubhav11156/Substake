@@ -40,30 +40,30 @@ export const StakeTable: React.FC = () => {
     status: item?.status,
   }));
 
-  if (isLoading) {
+  if (true) {
     return (
       <div className="w-full">
-        <Skeleton className="h-12 w-full bg-transparent rounded-tl-md rounded-tr-md border border-mainBg" />
+        <Skeleton className="h-12 w-full rounded-tl-md rounded-tr-md border border-mainBg" />
         <div className="flex flex-col w-full rounded-bl-md rounded-br-md border-x border-b border-mainBg">
-          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
-          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
-          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
-          <Skeleton className="h-[52px] bg-transparent border-b border-mainBg" />
-          <Skeleton className="h-[52px] bg-transparent rounded-bl-md rounded-br-md" />
+          <Skeleton className="h-[52px] border-b border-mainBg" />
+          <Skeleton className="h-[52px] border-b border-mainBg" />
+          <Skeleton className="h-[52px] border-b border-mainBg" />
+          <Skeleton className="h-[52px] border-b border-mainBg" />
+          <Skeleton className="h-[52px] rounded-bl-md rounded-br-md" />
         </div>
       </div>
     );
   }
 
-  if (isError) {
-    return (
-      <div className="flex items-center justify-center h-96">
-        <p className="text-2xl text-center text-gray-500">
-          Something went wrong.
-        </p>
-      </div>
-    );
-  }
+  // if (isError) {
+  //   return (
+  //     <div className="flex items-center justify-center h-96">
+  //       <p className="text-2xl text-center text-gray-500">
+  //         Something went wrong.
+  //       </p>
+  //     </div>
+  //   );
+  // }
 
-  return <DataTable searchKey="id" columns={columns} data={formattedData} />;
+  // return <DataTable searchKey="id" columns={columns} data={formattedData} />;
 };
