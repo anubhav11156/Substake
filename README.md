@@ -1,13 +1,6 @@
 # Substake: Cross-chain Liquid Staking Protocol
 
 ![ezgif com-optimize](https://github.com/surfer05/Substake/assets/85151171/dc6235f3-eb70-499d-afe6-a22494d8eb08)
-
-![substake stake](https://github.com/anubhav11156/Substake/assets/86551390/4ee95fd6-646f-47de-ad78-fad62bfd6a1d)
-
-![transaction](https://github.com/anubhav11156/Substake/assets/86551390/b4aa55d7-62b1-41e3-872c-7b66e9828fd8)
-
-![substake maths](https://github.com/anubhav11156/Substake/assets/86551390/8c5ee0cd-6e7b-4077-9d28-499b2f3db79d)
-
 Substake is a Cross-chain Liquid Staking protocol designed to enable seamless participation in liquid staking from Layer 2 (L2) funds. By leveraging Substake, users can deposit their wrapped/Native ETH tokens on L2, which our platform bridges to Layer 1 (L1) for staking on Liquid Staking Derivative (LSD) platforms such as Lido, Rocket Pool, and Stader Labs. Our solution is highly gas-effective, minimizing the bridging and staking costs for users.
 
 ## Key Features
@@ -17,7 +10,13 @@ Substake is a Cross-chain Liquid Staking protocol designed to enable seamless pa
 - **Gas Efficiency**: Substake significantly reduces gas fees by creating batches on L2s and equally distributing the bridging and staking costs among batch members.
 
 - **Regular APY**: Users can enjoy a regular Annual Percentage Yield (APY) on their L2 funds without the complexities associated with traditional staking processes.
+- 
+## Screenshots
+![substake stake](https://github.com/anubhav11156/Substake/assets/86551390/4ee95fd6-646f-47de-ad78-fad62bfd6a1d)
 
+![transaction](https://github.com/anubhav11156/Substake/assets/86551390/b4aa55d7-62b1-41e3-872c-7b66e9828fd8)
+
+![substake maths](https://github.com/anubhav11156/Substake/assets/86551390/8c5ee0cd-6e7b-4077-9d28-499b2f3db79d)
 ## Stake Flow
 
 1. **Deposit and SubToken Creation**: Users deposit their funds on our platform and receive SubToken, a representational token. These deposited funds are accumulated in a batch, and when specific conditions are met, the batch is dispatched to L1. Gas fees are equally distributed among batch members, significantly reducing costs.
@@ -35,6 +34,8 @@ While developing Substake, we encountered several notable challenges:
 - **Batching Architecture**: Implementing the batching architecture required deep thought and fine-tuning for an efficient solution. Messaging between chains also posed a tough challenge, with significant time delays for message transfers.
 
 - **Exchange Rate Calculation**: Calculating the exchange rate between Subtoken and wstETH was complex, requiring continuous logging of wstETH price on L2, which was not fully supported by messaging protocols.
+
+
 
 ## Contract Addresses
 - L2Config proxy - [0x7BCaa65E6cAceF4FB7F2852488829bd92090667a](https://sepolia.scrollscan.com/address/0x7BCaa65E6cAceF4FB7F2852488829bd92090667a) 
