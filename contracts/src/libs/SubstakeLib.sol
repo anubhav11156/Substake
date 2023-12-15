@@ -27,19 +27,19 @@ library SubstakeLib {
         if (_uint == 0) revert ZeroValue();
     }
 
-    function getBytes32Slot(bytes32 slot) external pure returns (bytes32Slots storage r) {
+    function getBytes32Slot(bytes32 slot) internal pure returns (bytes32Slots storage r) {
         assembly {
             r.slot := slot
         }
     }
 
-    function getAddressSlot(bytes32 slot) external pure returns (addressSlot storage r) {
+    function getAddressSlot(bytes32 slot) internal pure returns (addressSlot storage r) {
         assembly {
             r.slot := slot
         }
     }
 
-    function getUint256Slot(bytes32 slot) external pure returns (uint256Slot storage r) {
+    function getUint256Slot(bytes32 slot) internal pure returns (uint256Slot storage r) {
         assembly {
             r.slot := slot
         }
