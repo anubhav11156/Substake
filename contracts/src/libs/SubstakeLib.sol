@@ -5,7 +5,7 @@ library SubstakeLib {
     error ZeroAddress();
     error ZeroValue();
     error callerNotManager();
-    error callerNotHashstackContract();
+    error callerNotSubstakeContract();
 
     struct bytes32Slots {
         bytes32 value;
