@@ -18,7 +18,7 @@ export const StakeTable: React.FC = () => {
       }),
     };
 
-    const res = await fetch("http://localhost:3000/api/getUserStakes", options);
+    const res = await fetch("/api/getUserStakes", options);
 
     const data = await res.json();
 

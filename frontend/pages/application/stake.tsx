@@ -85,7 +85,7 @@ const StakePage: NextPage = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddUserStakesType) => {
-      const res = await fetch("http://localhost:3000/api/addUserStakes", {
+      const res = await fetch("/api/addUserStakes", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

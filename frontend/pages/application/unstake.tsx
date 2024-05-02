@@ -90,7 +90,7 @@ const UnstakePage: NextPage = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (data: AddUserUntakesType) => {
-      const res = await fetch("http://localhost:3000/api/addUserUnstakes", {
+      const res = await fetch("/api/addUserUnstakes", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

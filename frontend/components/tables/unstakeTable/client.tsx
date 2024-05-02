@@ -18,10 +18,7 @@ export const UnstakeTable: React.FC = () => {
       }),
     };
 
-    const res = await fetch(
-      "http://localhost:3000/api/getUserUnstakes",
-      options
-    );
+    const res = await fetch("/api/getUserUnstakes", options);
 
     const data = await res.json();
 
