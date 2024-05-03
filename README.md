@@ -60,4 +60,4 @@ While developing Substake, we encountered several notable challenges:
 
 ## Contact Us
 
-For inquiries and support, please contact us at [![x.com/thelvedem]](https://twitter.com/thelvedem)
+For inquiries and support, please contact us at [Anubhav Kumar](https://twitter.com/subsix_)
